@@ -1,5 +1,5 @@
 label, h2, th {
-    color: #637f83;
+    color: #275B91;
 }
 
 .professor-panel-content {
@@ -11,9 +11,9 @@ label, h2, th {
     /* border&shadow */
     -moz-border-radius: 5px;
     border-radius: 5px;
-    -moz-box-shadow: 8px 8px 8px #637F83;
-    -webkit-box-shadow: 8px 8px 8px #637F83;
-    box-shadow: 8px 8px 8px #637F83;
+    -moz-box-shadow: 8px 8px 8px #275B91;
+    -webkit-box-shadow: 8px 8px 8px #275B91;
+    box-shadow: 8px 8px 8px #275B91;
 }
 
 .generic-table td a {
@@ -21,7 +21,7 @@ label, h2, th {
 }
 
 .generic-table th {
-    background-color: #637F83;
+    background-color: #275B91;
     color: white;
 }
 
@@ -34,5 +34,5 @@ label, h2, th {
 }
 
 .btn-primary {
-    background-color: #637F83;
+    background-color: #275B91;
 }

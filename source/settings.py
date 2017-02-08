@@ -133,12 +133,12 @@ MEDIA_ROOT = os.path.join(BASE_DIR,'media')
 MEDIA_URL = '/media/'
 
 
-# STATIC_ROOT = os.path.join(BASE_DIR, "static_in_project", "static_root")
+STATIC_ROOT = os.path.join(BASE_DIR, "assets")
 
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "users/static_in_users", "static_files"),
-    #os.path.join(BASE_DIR, "users/static_in_users", "media"),
+    os.path.join(BASE_DIR, "static"),
     #'/var/www/static_in_users/',
 ]
 

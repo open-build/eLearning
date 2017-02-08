@@ -42,7 +42,7 @@ a {
 
 /*--navbar--*/
 #mainNavBar {
-    margin-top: 10px;
+    margin-top: 27px;
 }
 
 .nav-wrapper {
@@ -57,34 +57,34 @@ a {
 
 #mainNavBar li a {
     display: block;
-    font-size: 1em;
-    color: #637f83;
+    font-size: 1.20em;
+    color: #275B91;
     -webkit-transition: all 0.3s ease;
     -moz-transition: all 0.3s ease;
     -o-transition: all 0.3s ease;
     transition: all 0.3s ease;
     text-transform: uppercase;
-    font-weight: bold;
+    /*font-weight: bold;*/
 }
 
 /*--registration templates--*/
 .login {
     margin-top: 4%;
-    color: #637f83;
+    color: #275B91;
 }
 
 .registration {
     margin-top: 2%;
-    color: #637f83;
+    color: #275B91;
 }
 
 .reset-password {
     margin-top: 4%;
-    color: #637f83;
+    color: #275B91;
 }
 
 .form-opt {
-    color: #637f83;
+    color: #275B91;
 }
 
 /*--feature content--*/
@@ -139,7 +139,7 @@ h3.m_1 {
 h3.m_1 a {
     font-size: 0.95em;
     font-weight: bold;
-    color: #637f83;
+    color: #275B91;
     text-decoration: none;
 }
 
@@ -160,7 +160,7 @@ p.m_2 {
     font-size: 1em;
     cursor: pointer;
     border: none;
-    background: #637f83;
+    background: #275B91;
     color: #fff;
     font-weight: bold;
     text-decoration: none;
@@ -183,14 +183,14 @@ p.m_2 {
 
 /*--banner--*/
 .banner {
-    background: url(../img/e-banner.png) no-repeat 0 0;
-    min-height: 350px;
+    background: url(../img/banner.png) no-repeat 0 0;
+    min-height: 223px;
     background-size: 100% 100%;
 }
 
 @media (min-width: 900px) and (min-height: 650px) {
     .banner {
-        min-height: 480px;
+        min-height: 223px;
         background-size: 100% 100%;
     }
 }

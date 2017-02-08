@@ -1,12 +1,12 @@
 h5 {
     font-size: 1em;
     font-weight: bold;
-    color: #637f83;
+    color: #275B91;
     margin-top: 25px;
 }
 
 label, h2, th {
-    color: #637f83;
+    color: #275B91;
 }
 
 td {
@@ -22,13 +22,13 @@ td {
     /* border&shadow */
     -moz-border-radius: 5px;
     border-radius: 5px;
-    -moz-box-shadow: 8px 8px 8px #637F83;
-    -webkit-box-shadow: 8px 8px 8px #637F83;
-    box-shadow: 8px 8px 8px #637F83;
+    -moz-box-shadow: 8px 8px 8px #275B91;
+    -webkit-box-shadow: 8px 8px 8px #275B91;
+    box-shadow: 8px 8px 8px #275B91;
 }
 
 .generic-table th {
-    background-color: #637F83;
+    background-color: #275B91;
     color: white;
 }
 

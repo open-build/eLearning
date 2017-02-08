@@ -2,17 +2,17 @@
     /* border&shadow */
     -moz-border-radius: 5px;
     border-radius: 5px;
-    -moz-box-shadow: 8px 8px 8px #637F83;
-    -webkit-box-shadow: 8px 8px 8px #637F83;
-    box-shadow: 8px 8px 8px #637F83;
-    background-color: #637F83;
+    -moz-box-shadow: 8px 8px 8px #275B91;
+    -webkit-box-shadow: 8px 8px 8px #275B91;
+    box-shadow: 8px 8px 8px #275B91;
+    background-color: #275B91;
 }
 
 .inner-top {
     padding-top: 5px;
     padding-bottom: 5px;
     color: #fff;
-    background: #637F83;
+    background: #275B91;
     text-align: center;
     text-transform: capitalize;
     font-weight: bolder;
