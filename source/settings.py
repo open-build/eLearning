@@ -137,9 +137,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, "assets")
 
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "users/static_in_users", "static_files"),
     os.path.join(BASE_DIR, "static"),
-    #'/var/www/static_in_users/',
 ]
 
 # Crispy forms tags settings

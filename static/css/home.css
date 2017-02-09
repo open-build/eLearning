@@ -182,8 +182,15 @@ p.m_2 {
 }
 
 /*--banner--*/
-.banner {
-    background: url(../img/banner.png) no-repeat 0 0;
+.banner-img {
+    min-height: 180px;
+    display: inline-block;
+    padding: 20px 20px;
+}
+
+
+.banner-back {
+    background: url(/static/img/banner.png) no-repeat 0 0;
     min-height: 223px;
     background-size: 100% 100%;
 }
