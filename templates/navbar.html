@@ -18,7 +18,7 @@
 
     <!-- Menu items -->
     <div class="collapse navbar-collapse"role="navigation" >
-      <ul class="nav navbar-nav" >
+      <ul class="nav navbar-nav navbar-left" >
         <li class=""><a href="/"><span class="glyphicon glyphicon-home"></span> Home</a></li>
         {% if request.user.is_authenticated %}
           <li><a href="{% url 'courses' %}"><span class="glyphicon glyphicon-education"></span> Courses</a></li>
