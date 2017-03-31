@@ -4,7 +4,6 @@
 
 {% block content %}
   <!-- Contact core css -->
-  <link href="{% static "css/contact.css" %}" rel="stylesheet"/>
   {% include 'breadcrumb.html' %}
 
   <div class="contact">
@@ -19,7 +18,7 @@
           {% endif %}
         </div>
 
-        <form method='POST' action='' class="col-md-5 col-xs-12">
+        <form method='POST' action='' class="col-md-8">
           {% csrf_token %}
           {{ contact_form | crispy }}
           <input type="submit" value="Submit" class="submit">
