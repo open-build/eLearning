@@ -1,12 +1,12 @@
 {% load staticfiles %}
-<nav class="navbar navbar-custom navbar-fixed-top" role="navigation">
+<nav class="navbar-custom navbar-fixed-top" role="navigation">
         <div class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse">
                     Menu <i class="fa fa-bars"></i>
                 </button>
                 <a class="navbar-brand page-scroll" href="#page-top">
-                    <img style="margin-top: -8px; max-width: 300px; height: 250%" src='{% static "img/OpenBuild-Logo.png" %}'/>
+                    <img style="margin-top: -8px; max-width: 140px;" src='{% static "img/OpenBuild-Logo.png" %}'/>
                 </a>
             </div>
 
@@ -15,16 +15,19 @@
                 <ul class="nav navbar-nav pull-down">
                     <!-- Hidden li included to remove active class from about link when scrolled up past about section -->
                     <li>
-                        <a class="page-scroll" href=""><span class="glyphicon glyphicon-home"></span>Home</a>
+                        <a class="page-scroll" href="/"><span class="glyphicon glyphicon-home"></span>Home</a>
                     </li>
                     <li>
                         <a class="page-scroll" href="#about"><span class="glyphicon glyphicon-info-sign"></span>About</a>
                     </li>
                     <li>
-                        <a class="page-scroll" href="#download"><span class="glyphicon glyphicon-education"></span>Courses</a>
+                        <a class="page-scroll" href="#contact"><span class="glyphicon glyphicon-earphone"></span>Contact</a>
                     </li>
                     <li>
-                        <a class="page-scroll" href="#contact"><span class="glyphicon glyphicon-earphone"></span>Contact</a>
+                        <a class="page-scroll" href="#"><span class="glyphicon glyphicon-education"></span>Our Team</a>
+                    </li>
+                    <li>
+                        <a class="page-scroll" href="#download"><span class="glyphicon glyphicon-education"></span>Courses</a>
                     </li>
                 </ul>
             </div>
@@ -32,7 +35,7 @@
                 <ul class="nav navbar-nav pull-down">
                     <!-- Hidden li included to remove active class from about link when scrolled up past about section -->
                     <li>
-                        <a class="page-scroll" href="/accounts/register"><span class="glyphicon glyphicon-plus"></span>Sign Up</a>
+                        <a class="page-scroll" href=""><span class="glyphicon glyphicon-plus"></span>Sign Up</a>
                     </li>
                     <li>
                         <a class="page-scroll" href=""><span class="glyphicon glyphicon-user"></span>Login</a>

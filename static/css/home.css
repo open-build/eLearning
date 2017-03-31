@@ -1,5 +1,5 @@
 h4, h5, h6,
-h2, h3 {
+h1, h2, h3 {
     margin-top: 0;
 }
 
@@ -21,7 +21,10 @@ html, body {
 a {
     outline: none !important;
 }
-
+.font1
+{
+    color: #275B91;
+}
 .icon-bar {
     background-color: #e4551d;
 }
@@ -122,9 +125,7 @@ a {
 
 /*--feature content--*/
 .featured_content {
-    background: white;
-    padding-left: 15px;
-    padding-right: 15px;
+    background: rgba(255,255,255,0.3);
 }
 
 .featured_content a {
@@ -161,14 +162,12 @@ i.icon4 {
 }
 
 .feature_grid1 {
-    margin-top: 20px;
-    margin-bottom: 15px;
-    border-right: 1px solid #E6E6E6;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    min-height: 165px;
 }
 
-h3.m_1 {
-    padding: 0.8em 0;
-    margin: 0;
+h3.m_1 {    margin: 0;
 }
 
 h3.m_1 a {
@@ -183,12 +182,10 @@ h3.m_1 a:hover {
 }
 
 p.m_2 {
-    color: #999;
+    color: #606060;
     font-size: 0.95em;
     line-height: 1.5em;
-    margin-bottom: 1em;
 }
-
 .feature_btn {
     display: inline-block;
     padding: 6px 20px;
@@ -225,8 +222,7 @@ p.m_2 {
 
 
 .banner-back {
-    background: url(/static/img/background-banner.png) no-repeat 0 0;
-    min-height: 223px;
+    background: url(/static/img/background-banner.png) no-repeat;
     background-size: 100% 100%;
 }
 

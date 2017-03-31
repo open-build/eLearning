@@ -4,26 +4,20 @@
 
 {% block content %}
 
-
+<link href="{% static "css/contact.css" %}" rel="stylesheet" />
     <!-- Intro Header -->
     <header class="intro">
         <div class="intro-body">
             <div class="container">
-            <div class="clear-fix col-md-12"></div><br><br><br>
+            <div class="clear-fix"></div>
                 <div class="row">
                     <div class="">
                         <!----start-banner---->
                         <div class="text-center">
-                          <div class="col-md-1 banner-img">
+                          <div class="col-md-3 banner-img">
                             &nbsp;
                           </div>
-                          <div class="col-md-2 banner-img">
-                            <img src="{% static '/static/img/mombasa-team.jpg' %}">
-                          </div>
-                          <div class="col-md-2 banner-img">
-                            <img src="{% static '/static/img/mombasa-girls-programming.jpg' %}">
-                          </div>
-                          <div class="col-md-7 banner-img">
+                          <div class="col-md-6 banner-img">
                             <img src="{% static '/static/img/OpenBuild-Logo-Big.png' %}">
                           </div>
 
@@ -32,37 +26,31 @@
                     </div>
 
                 </div>
+                <div class="main_intro col-md-12 row">
+                  <div class="col-md-1"> </div>
+                  <p class="font1 col-md-10 ">OpenBuild is a nonprofit organization that builds, tests, supports and teaches about Open Source software and hardware projects. Our mission is to distribute and promote Open Source software for education, nonprofit, and business use cases in underserved communities around the world.
+                </p>
+                </div>
                 <!----start-content---->
-                <div class="featured_content" id="feature">
-                  <div class="">
-                    <div class="row text-center">
+                <div class="featured_content col-md-12" id="feature">
 
-                      <div class="col-md-3 feature_grid1">
+                      <div class="col-md-4 feature_grid1" style=" border-right: 1px solid #E6E6E6;">
                         <i class="icon1"> </i>
                         <h3 class="m_1"><a href="#">Learn</a></h3>
                         <p class="m_2">Coding, Robotics, learn almost anything STEM related with our open courseware and videos!</p>
                       </div>
 
-                      <div class="col-md-3 feature_grid1">
+                      <div class="col-md-4 feature_grid1" style=" border-right: 1px solid #E6E6E6;">
                         <i class="icon2"> </i>
                         <h3 class="m_1"><a href="#">Research</a></h3>
                         <p class="m_2">Connect with existing open source projects and help build and test!</p>
                       </div>
 
-                      <div class="col-md-3 feature_grid1">
+                      <div class="col-md-4 feature_grid1">
                         <i class="icon3"> </i>
                         <h3 class="m_1"><a href="#">Solutions</a></h3>
                         <p class="m_2">Build your own STEM class, or contribute to an existing one!</p>
                       </div>
-
-                      <div class="col-md-3 feature_grid1">
-                        <i class="icon4"> </i>
-                        <h3 class="m_1"><a href="#">Work</a></h3>
-                        <p class="m_2">Start your own open source or open hardware project and we will help you build it into a business!</p>
-                      </div>
-
-                    </div>
-                  </div>
                 </div>
 
                 <div class="col-lg-8 col-lg-offset-2">
@@ -101,17 +89,18 @@
     </section>
 
     <!-- Contact Section -->
+    <!-- Contact Section -->
     <section id="contact" class="container content-section text-center">
-        <div class="form-style-6">
-              <h1>Contact Us</h1>
-              <form>
-                <input type="text" name="field1" placeholder="Your Name" />
-                <input type="text" name="field1" placeholder="Subject" />
-                <input type="email" name="field2" placeholder="Email Address" />
-                <textarea name="field3" placeholder="Type your Message"></textarea>
-                <input type="submit" value="Send" />
-              </form>
-              </div>
+    <div class="form-style-6">
+          <h1>Contact Us</h1>
+          <form>
+            <input type="text" name="field1" placeholder="Your Name" />
+            <input type="text" name="field1" placeholder="Subject" />
+            <input type="email" name="field2" placeholder="Email Address" />
+            <textarea name="field3" placeholder="Type your Message"></textarea>
+            <input type="submit" value="Send" />
+          </form>
+          </div>
     </section>
 
   <hr/>
