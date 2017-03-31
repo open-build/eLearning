@@ -4,6 +4,7 @@
 {% load staticfiles %}
 
 {% block content %}
+
   <link href="{% static 'css/registration.css' %}" rel="stylesheet"/>
   <!-- Using this because of django redux registration which contains built-in validation. -->
   {% if request.user.is_authenticated %}
@@ -11,23 +12,27 @@
       window.location.replace("http://127.0.0.1:8000");
     </script>
   {% else %}
-  <div class='row'>
-    <div class='col-xs-12 col-sm-4 col-sm-offset-4 registration'>
-      <h1>Register for free!</h1>
-      <form method="post" action=".">
-        {% csrf_token %}
-        {{ form|crispy }}
-
-        <input class='btn btn-block btn-primary' type="submit" value="{% trans 'Join' %}"/>
-      </form>
-    </div>
-  </div>
-
-  <hr/>
-  <div class='row form-opt'>
-    <div class='col-sm-4 col-sm-offset-4 text-align-center'>
-      <p>Need to <a href="{% url 'auth_login' %}">Login</a>?</p>
-    </div>
+  <div class="form-style-10 col-md-6 col-md-offset-3">
+  <br><br><br><br><br>
+    <h1>Sign Up Now!<span>Sign up and tell us what you think of the site!</span></h1>
+    <form>
+        <div class="section"><span>1</span>Username &amp; Email</div>
+        <div class="inner-wrap">
+            <label>Your Username <input type="text" name="field1" /></label>
+            <label>Email Address <input type="email" name="field3" /></label>
+        </div>
+        <div class="section"><span>2</span>Passwords</div>
+            <div class="inner-wrap">
+            <label>Password <input type="password" name="field5" /></label>
+            <label>Confirm Password <input type="password" name="field6" /></label>
+        </div>
+        <div class="button-section">
+         <input type="submit" name="Sign Up" value="Join" />
+         <span class="privacy-policy">
+         <input type="checkbox" name="field7">You agree to our Terms and Policy. 
+         </span>
+        </div>
+    </form>
   </div>
   {% endif %}
 
