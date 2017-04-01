@@ -50,8 +50,8 @@ a:focus {
 }
 .navbar-custom {
   margin-bottom: 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
   text-transform: uppercase;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
   font-family: "Montserrat", "Helvetica Neue", Helvetica, Arial, sans-serif;
   background-color: grey;
 }
@@ -99,6 +99,22 @@ a:focus {
 }
 .pull-down{
   margin-top: 20px;
+}
+.login_dropdown
+{
+  text-transform:  capitalize;
+}
+.team_dropdown ul
+{
+  background-color: rgba(255,255,255,0.4);
+}
+.team_dropdown a
+{
+  color:white;
+}
+.team_dropdown a:hover
+{
+  color: rgba(255, 255, 255, 0.8);
 }
 @media (min-width: 768px) {
   .navbar-custom {
@@ -244,7 +260,6 @@ a:focus {
   }
 }
 .btn {
-  text-transform: uppercase;
   font-family: "Montserrat", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-weight: 400;
   -webkit-transition: all 0.3s ease-in-out;

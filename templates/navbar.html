@@ -23,11 +23,19 @@
                     <li>
                         <a class="page-scroll" href="#contact"><span class="glyphicon glyphicon-earphone"></span>Contact</a>
                     </li>
-                    <li>
-                        <a class="page-scroll" href="#"><span class="glyphicon glyphicon-education"></span>Our Team</a>
+                    <li class="team_dropdown"> 
+                        <a href="" class="page-scroll  dropdown-toggle" data-toggle="dropdown" type="button"><span class="glyphicon glyphicon-education"></span>Our Team <span class="caret"></span> </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">About</a></li>
+                            <li><a href="#">Current Profiles</a></li>
+                            <li><a href="#">Internship</a></li>
+                        </ul>
                     </li>
                     <li>
+                    {% if user.is_authenticated %}
                         <a class="page-scroll" href="#download"><span class="glyphicon glyphicon-education"></span>Courses</a>
+                    
+                    {% endif %}
                     </li>
                 </ul>
             </div>
@@ -37,8 +45,28 @@
                     <li>
                         <a class="page-scroll" href=""><span class="glyphicon glyphicon-plus"></span>Sign Up</a>
                     </li>
-                    <li>
-                        <a class="page-scroll" href=""><span class="glyphicon glyphicon-user"></span>Login</a>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle page-scroll" href="#" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span> Login <span class="caret"></span></a>
+                        <div class="dropdown-menu login_dropdown" style="padding: 15px">
+                            <form method="post" action="" accept-charset="UTF-8">
+                                <input style="margin-bottom: 15px;" type="text" placeholder="Username" id="username" name="username" class="form-control">
+                                <input style="margin-bottom: 15px;" type="password" placeholder="Password" id="password" name="password" class="form-control">
+                                <input style="float: left; margin-right: 10px;" type="checkbox" name="remember-me" id="remember-me" value="1">
+                                <label class="string optional font1" for="user_remember_me"> Remember me</label>
+                                <input class="btn btn-primary form-control" type="submit" id="sign-in" value="Sign In">
+                                <label class="col-md-offset-5 col-md-2"> <font class="font1" style="margin-top:5px;">or</font></label>
+                                <input class="btn btn-primary form-control" type="button" id="sign-in-google" value="Sign In with Google">
+                                <!-- <input class="btn btn-primary btn-block" type="button" id="sign-in-twitter" value="Sign In with Twitter"> -->
+                            </form>
+                        </div>
+                        <!-- <script type="text/javascript">
+                            $(document).ready(function(){
+                                //Handles menu drop down
+                                $('.dropdown-menu').find('form').click(function (e) {
+                                    e.stopPropagation();
+                                });
+                            });
+                        </script> -->
                     </li>
                 </ul>
             </div>
