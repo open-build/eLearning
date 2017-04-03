@@ -25,6 +25,11 @@ a {
 {
     color: #275B91;
 }
+.font2
+{
+    text-align: center;
+    color: #e4551d;
+}
 .icon-bar {
     background-color: #e4551d;
 }
@@ -74,7 +79,7 @@ a {
 /*--navbar--*/
 #mainNavBar {
     margin-top: 27px;
-
+    padding:10px;
 }
 
 #mainNavBar1 {
@@ -126,12 +131,9 @@ a {
 /*--feature content--*/
 .featured_content {
     background: rgba(255,255,255,0.3);
+    padding-bottom: 7px;
 }
 
-.featured_content a {
-    pointer-events: none;
-    cursor: default;
-}
 
 i.icon1 {
     width: 80px;
