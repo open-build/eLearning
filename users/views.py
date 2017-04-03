@@ -28,6 +28,14 @@ def about(request):
 
     return render(request, "users/about.html", context)
 
+def ourteam(request):
+    context = {
+        "title": "Our Team",
+    }
+
+    return render(request, "ourteam.html", context)
+
+
 
 def contact(request):
     contact_form = Contact(request.POST or None)

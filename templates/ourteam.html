@@ -1,0 +1,162 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<link href="{% static "css/contact.css" %}" rel="stylesheet" />
+    <!-- Intro Header -->
+    <header class="intro">
+        <div class="intro-body">
+            <div class="container">
+            <div class="clear-fix"></div>
+                <div class="main_intro col-md-12 row">
+                  <div class="col-md-1"> </div>
+                  <h2>OUR TEAM</h2>
+                  <p class="font1 ">The OpenBuild team is comprised of mentors, educators, and industry professionals that focus on technology solutions for international development. Our team is made up of three distinct roles that play either a Technical or Support function. The technical function consists of software engineers and developers while the support functions consists of data specialists, data analysts, and software support specialists. Each team will collaborate and work together on a particular client's needs including ensuring the server is up and running efficiently, the integrations are working well, and the support tickets are being answered in a timely manner. In addition, these teams will coordinate with the larger open source community to make sure any bounty tickets or enhancements are addressed and prioritized as well as providing training and support for issues.
+
+                </p>
+                </div>
+                <!----start-content---->
+                <div class="featured_content col-md-12" id="feature">
+
+                      <div class="col-md-3 feature_grid1" style=" border-right: 1px solid #E6E6E6;">
+                        <h3 class="m_1"><a href="#"><i class="fa fa-cogs"></i> Developer</a></h3>
+                        <p class="m_2">A software developer will be assigned to maintain the internal workings of the hosted service. For a system like TolaData that may include log rotating and monitoring, ticket tracking for bugs and enhancements as well as initial setup and migration of existing platforms.</p>
+                      </div>
+
+                      <div class="col-md-4 feature_grid1" style=" border-right: 1px solid #E6E6E6;">
+                        <h3 class="m_1"><a href="#"><i class="fa fa-line-chart"></i> Specialist/Analyst</a></h3>
+                        <p class="m_2">A trainer, and data specialist will also be assigned to ensure any questions around the business process, reporting needs, data collection, and analysis are being met. They will work with clients to configure the platform to the client’s needs and help gather additional functional requirements that are not met by the current system and provide guidance on possible solutions.</p>
+                      </div>
+
+                      <div class="col-md-5 feature_grid1">
+                        <h3 class="m_1"><a href="#"><i class="fa fa-question-circle-o"></i> Support</a></h3>
+                        <p class="m_2">A support specialist will be assigned to work with the client on working through any issues or enhancement requests that arise during the setup and configuration phase. In addition, the support team member will help evaluate requests and determine if technical assistance is required as well as overlap with the Analyst/Specialist role where needed.</p>
+                        <p class="m_2">In order to provide support for our projects around the world, our distributed team is currently based in 3 locations: Portland, USA; Berlin, Germany; Nairobi, Kenya; and soon in, Ho Chi Minh City, Vietnam.</p>
+                      </div>
+                </div>
+
+                <div class="col-lg-8 col-lg-offset-2">
+                  <a href="#about" class="btn btn-circle page-scroll">
+                      <i class="fa fa-angle-double-down animated"></i>
+                  </a>
+                </div>
+
+            </div>
+        </div>
+    </header>
+
+    <!-- About Section -->
+    <section id="currentprofiles" class="content-section text-center">
+        <div class="download-section">
+            <div class="container">
+                <div class="container row font_profile">
+                    <h2>OUR CURRENT PROFILES</h2>
+                    <div class="row">
+                      <div class="col-md-4">
+                          <img src="{% static '/static/img/OpenBuild-Logo-Big.png' %}" alt="..." class="img-circle" width="140" height="120"><br>
+                          <P>Peter Odeny</P>
+                          <P>Software Developer</P>
+                          <P>Nairobi Kenya</P>
+                      </div>
+                      <div class="col-md-4">
+                        <img src="{% static '/static/img/OpenBuild-Logo-Big.png' %}" alt="..." class="img-circle" width="140" height="140"><br>
+                        <P>Peter Odeny</P>
+                        <P>Software Developer</P>
+                        <P>Nairobi Kenya</P>
+                      </div>
+                      <div class="col-md-4">
+                        <img src="{% static '/static/img/OpenBuild-Logo-Big.png' %}" alt="..." class="img-circle" width="140" height="140"><br>
+                        <P>Peter Odeny</P>
+                        <P>Software Developer</P>
+                        <P>Nairobi Kenya</P>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-4">
+                          <img src="{% static '/static/img/OpenBuild-Logo-Big.png' %}" alt="..." class="img-circle" width="140" height="120"><br>
+                          <P>Peter Odeny</P>
+                          <P>Software Developer</P>
+                          <P>Nairobi Kenya</P>
+                      </div>
+                      <div class="col-md-4">
+                        <img src="{% static '/static/img/OpenBuild-Logo-Big.png' %}" alt="..." class="img-circle" width="140" height="140"><br>
+                        <P>Peter Odeny</P>
+                        <P>Software Developer</P>
+                        <P>Nairobi Kenya</P>
+                      </div>
+                      <div class="col-md-4">
+                        <img src="{% static '/static/img/OpenBuild-Logo-Big.png' %}" alt="..." class="img-circle" width="140" height="140"><br>
+                        <P>Peter Odeny</P>
+                        <P>Software Developer</P>
+                        <P>Nairobi Kenya</P>
+                      </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Download Section -->
+    <section id="internship" class="content-section text-center">
+        <div class="download-section">
+            <div class="container">
+                <div class="main_intro col-md-12 row">
+                  <div class="col-md-1"> </div>
+                  <h2>Internship</h2>
+                  <p class="font1">As part of the OpenBuild STEM and Open Source software initiatives we bring on 2-3 new volunteers or interns each year to both learn our existing infrastructure and support clients of either TolaData or OpenBuild, but to also learn from more senior developers and educators about best practices within the industry.  
+                  </p>
+                  <p class="font1">We are current looking for interns, remote or located in Portland, OR; Nairobi, Kenya; or Ho Chi Minh City, Vietnam to work on open source projects and help set up STEM related activities. We have two types of Intern roles we are looking for:</p>
+                </div>
+                <!--start-content-->
+
+                <div class="col-md-4 feature_grid1" style=" border-right: 1px solid #E6E6E6;">
+                  <h3 class="m_1"><a href="#"><i class="fa fa-cogs"></i> Software Intern</a></h3>
+                  <p class="m_2">Contribute to one of our existing Open Source projects that will benefit International Aid organizations and/or help manage large public data sets.  Work as part of the R&D team being mentored by a senior software developer to ensure the project is evolving, getting adopted by the community, and continually tested and debugged.</p>
+                </div>
+
+                <div class="col-md-4 feature_grid1" style=" border-right: 1px solid #E6E6E6;">
+                  <h3 class="m_1"><a href="#"><i class="fa fa-desktop"></i> Hardware Intern</a></h3>
+                  <p class="m_2">Contribute to an Open Source hardware project to help build STEM labs for middle school to high school age kids.  This can include building online lesson plans, software and hardware tests, and YouTube videos of the complete project steps.  When the physical locations open in Fall 2017 these will be used for classes in each of the spaces.</p>
+                </div>
+
+                <div class="col-md-4 feature_grid1">
+                  <h3 class="m_1"><a href="#"><i class="fa fa-question-circle-o"></i> More Opportunities</a></h3>
+                  <p class="m_2">We have some additional opportunities as volunteers and each of these positions are unpaid but can evolve into part or full time paid positions with OpenBuild or one of our partner organizations.</p>
+                </div>
+                <div class="col-md-12"><p class="font1">
+                <br>
+                To apply, please contact us at: intern@open.build by sending a link to your CV, LinkedIn or anything else that can give us an idea about who you are, what you do, and why you want to work with us.</p></div>
+
+              </div>
+                
+            </div>
+    </section>
+
+    <!-- Contact Section -->
+    <!-- Contact Section -->
+    <section id="contact" class="container content-section text-center">
+    <div class="form-style-6">
+          <h1>Contact Us</h1>
+          <form>
+            <input type="text" name="field1" placeholder="Your Name" />
+            <input type="text" name="field1" placeholder="Subject" />
+            <input type="email" name="field2" placeholder="Email Address" />
+            <textarea name="field3" placeholder="Type your Message"></textarea>
+            <input type="submit" value="Send" />
+          </form>
+          </div>
+    </section>
+
+  <hr/>
+  <div class="row text-center">
+    <div class="col-md-3">
+      <h4><a href="https://openbuild.hackpad.com">Our Ideas!</a></h4>
+    </div>
+  </div>
+  </div>
+
+{% endblock %}
+
+
