@@ -4,7 +4,7 @@ body {
   height: 100%;
   font-family: "Lora", "Helvetica Neue", Helvetica, Arial, sans-serif;
   color: white;
-  background-color: black;
+  background-color: white;
 }
 html {
   width: 100%;
@@ -16,17 +16,13 @@ h3,
 h4,
 h5,
 h6 {
-  margin: 0 0 35px;
+  margin: 0 0 25px;
   text-transform: uppercase;
   font-family: "Montserrat", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-weight: 700;
   letter-spacing: 1px;
 }
-p {
-  margin: 0 0 25px;
-  font-size: 18px;
-  line-height: 1.5;
-}
+
 @media (min-width: 768px) {
   p {
     margin: 0 0 35px;
@@ -238,10 +234,10 @@ a:focus {
 }
 .download-section {
   width: 100%;
-  padding: 50px 0;
+  padding-top: 10px;
   color: white;
   background: url(../img/downloads-bg.jpg) no-repeat center center scroll;
-  background-color: black;
+  background-color: grey;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   background-size: cover;
@@ -250,13 +246,6 @@ a:focus {
 @media (min-width: 767px) {
   .content-section {
     padding-top: 250px;
-  }
-  .download-section {
-    padding: 100px 0;
-  }
-  #map {
-    height: 400px;
-    margin-top: 250px;
   }
 }
 .btn {
@@ -324,4 +313,10 @@ body {
 }
 .clear-fix{
   min-height: 30px;
+}
+
+.font_profile{
+  font-size: 15px;
+  font-color:white;
+
 }
