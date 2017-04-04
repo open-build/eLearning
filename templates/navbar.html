@@ -47,13 +47,16 @@
             <div class="collapse navbar-collapse navbar-right navbar-main-collapse">
                 <ul class="nav navbar-nav pull-down">
                     <!-- Hidden li included to remove active class from about link when scrolled up past about section -->
+                    {% if not request.user.is_authenticated%}
                     <li>
                         <a class="page-scroll" href="/accounts/register"><span class="glyphicon glyphicon-plus"></span>Sign Up</a>
                     </li>
                     <li class="dropdown">
                         <a class="dropdown-toggle page-scroll" href="#" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span> Login <span class="caret"></span></a>
                         <div class="dropdown-menu login_dropdown col-md-5" style="padding: 15px;min-width:250px">
-                            <form method="post" action="" accept-charset="UTF-8">
+                            <form method="post" action="{% url 'django.contrib.auth.views.login' %}" accept-charset="UTF-8">
+                                {% csrf_token %}
+
                                 <input style="margin-bottom: 15px;" type="text" placeholder="Username" id="username" name="username" class="form-control">
                                 <input style="margin-bottom: 15px;" type="password" placeholder="Password" id="password" name="password" class="form-control">
                                 <input style="float: left; margin-right: 10px;" type="checkbox" name="remember-me" id="remember-me" value="1">
@@ -73,6 +76,14 @@
                             });
                         </script>
                     </li>
+                    {% else %}
+                    <li>
+                       <a href="" class="page-scroll  dropdown-toggle" data-toggle="dropdown" type="button"><span class="glyphicon glyphicon-user"></span> {{request.user}} <span class="caret"></span> </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/accounts/logout">Logout</a></li>
+                        </ul>
+                    </li>
+                    {% endif %}
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
