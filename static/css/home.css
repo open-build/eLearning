@@ -30,6 +30,11 @@ a {
     text-align: center;
     color: #e4551d;
 }
+.font3
+{
+    color: #275B91;
+    text-align: center;
+}
 .icon-bar {
     background-color: #e4551d;
 }
@@ -224,7 +229,7 @@ p.m_2 {
 
 
 .banner-back {
-    background: url(/static/img/background-banner.png) no-repeat;
+    background: #fff;
     background-size: 100% 100%;
 }
 
