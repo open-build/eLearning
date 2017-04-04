@@ -119,7 +119,7 @@ a:focus {
   }
   .navbar-custom.top-nav-collapse {
     padding: 0;
-    background: grey;
+    background: #DCDCDC;
     border-bottom: 1px solid rgba(255, 255, 255, 0.3);
   }
 }
@@ -130,6 +130,7 @@ a:focus {
   margin-top: 10px;
   width: 100%;
   height: auto;
+  margin-bottom: none;
   text-align: center;
   /*background: url(../img/intro-bg.jpg) no-repeat bottom center scroll;*/
   /*background-color: orange;*/
@@ -158,7 +159,7 @@ a:focus {
 }
 .main_intro
 {
-    margin-bottom: 20px;
+    margin-bottom: none;
 }
 .btn-circle {
   width: 70px;
@@ -225,23 +226,21 @@ a:focus {
   }
 }
 .content-section {
-  padding-top: 10px;
+  padding-top: 100px;
 }
+
+
 .download-section {
   width: 100%;
   padding-top: 10px;
+  margin-top: none;
   color: white;
   background: url(../img/downloads-bg.jpg) no-repeat center center scroll;
-  background-color: grey;
+  background-color: #DCDCDC;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   background-size: cover;
   -o-background-size: cover;
-}
-@media (min-width: 767px) {
-  .content-section {
-    padding-top: 200px;
-  }
 }
 .btn {
   font-family: "Montserrat", "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -345,7 +344,7 @@ body {
 }
 
 .font_profile{
-  font-size: 15px;
+  font-size: 10px;
   font-color:white;
 
 }

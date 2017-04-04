@@ -1,0 +1,36 @@
+
+.prof
+{
+	padding-left: 200px;
+}
+
+.prof p
+{
+  font-size: 15px;
+  color: #275B91;
+
+}
+.profile-section h2
+{
+	color: #275B91;
+}
+
+.content-section-prof {
+  padding-top: 90px;
+
+}
+.profile-section
+{
+  width: 100%;
+  padding-top: 30px;
+  padding-bottom: 30px;
+  padding-right: 20px;
+  margin-top: none;
+  color: white;
+  background: url(../img/downloads-bg.jpg) no-repeat center center scroll;
+  background-color: white;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  background-size: cover;
+  -o-background-size: cover;
+}
