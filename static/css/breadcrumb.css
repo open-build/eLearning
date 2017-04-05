@@ -2,6 +2,7 @@
 .bread-h {
     background: #275B91;
     margin-bottom: 25px;
+    margin-top: 20px;
 }
 
 .spacing-path {
@@ -12,6 +13,7 @@
     background: #275B91;
     position: relative;
     border-bottom: 1px solid #597275;
+    margin-top: 100;
 }
 
 .title-section h1 {

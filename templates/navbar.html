@@ -38,7 +38,7 @@
                     </li>
                     <li>
                     {% if user.is_authenticated %}
-                        <a class="page-scroll" href="#download"><span class="glyphicon glyphicon-education"></span>Courses</a>
+                        <a class="page-scroll" href="{% url 'courses' %}"><span class="glyphicon glyphicon-education"></span>Courses</a>
                     
                     {% endif %}
                     </li>
