@@ -120,12 +120,13 @@
     <section id="contact" class="container content-section text-center">
     <div class="form-style-6">
           <h1>Contact Us</h1>
-          <form>
-            <input type="text" name="field1" placeholder="Your Name" />
-            <input type="text" name="field1" placeholder="Subject" />
-            <input type="email" name="field2" placeholder="Email Address" />
-            <textarea name="field3" placeholder="Type your Message"></textarea>
-            <input type="submit" value="Send" />
+          <form method="POST" action="{% url 'users.views.contact' %}">
+            {% csrf_token %}
+                <input type="text" id="id_sender" maxlength="30" name="sender" placeholder="Your Name" />
+                <input type="text" id="id_subject" maxlength="30" name="subject" placeholder="Subject" />
+                <input type="email" id="id_email" maxlength="30" name="email" placeholder="Email Address" />
+                <textarea id="id_message" name="message" placeholder="Type your Message"></textarea>
+                <input type="submit" value="Send" />
           </form>
           </div>
     </section>
