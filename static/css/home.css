@@ -136,7 +136,7 @@ a {
 /*--feature content--*/
 .featured_content {
     background: rgba(255,255,255,0.3);
-    padding-bottom: 7px;
+    padding-bottom: 4px;
 }
 
 
@@ -169,8 +169,8 @@ i.icon4 {
 }
 
 .feature_grid1 {
-    margin-top: 10px;
-    margin-bottom: 5px;
+    margin-top: 5px;
+    margin-bottom: 3px;
     min-height: 165px;
 }
 
@@ -191,7 +191,7 @@ h3.m_1 a:hover {
 p.m_2 {
     color: #606060;
     font-size: 0.95em;
-    line-height: 1.5em;
+    line-height: 1.2em;
 }
 .feature_btn {
     display: inline-block;
@@ -222,9 +222,9 @@ p.m_2 {
 
 /*--banner--*/
 .banner-img {
-    min-height: 180px;
+    min-height: 100px;
     display: inline-block;
-    padding: 20px 20px;
+    padding: 10px 10px;
 }
 
 

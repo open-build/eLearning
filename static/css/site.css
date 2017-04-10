@@ -120,7 +120,6 @@ a:focus {
   background: url(/static/img/background-banner.png) no-repeat;
   background-size: 100% 100%;
   display: table;
-  margin-top: 10px;
   width: 100%;
   height: auto;
   margin-bottom: none;
@@ -131,6 +130,7 @@ a:focus {
 .intro .intro-body {
   display: table-cell;
   vertical-align: middle;
+  padding-bottom: 20px;
 }
 .intro .intro-body .brand-heading {
   font-size: 40px;
@@ -152,7 +152,7 @@ a:focus {
 }
 .main_intro
 {
-    margin-bottom: none;
+    margin-bottom: 10px;
 }
 .btn-circle {
   width: 70px;
@@ -345,4 +345,8 @@ body {
   font-size: 10px;
   font-color:white;
 
+}
+.image
+{
+  margin-top: 8px;
 }

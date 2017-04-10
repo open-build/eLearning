@@ -38,13 +38,24 @@
 {
   font-size: 16px;
   color: #275B91;
+  text-align: left;
 
 }
 .feature_grid_f
 {
   color: #275B91;
+  
 }
 .intern_apply
 {
   color: #e4551d;
+}
+.about_content
+{
+  text-align: left;
+}
+.feature_grid2 {
+    margin-top: 5px;
+    margin-bottom: 3px;
+    min-height: 230px;
 }
