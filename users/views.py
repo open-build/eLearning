@@ -44,19 +44,17 @@ def contact(request):
         "title": "Contact",
         "contact_form": contact_form,
     }
-
     if contact_form.is_valid():
         sender = contact_form.cleaned_data.get("sender")
         subject = contact_form.cleaned_data.get("subject")
         from_email = contact_form.cleaned_data.get("email")
         message = contact_form.cleaned_data.get("message")
         message = 'Sender:  ' + sender + '\nFrom:  ' + from_email + '\n\n' + message
-        send_mail(subject, message, settings.EMAIL_HOST_USER, [settings.EMAIL_HOST_USER], fail_silently=True)
+        send_mail(subject, message, settings.EMAIL_HOST_USER, [settings.EMAIL_HOST_USER], fail_silently=False)
         success_message = "We appreciate you contacting us, one of our Customer Service colleagues will get back" \
                           " to you within a 24 hours."
         messages.success(request, success_message)
-
-        return redirect(reverse('contact'))
+        return redirect(reverse('home'))
 
     return render(request, "users/contact.html", context)
 
