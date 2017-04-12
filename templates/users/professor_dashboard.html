@@ -5,10 +5,10 @@
 {% block content %}
   <!-- Professor core css -->
   <link href="{% static "css/professor.css" %}" rel="stylesheet"/>
-  {% include 'breadcrumb.html' %}
 
   <div class="container professor-panel-content">
     <div class="row">
+  {% include 'breadcrumb.html' %}
       <div class="col-md-4">
         <form method='POST' action=''>
           {% csrf_token %}

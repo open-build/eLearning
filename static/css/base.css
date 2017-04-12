@@ -29,6 +29,7 @@ body {
 }
 
 #footer > .container {
+    position: fixed;
     padding-top: 2px;
 }
 

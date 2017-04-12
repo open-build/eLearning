@@ -9,7 +9,7 @@ def courses(request):
     if request.user.is_professor or request.user.is_site_admin:
         queryset = Course.objects.all()
     else:
-        queryset = Course.objects.filter(for_everybody=True)
+        queryset = Course.objects.filter(for_everybody=True) | Course.objects.filter(students=request.user)
 
     context = {
         "title": "Courses",
