@@ -130,7 +130,7 @@ a:focus {
 .intro .intro-body {
   display: table-cell;
   vertical-align: middle;
-  padding-bottom: 20px;
+  padding-bottom: 80px;
 }
 .intro .intro-body .brand-heading {
   font-size: 40px;
@@ -225,7 +225,8 @@ a:focus {
 
 .download-section {
   width: 100%;
-  padding-top: 10px;
+  padding-top: 20px;
+  padding-bottom: 20px;
   margin-top: none;
   color: white;
   background: url(../img/downloads-bg.jpg) no-repeat center center scroll;
