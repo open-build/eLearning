@@ -15,26 +15,29 @@
   <div class="form-style-10 col-md-6 col-md-offset-3">
   <br><br><br><br>
     <h1>Sign Up Now!<span>Sign up to fully access OpenBuild services!</span></h1>
-    <form id="register" method="post" action="/accounts/register/">
-        {% csrf_token %}
+
+      <form method="post" action=".">
+          {% csrf_token %}
 
         <div class="section"><span>1</span>Username &amp; Email</div>
         <div class="inner-wrap">
-            <label>Your Username <input type="text" name="Username" /></label>
-            <label>Email Address <input type="email" name="email" /></label>
+            <label>Your Username <input class="textinput textInput form-control" id="id_username" maxlength="30" name="username" type="text" /></label>
+            <label>Email Address <input class="emailinput form-control" id="id_email" name="email" type="email" /></label>
         </div>
         <div class="section"><span>2</span>Passwords</div>
             <div class="inner-wrap">
-            <label>Password <input type="password" name="password" /></label>
-            <label>Confirm Password <input type="password" name="password1" /></label>
+            <label>Password <input class="textinput textInput form-control" id="id_password1" name="password1" type="password" /></label>
+            <label>Confirm Password <input class="textinput textInput form-control" id="id_password2" name="password2" type="password" /></label>
         </div>
         <div class="button-section">
          <input type="submit" name="Sign Up" value="Join" />
          <!-- <span class="privacy-policy">
-         <input type="checkbox" name="field7">You agree to our Terms and Policy. 
+         <input type="checkbox" name="field7">You agree to our Terms and Policy.
          </span> -->
         </div>
-    </form>
+
+      </form>
+
   </div>
   {% endif %}
 

@@ -18,6 +18,9 @@ from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
 from users import views as user_views
+from registration.backends.default.views import RegistrationView
+from users.forms import AddUser
+
 
 urlpatterns = [
     url(r'^$', user_views.home, name='home'),
