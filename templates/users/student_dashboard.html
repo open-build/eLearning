@@ -5,11 +5,11 @@
 {% block content %}
   <!-- Contact core css -->
   <link href="{% static "css/student_profile.css" %}" rel="stylesheet"/>
-  {% include 'breadcrumb.html' %}
 
   <div class="container content">
     <link href="{% static "css/course.css" %}" rel="stylesheet"/>
     <div class="row">
+  {% include 'breadcrumb.html' %}
       {% if queryset %}
         {% for instance in queryset %}
           <div class="col-md-4 course-box-model">
