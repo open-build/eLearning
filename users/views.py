@@ -1,8 +1,6 @@
 from courses.forms import AddCourseForm
 from courses.models import *
 from .forms import *
-
-import re
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.decorators import user_passes_test, login_required
 from django.core.urlresolvers import reverse
