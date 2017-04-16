@@ -19,26 +19,91 @@
       <form method="post" action=".">
           {% csrf_token %}
 
-        <div class="section"><span>1</span>Username &amp; Email</div>
-        <div class="inner-wrap">
-            <label>Your Username <input class="textinput textInput form-control" id="id_username" maxlength="30" name="username" type="text" /></label>
-            <label>Email Address <input class="emailinput form-control" id="id_email" name="email" type="email" /></label>
-        </div>
-        <div class="section"><span>2</span>Passwords</div>
-            <div class="inner-wrap">
-            <label>Password <input class="textinput textInput form-control" id="id_password1" name="password1" type="password" /></label>
-            <label>Confirm Password <input class="textinput textInput form-control" id="id_password2" name="password2" type="password" /></label>
-        </div>
-        <div class="button-section">
-         <input type="submit" name="Sign Up" value="Join" />
-         <!-- <span class="privacy-policy">
-         <input type="checkbox" name="field7">You agree to our Terms and Policy.
-         </span> -->
-        </div>
+        <div class="section"><span>1</span>Username &amp; Email</div> 
+          <div class="inner-wrap"> 
+              <label>Your Username
+                  <input class="textinput textInput form-control" id="id_username" maxlength="30" name="username" type="text" />
+              </label> 
+              <span class="helptext_username">Usernames must be 30 characters or fewer. Letters, digits and @/./+/-/_ only.</span> 
+              <label>Email Address <input class="emailinput form-control" id="id_email" name="email" type="email" /></label> 
+              <span class="helptext_email">Emails must include text then @ then text then period then text</span> 
+          </div> 
+          <div class="section"><span>2</span>Passwords</div> 
+          <div class="inner-wrap"> 
+          <label>Password <input class="textinput textInput form-control" id="id_password1" name="password1" type="password" /></label> 
+              <span class="helptext_password">Passwords must be at least 8 characters and cannot be only numbers</span> 
+              <label>Confirm Password <input class="textinput textInput form-control" id="id_password2" name="password2" type="password" /></label> 
+              <span class="helptext_confirm_password">Enter the same password as before, for verification.</span> 
+          </div> 
+          <div class="button-section"> 
+              <input type="submit" name="Sign Up" value="Join" /> 
+              <!-- <span class="privacy-policy"> 
+              <input type="checkbox" name="field7">You agree to our Terms and Policy. 
+              </span> --> 
+          </div> 
+      </form>  
 
-      </form>
+      <script> 
+          $(".helptext_username").hide(); 
+          $(".helptext_password").hide(); 
+          $(".helptext_confirm_password").hide(); 
+          $(".helptext_email").hide(); 
 
-  </div>
-  {% endif %}
+          username_valid = false; 
+          email_valid = false; 
+          password_valid = false; 
+          confirm_password_valid = false;  
 
-{% endblock %}
+          $( "#id_username" ) 
+          .focusout(function() { 
+          username_input = $("#id_username").val(); 
+          if(/[^A-Za-z0-9_+-.@]+/.test(username_input) || username_input.length > 30) { 
+          $(".helptext_username").show() 
+          username_valid = false; 
+          }
+          else{ 
+          $(".helptext_username").hide() 
+          username_valid = true; 
+          } 
+          });  
+
+          $( "#id_email" ) 
+          .focusout(function() { 
+          email_input = $("#id_email").val(); 
+          if(!/^[\w.%+-]+@[\w.-]+\.[\w]+$/.test(email_input)) { 
+          $(".helptext_email").show() 
+          email_valid = false; 
+          } else{ 
+          $(".helptext_email").hide() 
+          email_valid = true; 
+          } 
+          });  
+
+          $( "#id_password1" ) 
+          .focusout(function() { 
+          password_input = $("#id_password1").val(); 
+          if(/^\d+$/.test(password_input) || password_input.length < 8) { 
+          $(".helptext_password").show() 
+          password_valid = false; 
+          } else{ 
+          $(".helptext_password").hide() 
+          password_valid = true; 
+          } 
+          });  
+
+          $( "#id_password2" ) 
+          .focusout(function() { 
+          password_input1 = $("#id_password1").val(); 
+          password_input2 = $("#id_password2").val(); 
+          if(password_input1 != password_input2) { 
+          $(".helptext_confirm_password").show() 
+          confirm_password_valid = false; 
+          } else{ 
+          $(".helptext_confirm_password").hide() 
+          confirm_password_valid = true; 
+          } 
+          });  
+
+    </script>  
+  </div> 
+{% endif %}  {% endblock %}

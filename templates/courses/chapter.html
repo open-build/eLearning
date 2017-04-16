@@ -7,9 +7,13 @@
   <link href="{% static "css/course.css" %}" rel="stylesheet"/>
   <script src="{% static "js/tinymce/jquery.tinymce.min.js" %}"></script>
   <script src="{% static "js/tinymce/tinymce.min.js" %}"></script>
-  <script>tinymce.init({
-    selector: 'textarea', resize: false
-  });
+  <script>
+
+    tinymce.init({
+      selector: "textarea",  // change this value according to your HTML
+      plugins: "code    image"
+    });
+
   </script>
   {% include 'breadcrumb.html' %}
 
@@ -21,6 +25,8 @@
           {{ add_txt_form|crispy }}
           <input class='btn btn-primary' type='submit' name="add_text" value='Add text'/>
         </form>
+        <div class="container">
+      </div>
       </div>
 
       <div class="col-md-3">
