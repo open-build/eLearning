@@ -120,7 +120,6 @@ a:focus {
   background: url(/static/img/background-banner.png) no-repeat;
   background-size: 100% 100%;
   display: table;
-  margin-top: 10px;
   width: 100%;
   height: auto;
   margin-bottom: none;
@@ -131,6 +130,7 @@ a:focus {
 .intro .intro-body {
   display: table-cell;
   vertical-align: middle;
+  padding-bottom: 80px;
 }
 .intro .intro-body .brand-heading {
   font-size: 40px;
@@ -152,7 +152,7 @@ a:focus {
 }
 .main_intro
 {
-    margin-bottom: none;
+    margin-bottom: 10px;
 }
 .btn-circle {
   width: 70px;
@@ -225,7 +225,8 @@ a:focus {
 
 .download-section {
   width: 100%;
-  padding-top: 10px;
+  padding-top: 20px;
+  padding-bottom: 20px;
   margin-top: none;
   color: white;
   background: url(../img/downloads-bg.jpg) no-repeat center center scroll;
@@ -333,16 +334,21 @@ body {
 }
 .toladata_about
 {
-  padding-top:150px;
+  padding-top:130px;
 }
+
 .stem_about
 {
   padding-bottom: 100px;
-  padding-top: 150px;
+  padding-top: 160px;
 }
 
 .font_profile{
   font-size: 10px;
   font-color:white;
 
+}
+.image
+{
+  margin-top: 8px;
 }

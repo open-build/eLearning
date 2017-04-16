@@ -10,8 +10,7 @@
         <div class="intro-body">
             <div class="container">
             <div class="clear-fix"></div>
-                <div class="row">
-                    <div class="">
+                <div class="row image">
                         <!----start-banner---->
                         <div class="text-center">
                           <div class="col-md-3 banner-img">
@@ -23,15 +22,13 @@
 
                         </div>
 
-                    </div>
-
                 </div>
                 <div class="main_intro col-md-12 row">
-                  <div class="col-md-1"> </div>
-                  <p class="font1 col-md-10 ">OpenBuild is a nonprofit organization that builds, tests, supports and teaches about Open Source software and hardware projects. Our mission is to distribute and promote Open Source software for education, nonprofit, and business use cases in underserved communities around the world.
+                <div class="col-md-1"></div>
+                  <p class="font1 col-md-10">OpenBuild is a nonprofit organization that builds, tests, supports and teaches about Open Source software and hardware projects. Our mission is to distribute and promote Open Source software for education, nonprofit, and business use cases in underserved communities around the world.
                 </p>
                 </div>
-                <!----start-content---->
+                <!--start-content-->
                 <div class="featured_content col-md-12" id="feature">
 
                       <div class="col-md-4 feature_grid1" style=" border-right: 1px solid #E6E6E6;">
@@ -69,9 +66,10 @@
                 <h2 class="font2">Open Source</h2>
                 <p>At its core work, OpenBuild helps to build and support new and existing Open Source software for nonprofit organizations and social businesses working in the humanitarian and development sector. 
                </p>
+                <img src="{% static '/static/img/mombasa-team.jpg' %}" align="left" style="max-height:200px; margin-right:15px">
                <p>This includes supporting the development and implementation of a Open Source NGO data management platform called <a href="https://github.com/toladata">TolaData.</a></p>
                 <p>Our teams of two or more provide dedicated support to clients that either directly contract us to support their data management process and host their Open Source projects/systems or subcontract us through one of our partner Open Source projects.</p>
-                <p>We provide support to our clients in 3 major stages for TolaData:</p>
+                <p>We provide support to our clients in 3 major stages for TolaData:</p><br>
                 <ul class="toladata_list">
                   <li>Setup and deployment of organization instance</li>
                   <li>Platform enhancement requests</li>
@@ -99,12 +97,13 @@
     </div>
     </section>
 
-    <section id="stem" class="container content-section ">
+    <section id="stem" class="container content-section stem_about">
     <div class="main_frame">
         <div class="inner_frame main_frame1 col-md-12">
             <div class="col-md-10 col-md-offset-1">
                 <h2 class="font2">STEM Teaching</h2>
                 <p>With OpenBuild being an active member in the Open Source community, we are deeply passionate about contributing to the spread of learning and knowledge of Open Source technologies, both software and hardware in our local communities. </p>
+                <img src="{% static '/static/img/a2.jpg' %}" align="right" style="max-height:200px; margin-left:15px">
                 <p>Our developers, technical specialists, and analysts volunteer their time to work with local organizations and schools and organizations to teach STEM based courses.</p>
               <p>In addition, we partner with local community members to help set up project spaces, offer master classes and open courseware as well as introduce projects that attempt to solve real-life challenges through STEM teaching. </p>
               <p>All of these focus on Open Source software and hardware initiatives as well teaching and mentoring students and junior team members about process, best practices and more in the evolving tech industry.</p>   
@@ -141,7 +140,7 @@
                 <textarea id="id_message" name="message" placeholder="Type your Message"></textarea>
                 <input type="submit" value="Send" />
           </form>
-          </div>
+    </div>
     </section>
 
   <hr/>

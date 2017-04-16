@@ -3,10 +3,10 @@
 
 {% block content %}
   <link href="{% static 'css/sidebar.css' %}" rel="stylesheet"/>
-  {% include 'breadcrumb.html' %}
 
   <div class="container student-course">
     <div class="row">
+  {% include 'breadcrumb.html' %}
       <div class="col-md-2">
         {% if chapter_list %}
 

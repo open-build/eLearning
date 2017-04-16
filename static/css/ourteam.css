@@ -1,7 +1,7 @@
 
 .prof
 {
-	padding-left: 200px;
+	
 }
 
 .prof p
@@ -12,12 +12,16 @@
 }
 .profile-section h2
 {
-	color: #275B91;
+	color: #e4551d;
 }
 
 .content-section-prof {
   padding-top: 100px;
 
+}
+.profile_about
+{
+  padding-top:140px;
 }
 .profile-section
 {
@@ -38,13 +42,24 @@
 {
   font-size: 16px;
   color: #275B91;
+  text-align: left;
 
 }
 .feature_grid_f
 {
   color: #275B91;
+  
 }
 .intern_apply
 {
   color: #e4551d;
+}
+.about_content
+{
+  text-align: left;
+}
+.feature_grid2 {
+    margin-top: 5px;
+    margin-bottom: 3px;
+    min-height: 230px;
 }
