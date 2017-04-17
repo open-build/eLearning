@@ -117,8 +117,8 @@ a:focus {
   }
 }
 .intro {
-  background: url(/static/img/background-banner.png) no-repeat;
-  background-size: 100% 100%;
+  background: url(/static/img/background-banner1.jpg) no-repeat;
+  background-size: 100% ;
   display: table;
   width: 100%;
   height: auto;

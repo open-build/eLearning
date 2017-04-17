@@ -135,7 +135,8 @@ a {
 
 /*--feature content--*/
 .featured_content {
-    background: rgba(255,255,255,0.3);
+    background-color: whitesmoke;
+
     padding-bottom: 4px;
 }
 
@@ -189,7 +190,7 @@ h3.m_1 a:hover {
 }
 
 p.m_2 {
-    color: #606060;
+    color: #275B91;
     font-size: 0.95em;
     line-height: 1.2em;
 }
