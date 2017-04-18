@@ -11,10 +11,10 @@
     selector: 'textarea', resize: false
   });
   </script>
-  {% include 'breadcrumb.html' %}
 
   <div class="container">
     <div class="row">
+  {% include 'breadcrumb.html' %}
       <div class="col-md-6 chapter-text-input">
         <form method='POST' action=''>
           {% csrf_token %}

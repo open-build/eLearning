@@ -6,10 +6,10 @@
   <!-- Course core css -->
   <link href="{% static "css/course.css" %}" rel="stylesheet"/>
 
-  {% include 'breadcrumb.html' %}
 
   <div class="container course-professor-panel">
     <div class="row">
+  {% include 'breadcrumb.html' %}
       <div class="col-md-3">
         <form method='POST' action=''>
           {% csrf_token %}
