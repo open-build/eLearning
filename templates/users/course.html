@@ -6,15 +6,17 @@
   <link href="{% static "css/course.css" %}" rel="stylesheet"/>
   <div class="container">
 
-    <div class="row">
-      {% include 'breadcrumb.html' %}
-      <div class="col-xs-12  col-md-6 col-md-offset-3 message">
+
+    <div class="message">
         {% if messages %}
           {% for message in messages %}
             <p{% if message.tags %} class="alert alert-warning"{% endif %}>{{ message }}</p>
           {% endfor %}
         {% endif %}
-      </div>
+    </div>
+
+    <div class="row">
+      {% include 'breadcrumb.html' %}
       {% include 'courses/course_box_model.html' %}
     </div>
 

@@ -7,9 +7,13 @@
   <link href="{% static "css/course.css" %}" rel="stylesheet"/>
   <script src="{% static "js/tinymce/jquery.tinymce.min.js" %}"></script>
   <script src="{% static "js/tinymce/tinymce.min.js" %}"></script>
-  <script>tinymce.init({
-    selector: 'textarea', resize: false
-  });
+  <script>
+
+    tinymce.init({
+      selector: "textarea",  // change this value according to your HTML
+      plugins: "code    image"
+    });
+
   </script>
 
   <div class="container">
