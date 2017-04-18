@@ -49,7 +49,6 @@ def chapter(request, course_name=None, slug=None):
     add_link_form = AddLinkForm(request.POST or None)
     add_txt_form = AddTxtForm(request.POST or None)
     file_upload_form = FileUploadForm(request.POST or None, request.FILES or None)
-
     queryset_txt_block = TextBlock.objects.filter(text_block_fk__id=place.id)
     queryset_yt_link = YTLink.objects.filter(yt_link_fk__id=place.id)
     queryset_files = FileUpload.objects.filter(file_fk__id=place.id)
