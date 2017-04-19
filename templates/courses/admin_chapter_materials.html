@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load staticfiles %}
+
+{% block content %}
+  <!-- Contact core css -->
+  <link href="{% static "css/sysadmin.css" %}" rel="stylesheet"/>
+  {% include 'breadcrumb.html' %}
+
+  <div class="container-fluid admin-panel-content">
+    <div class="row">
+      <div class="col-md-10">
+
+
+        <form class="form-inline admin-search-form" method='GET' action="" role="form">
+          <div class="form-group">
+            <input class="form-control" type="text" name="search" placeholder="Search Courses"
+                   value="{{ request.GET.search }}"/>
+            <button class="btn btn-danger btn-md">Submit</button>
+          </div>
+        </form>
+
+
+      <div class="row">
+      {% if queryset_txt_block %}
+        <table class="table table-bordered generic-table scroll">
+          <thead>
+          <tr>
+            <th>Lesson</th>
+            <th>Date created</th>
+            <th>Is Active</th>
+            <th>Mangage Chapter Lesson</th>
+          </tr>
+          </thead>
+          {% for instance in queryset_txt_block %}
+            <tr>
+              <td class="col-md-8">{{ instance.lesson|safe }}</td>
+              <td class="col-md-2">{{ instance.date_created }}</td>
+              <td class="col-md-2">{{ instance.is_active }}</td>
+              <td class="col-md-2">
+                  {% if instance.is_active == False %}
+                <a href="{% url 'admin_txt_reactivate' instance.id %}"> 
+                    <input class='btn btn-primary btn-sm' type='submit' value='Reactivate Lesson'/> 
+                </a>
+                 <a href="{% url 'admin_txt_delete' instance.id %}"> 
+                  <input onclick=" return confirm('Are you sure you wnt to delete this Lesson')" 
+                         class='btn btn-danger btn-sm' type='submit' value='Delete Lesson'/> 
+                </a>
+                  {% endif %}
+              </td>
+            </tr>
+          {% endfor %}
+        </table>
+      {% endif %}
+    </div>
+
+
+    <div class="row">
+      {% if queryset_yt_link %}
+        <table class="table table-bordered generic-table scroll_table">
+          <thead>
+          <tr>
+            <th>Link</th>
+            <th>Date Created</th>
+            <th>Is Active</th>
+            <th>Magage Chapter Link</th>
+          </tr>
+          </thead>
+          {% for instance in queryset_yt_link %}
+            <tr>
+              <td class="col-md-8">{{ instance.link }}</td>
+              <td class="col-md-2">{{ instance.date_created }}</td>
+              <td class="col-md-2">{{ instance.is_active }}</td>
+              <td class="col-md-2">
+                  {% if instance.is_active == False %}
+                <a href="{% url 'admin_link_reactivate' instance.id %}"> 
+                    <input class='btn btn-primary btn-sm' type='submit' value='Reactivate Link'/> 
+                </a>
+                 <a href="{% url 'admin_link_delete' instance.id %}"> 
+                  <input onclick=" return confirm('Are you sure you wnt to delete link:\n{{ instance.link }}')"
+                         class='btn btn-danger btn-sm' type='submit' value='Delete Link'/>
+                </a>
+                  {% endif %}
+              </td>
+            </tr>
+          {% endfor %}
+        </table>
+      {% endif %}
+    </div>
+
+
+    <div class="row">
+      {% if queryset_files %}
+        <table class="table table-bordered generic-table scroll_table">
+          <thead>
+          <tr>
+            <th>File</th>
+            <th>Date Created</th>
+            <th>Is Active</th>
+            <th>Manage Chapter File</th>
+          </tr>
+          </thead>
+          {% for instance in queryset_files %}
+            <tr>
+              <td class="col-md-8">{{ instance.file }}</td>
+              <td class="col-md-2">{{ instance.date_created }}</td>
+              <td class="col-md-2">{{ instance.is_active }}</td>
+              <td class="col-md-2">
+                  {% if instance.is_active == False %}
+                <a href="{% url 'admin_file_reactivate' instance.id %}"> 
+                    <input class='btn btn-primary btn-sm' type='submit' value='Restore File'/> 
+                </a>
+                 <a href="{% url 'admin_file_delete' instance.id %}"> 
+                  <input onclick=" return confirm('Are you sure you wnt to delete file:\n{{ instance.file }}')"
+                         class='btn btn-danger btn-sm' type='submit' value='Delete File'/>
+                </a>
+                  {% endif %}
+              </td>
+            </tr>
+          {% endfor %}
+        </table>
+      {% endif %}
+    </div>
+
+
+      </div>
+    </div>
+  </div>
+
+{% endblock %}

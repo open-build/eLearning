@@ -7,7 +7,7 @@ from .forms import *
 @login_required
 def courses(request):
     if request.user.is_professor or request.user.is_site_admin:
-        queryset = Course.objects.all()
+        queryset = Course.objects.filter(is_active=True)
     else:
         queryset = Course.objects.filter(for_everybody=True) | Course.objects.filter(students=request.user)
 
@@ -22,7 +22,7 @@ def courses(request):
 @user_passes_test(lambda user: user.is_professor)
 def course(request, course_name=None):
     add_chapter_form = AddChapterForm(request.POST or None)
-    queryset_chapter = Chapter.objects.filter(course__course_name=course_name)
+    queryset_chapter = Chapter.objects.filter(course__course_name=course_name).filter(is_active=True)
 
     context = {
         "title": course_name,
@@ -44,14 +44,15 @@ def course(request, course_name=None):
 
 @user_passes_test(lambda user: user.is_professor)
 def chapter(request, course_name=None, slug=None):
-    place = Chapter.objects.get(course__course_name=course_name, slug=slug)
+    place = Chapter.objects.get(course__course_name=course_name, slug=slug, is_active=True)
 
     add_link_form = AddLinkForm(request.POST or None)
     add_txt_form = AddTxtForm(request.POST or None)
     file_upload_form = FileUploadForm(request.POST or None, request.FILES or None)
-    queryset_txt_block = TextBlock.objects.filter(text_block_fk__id=place.id)
-    queryset_yt_link = YTLink.objects.filter(yt_link_fk__id=place.id)
-    queryset_files = FileUpload.objects.filter(file_fk__id=place.id)
+
+    queryset_txt_block = TextBlock.objects.filter(text_block_fk__id=place.id).filter(is_active=True)
+    queryset_yt_link = YTLink.objects.filter(yt_link_fk__id=place.id).filter(is_active=True)
+    queryset_files = FileUpload.objects.filter(file_fk__id=place.id).filter(is_active=True)
 
     context = {
         "title": place.chapter_name,
@@ -102,41 +103,46 @@ def chapter(request, course_name=None, slug=None):
 @user_passes_test(lambda user: user.is_professor)
 def delete_course(request, course_name=None):
     instance = Course.objects.get(course_name=course_name)
-    instance.delete()
+    instance.is_active = False
+    instance.save()
     return HttpResponseRedirect(reverse('profile'))
 
 
 @user_passes_test(lambda user: user.is_professor)
 def delete_chapter(request, course_name=None, slug=None):
     instance = Chapter.objects.get(slug=slug)
-    instance.delete()
+    instance.is_active = False
+    instance.save()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
 @user_passes_test(lambda user: user.is_professor)
 def delete_yt_link(request, yt_id=None):
     instance = YTLink.objects.get(id=yt_id)
-    instance.delete()
+    instance.is_active = False
+    instance.save()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
 @user_passes_test(lambda user: user.is_professor)
 def delete_text_block(request, txt_id=None):
     instance = TextBlock.objects.get(id=txt_id)
-    instance.delete()
+    instance.is_active = False
+    instance.save()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
 @user_passes_test(lambda user: user.is_professor)
 def delete_file(request, file_id=None):
     instance = FileUpload.objects.get(id=file_id)
-    instance.delete()
+    instance.is_active = False
+    instance.save()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
 @user_passes_test(lambda user: user.is_professor)
 def update_course(request, course_name=None):
-    instance = Course.objects.get(course_name=course_name)
+    instance = Course.objects.get(course_name=course_name, is_active=True)
     update_course_form = EditCourseForm(request.POST or None, instance=instance)
 
     path = request.path.split('/')[1]
@@ -159,7 +165,7 @@ def update_course(request, course_name=None):
 
 @user_passes_test(lambda user: user.is_professor)
 def update_chapter(request, course_name=None, slug=None):
-    instance = Chapter.objects.get(slug=slug)
+    instance = Chapter.objects.get(slug=slug, is_active=True)
     update_chapter_form = EditChapterForm(request.POST or None, instance=instance)
 
     path = request.path.split('/')[1]
@@ -183,7 +189,7 @@ def update_chapter(request, course_name=None, slug=None):
 
 @user_passes_test(lambda user: user.is_professor)
 def update_yt_link(request, course_name=None, slug=None, yt_id=None):
-    instance = YTLink.objects.get(id=yt_id)
+    instance = YTLink.objects.get(id=yt_id, is_active=True)
     update_link_form = EditYTLinkForm(request.POST or None, instance=instance)
 
     context = {
@@ -206,7 +212,7 @@ def update_yt_link(request, course_name=None, slug=None, yt_id=None):
 
 @user_passes_test(lambda user: user.is_professor)
 def update_text_block(request, course_name=None, slug=None, txt_id=None):
-    instance = TextBlock.objects.get(id=txt_id)
+    instance = TextBlock.objects.get(id=txt_id, is_active=True)
     update_txt_form = EditTxtForm(request.POST or None, instance=instance)
 
     context = {
@@ -271,3 +277,125 @@ def remove_students(request, student_id, course_name=None):
     course = Course.objects.get(course_name=course_name)
     course.students.remove(student)
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+
+@user_passes_test(lambda user: user.is_site_admin)
+def admin_courses(request, slug = None):
+    queryset = Course.objects.all()
+    search = request.GET.get("search")
+
+    if search:
+        queryset = queryset.filter(course_name__icontains=search)
+
+    context = {
+        "title": "Admin",
+        "queryset": queryset,
+        "slug": slug,
+    }
+
+    return render(request, "courses/admin_courses.html", context)
+
+@user_passes_test(lambda user: user.is_site_admin)
+def admin_course_delete(request, course_name=None):
+    instance = Course.objects.get(course_name=course_name)
+    instance.delete()
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+@user_passes_test(lambda user: user.is_site_admin)
+def admin_course_reactivate(request, course_name=None):
+    instance = Course.objects.get(course_name=course_name)
+    instance.is_active = True
+    instance.save()
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+@user_passes_test(lambda user: user.is_site_admin)
+def admin_chapters(request, course_name=None):
+    queryset = Chapter.objects.filter(course__course_name=course_name)
+    search = request.GET.get("search")
+    if search:
+        queryset = queryset.filter(chapter_name__icontains=search)
+
+    context = {
+        "title": "Admin",
+        "queryset": queryset,
+    }
+
+    return render(request, "courses/admin_chapters.html", context)
+
+@user_passes_test(lambda user: user.is_site_admin)
+def admin_chapter_delete(request, chapter_name=None):
+    instance = Chapter.objects.get(chapter_name=chapter_name)
+    instance.delete()
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+@user_passes_test(lambda user: user.is_site_admin)
+def admin_chapter_reactivate(request, chapter_name=None):
+    instance = Chapter.objects.get(chapter_name=chapter_name)
+    instance.is_active = True
+    instance.save()
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+@user_passes_test(lambda user: user.is_site_admin)
+def admin_chapter_materials(request, chapter_name=None):
+    chapter = Chapter.objects.get(chapter_name=chapter_name)
+    queryset_txt_block = TextBlock.objects.filter(text_block_fk__id=chapter.id)
+    queryset_yt_link = YTLink.objects.filter(yt_link_fk__id=chapter.id)
+    queryset_files = FileUpload.objects.filter(file_fk__id=chapter.id)
+
+    search = request.GET.get("search")
+    if search:
+        queryset_txt_block = queryset_txt_block.filter(lesson__icontains=search)
+        queryset_yt_link = queryset_yt_link.filter(link__icontains=search)
+        queryset_files = queryset_files.filter(file__icontains=search)
+
+    context = {
+        "title": chapter.chapter_name,
+        "queryset_yt_link": queryset_yt_link,
+        "queryset_txt_block": queryset_txt_block,
+        "queryset_files": queryset_files,
+    }
+
+    return render(request, "courses/admin_chapter_materials.html", context)
+
+@user_passes_test(lambda user: user.is_site_admin)
+def admin_link_reactivate(request, yt_id=None):
+    instance = YTLink.objects.get(id=yt_id)
+    instance.is_active = True
+    instance.save()
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+@user_passes_test(lambda user: user.is_site_admin)
+def admin_link_delete(request, yt_id=None):
+    instance = YTLink.objects.get(id=yt_id)
+    instance.delete()
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+
+@user_passes_test(lambda user: user.is_site_admin)
+def admin_txt_reactivate(request, txt_id=None):
+    instance = TextBlock.objects.get(id=txt_id)
+    instance.is_active = True
+    instance.save()
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+@user_passes_test(lambda user: user.is_site_admin)
+def admin_txt_delete(request, txt_id=None):
+    instance = TextBlock.objects.get(id=txt_id)
+    instance.delete()
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+
+@user_passes_test(lambda user: user.is_site_admin)
+def admin_file_reactivate(request, file_id=None):
+    instance = FileUpload.objects.get(id=file_id)
+    instance.is_active = True
+    instance.save()
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+@user_passes_test(lambda user: user.is_site_admin)
+def admin_file_delete(request, file_id=None):
+    instance = FileUpload.objects.get(id=file_id)
+    instance.delete()
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+

@@ -99,7 +99,7 @@ def admin(request):
 @user_passes_test(lambda user: user.is_professor)
 def professor(request):
     add_course_form = AddCourseForm(request.POST or None)
-    queryset_course = Course.objects.filter(user__username=request.user)
+    queryset_course = Course.objects.filter(user__username=request.user).filter(is_active=True)
 
     context = {
         "title": "Professor",

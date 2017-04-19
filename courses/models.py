@@ -16,6 +16,7 @@ class Course(models.Model):
     user = models.ForeignKey(UserProfile, default=1)
     students = models.ManyToManyField(UserProfile, related_name='students_to_course')
     for_everybody = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=True)
 
     def __unicode__(self):
         return self.course_name
@@ -26,6 +27,7 @@ class Chapter(models.Model):
     chapter_created_date = models.DateTimeField(auto_now_add=True)
     course = models.ForeignKey(Course, on_delete=models.CASCADE, default=1)
     slug = models.SlugField(unique=True)
+    is_active = models.BooleanField(default=True)
 
     def __unicode__(self):
         return self.chapter_name
@@ -66,18 +68,21 @@ class TextBlock(models.Model):
     lesson = models.TextField()
     text_block_fk = models.ForeignKey(Chapter, default=1)
     date_created = models.DateTimeField(auto_now_add=True)
+    is_active = models.BooleanField(default=True)
 
 
 class YTLink(models.Model):
     link = models.URLField(max_length=200)
     yt_link_fk = models.ForeignKey(Chapter, default=1)
     date_created = models.DateTimeField(auto_now_add=True)
+    is_active = models.BooleanField(default=True)
 
 
 class FileUpload(models.Model):
     file = models.FileField(null=False, blank=False, default='')
     date_created = models.DateTimeField(auto_now_add=True)
     file_fk = models.ForeignKey(Chapter, default=1)
+    is_active = models.BooleanField(default=True)
 
 
 @receiver(models.signals.post_delete, sender=FileUpload)

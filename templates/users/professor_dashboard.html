@@ -36,7 +36,8 @@
                     <input class='btn btn-primary btn-sm' type='submit' value='Edit Course'/>
                   </a>
                   <a href="{% url 'delete' instance.course_name %}">
-                    <input class='btn btn-danger btn-sm' type='submit' value='Delete Course'/>
+                    <input onclick=" return confirm('Are you sure you wnt to delete {{instance.course_name}}')"
+                           class='btn btn-danger btn-sm' type='submit' value='Delete Course'/>
                   </a>
                   <a href="{% url 'list_students' instance.course_name %}">
                     <input class='btn btn-info btn-sm' type='submit' value='Edit students'/>
