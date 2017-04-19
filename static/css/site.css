@@ -28,7 +28,7 @@ a {
 }
 a:active
 {
-  color: #e89424;
+  color: #4D4D4D;
 }
 a:hover,
 a:focus {
@@ -40,15 +40,24 @@ a:focus {
 }
 .navbar-custom {
   margin-bottom: 0;
-  text-transform: uppercase;
+  text-transform: capitalize;
   border-bottom: 1px solid rgba(255, 255, 255, 0.3);
   font-family: "Montserrat", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 15px;
   background-color: #FAFAFA;
 }
 .navbar-custom .navbar-toggle {
   background-color: rgba(255, 255, 255, 0.2);
-  font-size: 12px;
+  font-size: 17px;
 }
+
+.navbar-nav > li > a, .navbar-brand {
+  margin-top: -7px;
+  height: 50px;
+
+}
+.navbar {min-height:40px !important;}
+
 .navbar-custom .navbar-toggle:focus,
 .navbar-custom .navbar-toggle:active {
   outline: none;
@@ -60,24 +69,25 @@ a:focus {
   outline: none;
 }
 .navbar-custom a {
-  color: #4db3d0;
+  color: #777;
 }
 .navbar-custom a.active {
-  color: #e89424;
+  color: #333;
 }
 .navbar-custom .nav li a {
+
   -webkit-transition: background 0.3s ease-in-out;
   -moz-transition: background 0.3s ease-in-out;
   transition: background 0.3s ease-in-out;
 }
 .navbar-custom .nav li a:hover {
-  color: #e89424;
+  color: #101010;
   outline: none;
   background-color: transparent;
 }
 .navbar-custom .nav li a:focus,
 .navbar-custom .nav li a:active {
-  color: #e89424;
+  color: #101010;
   outline: none;
   background-color: transparent;
 }
@@ -97,7 +107,7 @@ a:focus {
 }
 .team_dropdown ul li a
 {
-  color:#4db3d0;
+  color:#777;
 }
 
 @media (min-width: 768px) {
@@ -117,8 +127,8 @@ a:focus {
   }
 }
 .intro {
-  background: url(/static/img/background-banner.png) no-repeat;
-  background-size: 100% 100%;
+  background: url(/static/img/background-banner1.jpg) no-repeat;
+  background-size: 100% ;
   display: table;
   width: 100%;
   height: auto;
