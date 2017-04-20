@@ -42,6 +42,7 @@
                     {% if request.user.is_authenticated %}
                         {% if request.user.is_site_admin %}
                           <li><a href="{% url 'admin' %}"><span class="glyphicon glyphicon-education"></span>Manage Users</a></li>
+                          <li><a href="{% url 'admin_courses' %}"><span class="glyphicon glyphicon-education"></span>Manage Courses</a></li>
                         {% endif %}
                     {% endif %}
                     </li>

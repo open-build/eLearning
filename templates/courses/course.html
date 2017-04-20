@@ -41,7 +41,8 @@
                     <input class='btn btn-primary btn-sm' type='submit' value='Rename'/>
                   </a>
                   <a href="{% url 'delete_chapter' instance.course instance.slug%}">
-                    <input class='btn btn-danger btn-sm' type='submit' value='Delete'/>
+                    <input onclick=" return confirm('Are you sure you wnt to delete {{instance.chapter_name}}')"
+                           class='btn btn-danger btn-sm' type='submit' value='Delete'/>
                   </a>
                 </td>
               </tr>

@@ -65,7 +65,8 @@
                   <input class='btn btn-primary btn-sm' type='submit' value='Edit Lesson'/>
                 </a>
                 <a href="{% url 'delete_txt' instance.id %}">
-                  <input class='btn btn-primary btn-sm' type='submit' value='Delete Lesson'/>
+                  <input onclick=" return confirm('Are you sure you wnt to delete this Lesson')"
+                         class='btn btn-danger btn-sm' type='submit' value='Delete Lesson'/>
                 </a>
               </td>
             </tr>
@@ -94,7 +95,8 @@
                   <input class='btn btn-primary btn-sm' type='submit' value='Edit Link'/>
                 </a>
                 <a href="{% url 'delete_link' instance.id %}">
-                  <input class='btn btn-primary btn-sm' type='submit' value='Delete Link'/>
+                  <input onclick=" return confirm('Are you sure you wnt to delete link:\n{{ instance.link }}')"
+                         class='btn btn-danger btn-sm' type='submit' value='Delete Link'/>
                 </a>
               </td>
             </tr>
@@ -124,7 +126,8 @@
               <td class="col-md-2">{{ instance.date_created }}</td>
               <td class="col-md-2">
                 <a href="{% url 'delete_file' instance.id %}">
-                  <input class='btn btn-primary btn-sm' type='submit' value='Delete File'/>
+                  <input onclick=" return confirm('Are you sure you wnt to delete file:\n{{ instance.file }}')"
+                         class='btn btn-danger btn-sm' type='submit' value='Delete File'/>
                 </a>
               </td>
             </tr>
