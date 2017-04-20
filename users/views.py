@@ -1,7 +1,6 @@
 from courses.forms import AddCourseForm
 from courses.models import *
 from .forms import *
-
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.decorators import user_passes_test, login_required
 from django.core.urlresolvers import reverse
@@ -50,7 +49,7 @@ def contact(request):
         from_email = contact_form.cleaned_data.get("email")
         message = contact_form.cleaned_data.get("message")
         message = 'Sender:  ' + sender + '\nFrom:  ' + from_email + '\n\n' + message
-        send_mail(subject, message, settings.EMAIL_HOST_USER, [settings.EMAIL_HOST_USER], fail_silently=False)
+        send_mail(subject, message, settings.EMAIL_HOST_USER, [settings.EMAIL_HOST_USER], fail_silently=True)
         success_message = "We appreciate you contacting us, one of our Customer Service colleagues will get back" \
                           " to you within a 24 hours."
         messages.success(request, success_message)
@@ -100,7 +99,7 @@ def admin(request):
 @user_passes_test(lambda user: user.is_professor)
 def professor(request):
     add_course_form = AddCourseForm(request.POST or None)
-    queryset_course = Course.objects.filter(user__username=request.user)
+    queryset_course = Course.objects.filter(user__username=request.user).filter(is_active=True)
 
     context = {
         "title": "Professor",
@@ -174,12 +173,24 @@ def delete_user(request, username):
 @login_required
 def course_homepage(request, course_name):
     chapter_list = Chapter.objects.filter(course__course_name=course_name)
-
     if chapter_list:
-        return redirect(reverse(student_course, kwargs={'course_name': course_name,
-                                                        "slug": chapter_list[0].slug}))
+        course = Course.objects.get(course_name=course_name)
+        chapter_list = Chapter.objects.filter(course=course)
+        user = request.user
+
+        if user in course.students.all() or user.is_professor or user.is_site_admin or course.for_everybody:
+            context = {
+                "course_name": course_name,
+                "chapter_list": chapter_list,
+                "title": course_name ,
+            }
+
+            return render(request, "users/student_courses.html", context)
+
+        else:
+            raise Http404
     else:
-        warning_message = "Currently there are no chapters for this course "
+        warning_message = "Currently there are no chapters for %s "%(course_name)
         messages.warning(request, warning_message)
         return redirect(reverse('courses'))
 
@@ -194,6 +205,7 @@ def student_course(request, course_name, slug=None):
     files = FileUpload.objects.filter(file_fk=chapter)
     user = request.user
 
+
     if user in course.students.all() or user.is_professor or user.is_site_admin or course.for_everybody:
         result_list = sorted(
             chain(text, videos, files),
@@ -207,8 +219,15 @@ def student_course(request, course_name, slug=None):
             "result_list": result_list,
             "title": course_name + ' : ' + chapter.chapter_name,
         }
+        if len(result_list) == 0:
+            warning_message = "Currently there are no materials for %s "%(chapter.chapter_name)
+            messages.warning(request, warning_message)
+            return redirect(reverse('course_homepage', kwargs={"course_name":course_name}))
 
-        return render(request, "users/student_courses.html", context)
+        return render(request, "users/student_chapter.html", context)
 
     else:
         raise Http404
+
+
+

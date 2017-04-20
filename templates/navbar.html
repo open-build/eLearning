@@ -35,10 +35,21 @@
                     </li>
                     <li>
                     {% if request.user.is_authenticated %}
+                    <li><a href="{% url 'courses' %}"><span class="glyphicon glyphicon-education"></span> Courses</a></li>
+                    {% endif %}
+                    </li>
+                    <li>
+                    {% if request.user.is_authenticated %}
+                        {% if request.user.is_site_admin %}
+                          <li><a href="{% url 'admin' %}"><span class="glyphicon glyphicon-education"></span>Manage Users</a></li>
+                          <li><a href="{% url 'admin_courses' %}"><span class="glyphicon glyphicon-education"></span>Manage Courses</a></li>
+                        {% endif %}
+                    {% endif %}
+                    </li>
+                    <li>
+                    {% if request.user.is_authenticated %}
                         {% if request.user.is_professor %}
-                          <li><a href="{% url 'professor' %}"><span class="glyphicon glyphicon-education"></span> Courses</a></li>
-                        {% else %}
-                          <li><a href="{% url 'courses' %}"><span class="glyphicon glyphicon-education"></span> Courses</a></li>
+                          <li><a href="{% url 'professor' %}"><span class="glyphicon glyphicon-education"></span>Manage Courses</a></li>
                         {% endif %}
                     {% endif %}
                     </li>
