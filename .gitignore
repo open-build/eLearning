@@ -4,4 +4,4 @@
 source/settings_sensitive.py
 slug
 venv
-assets/
+source/settings.py
