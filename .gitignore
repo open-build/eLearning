@@ -5,3 +5,4 @@ source/settings_sensitive.py
 slug
 venv
 source/settings.py
+.DS_Store
