@@ -7,13 +7,11 @@
   <link href="{% static "css/course.css" %}" rel="stylesheet"/>
   <script src="{% static "js/tinymce/jquery.tinymce.min.js" %}"></script>
   <script src="{% static "js/tinymce/tinymce.min.js" %}"></script>
-
-
-  {% include 'breadcrumb.html' %}
+  </script>
 
   <div class="container">
     <div class="row">
-
+  {% include 'breadcrumb.html' %}
       <div class="col-md-6 chapter-text-input">
         <form method='POST' action=''>
           {% csrf_token %}

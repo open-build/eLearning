@@ -2,7 +2,12 @@
 .bread-h {
     background: #275B91;
     margin-bottom: 25px;
-    margin-top: 20px;
+    margin-top: 50px;
+}
+.bread-course{
+    background: #275B91;
+    margin-bottom: 25px;
+    margin-top: 10px;
 }
 
 .spacing-path {
@@ -12,7 +17,7 @@
 .title-section {
     background: #275B91;
     position: relative;
-    margin-top: 100;
+    margin-top: 10;
 }
 
 .title-section h1 {
@@ -34,7 +39,7 @@
     border-radius: 0;
 }
 
-.title-section ul li {
+.title-section  ul li {
     line-height: 18px;
     font-size: 13px;
     color: #5f6775;
@@ -43,7 +48,47 @@
 .title-section ul li a {
     color: #fff;
 }
+.title-course {
+    background: #275B91;
+    position: relative;
+    margin-top: 10;
+}
+.title-course ul {
+    background: none;
+    position: relative;
+    margin: 0;
+    padding: 1px 0 2px 0;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
+}
+
+.title-course ul li {
+    line-height: 18px;
+    font-size: 15px;
+    color: #5f6775;
+}
+
+.title-course h1 {
+    margin-top: 10px;
+    line-height: 10px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #fff;
+}
+
+.title-course ul li a {
+    color: #fff;
+}
 
 .breadcrumb > .active {
     color: #9eb3b6;
+}
+
+.course_nav
+{
+
+    border-bottom: 1px solid #597275;
+    padding-top: 0px;
+    margin-bottom: 5px;
 }
