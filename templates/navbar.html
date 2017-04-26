@@ -55,7 +55,7 @@
                         <a class="page-scroll" href="/accounts/register"><span class="glyphicon glyphicon-plus"></span>Sign Up</a>
                     </li>
                     <li class="dropdown">
-                        <a class="dropdown-toggle page-scroll" href="#" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span> Login <span class="caret"></span></a>
+                        <a class="dropdown-toggle page-scroll" href="#" data-toggle="dropdown"><span class="glyphicon glyphicon-log-in"></span> Login <span class="caret"></span></a>
                         <div class="dropdown-menu login_dropdown col-md-5" style="padding: 15px;min-width:250px">
                             <form method="post" action="{% url 'django.contrib.auth.views.login' %}" accept-charset="UTF-8">
                                 {% csrf_token %}
@@ -83,7 +83,9 @@
                     <li>
                        <a href="" class="page-scroll  dropdown-toggle" data-toggle="dropdown" type="button"><span class="glyphicon glyphicon-user"></span> {{request.user}} <span class="caret"></span> </a>
                         <ul class="dropdown-menu">
-                            <li><a href="/accounts/logout">Logout</a></li>
+                            <li><a href="{% url 'profile' %}"><i class="fa fa-users" aria-hidden="true"></i> Manage Users</a></li>                       
+                            <li><a href="{% url 'profile' %}"><span class="glyphicon glyphicon-education"></span> Manage Courses</a></li>                       
+                            <li><a href="/accounts/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
                         </ul>
                     </li>
                     {% endif %}
