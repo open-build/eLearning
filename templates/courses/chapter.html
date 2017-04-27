@@ -1,4 +1,3 @@
-{% extends 'base.html' %}
 {% load crispy_forms_tags %}
 {% load staticfiles %}
 
@@ -58,9 +57,9 @@
           </thead>
           {% for instance in queryset_txt_block %}
             <tr>
-              <td class="col-md-8">{{ instance.lesson|safe }}</td>
+              <td class="col-md-7">{{ instance.lesson|safe }}</td>
               <td class="col-md-2">{{ instance.date_created }}</td>
-              <td class="col-md-2">
+              <td class="col-md-3">
                 <a href="{% url 'edit_txt' course_name slug instance.id %}">
                   <input class='btn btn-primary btn-sm' type='submit' value='Edit Lesson'/>
                 </a>

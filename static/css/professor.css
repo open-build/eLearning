@@ -4,6 +4,7 @@ label, h2, th {
 
 .professor-panel-content {
     margin-top: 25px !important;
+    background-color: #fff;
 }
 
 .generic-table {
@@ -35,4 +36,16 @@ label, h2, th {
 
 .btn-primary {
     background-color: #275B91;
+}
+.prof-course
+{
+    background: #275B91;
+    position: relative;
+    margin-top: 10;
+    margin-bottom: 20px;
+    padding-top: 7px;
+}
+.course_tab
+{
+    background-color: #fff;
 }

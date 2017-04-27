@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import user_passes_test, login_required
 from .forms import *
+from users.views import professor
 
 
 @login_required
@@ -35,11 +36,11 @@ def course(request, course_name=None):
 
     if add_chapter_form.is_valid():
         instance = add_chapter_form.save(commit=False)
-        instance.course = Course.objects.get(course_name=course_name)
+        instance.course = Course.objects.get(course_name="course 1")
         instance.save()
         return redirect(reverse('professor_course', kwargs={'course_name': course_name}))
 
-    return render(request, "courses/course.html", context)
+    return professor(request, course_name=None)
 
 
 @user_passes_test(lambda user: user.is_professor)
