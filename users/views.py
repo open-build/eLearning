@@ -172,10 +172,10 @@ def delete_user(request, username):
 
 @login_required
 def course_homepage(request, course_name):
-    chapter_list = Chapter.objects.filter(course__course_name=course_name)
+    chapter_list = Chapter.objects.filter(course__course_name=course_name, is_active=True)
     if chapter_list:
-        course = Course.objects.get(course_name=course_name)
-        chapter_list = Chapter.objects.filter(course=course)
+        course = Course.objects.get(course_name=course_name, is_active=True)
+        chapter_list = Chapter.objects.filter(course=course, is_active=True)
         user = request.user
 
         if user in course.students.all() or user.is_professor or user.is_site_admin or course.for_everybody:
@@ -197,12 +197,12 @@ def course_homepage(request, course_name):
 
 @login_required
 def student_course(request, course_name, slug=None):
-    course = Course.objects.get(course_name=course_name)
-    chapter_list = Chapter.objects.filter(course=course)
-    chapter = Chapter.objects.get(course__course_name=course_name, slug=slug)
-    text = TextBlock.objects.filter(text_block_fk=chapter).values('lesson_name','date_created','id')
-    videos = YTLink.objects.filter(yt_link_fk=chapter)
-    files = FileUpload.objects.filter(file_fk=chapter)
+    course = Course.objects.get(course_name=course_name, is_active=True)
+    chapter_list = Chapter.objects.filter(course=course, is_active=True)
+    chapter = Chapter.objects.get(course__course_name=course_name, slug=slug, is_active=True)
+    text = TextBlock.objects.filter(text_block_fk=chapter).filter(is_active=True).values('lesson_name','date_created','id')
+    videos = YTLink.objects.filter(yt_link_fk=chapter, is_active=True)
+    files = FileUpload.objects.filter(file_fk=chapter, is_active=True)
     user = request.user
 
 
@@ -234,9 +234,9 @@ def student_course(request, course_name, slug=None):
 
 @login_required
 def student_lesson(request, course_name, slug=None, txt_id = None):
-    course = Course.objects.get(course_name=course_name)
-    chapter = Chapter.objects.get(course__course_name=course_name, slug=slug)
-    text = TextBlock.objects.get(id=txt_id)
+    course = Course.objects.get(course_name=course_name, is_active=True)
+    chapter = Chapter.objects.get(course__course_name=course_name, slug=slug, is_active=True)
+    text = TextBlock.objects.get(id=txt_id, is_active=True)
     user = request.user
 
     if user in course.students.all() or user.is_professor or user.is_site_admin or course.for_everybody:
