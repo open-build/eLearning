@@ -1,14 +1,73 @@
-{% extends 'base.html' %}
+
 {% load staticfiles %}
 
 {% block content %}
   <link href="{% static 'css/sidebar.css' %}" rel="stylesheet"/>
+  <link href="{% static "css/breadcrumb.css" %}" rel="stylesheet"/>
+  {% include 'head_css.html' %}
+  {% include 'javascript.html' %}
 
   <div class="container student-course">
     <div class="row">
-  {% include 'breadcrumb.html' %}
+    <!-- breadcrumb -->
+    <div class="bread-course">
+      <div class="container">
+        <section class="title-course" >
+          <ul class="nav navbar-nav course_nav">
+
+            <li>
+              <a href="/">OpenBuild&nbsp</a>
+              {% if  path  != None %}
+                {% url 'forum' as forum_url %}
+                {% if request.get_full_path != forum_url %}
+                  <span class="spacing-path">&nbsp&nbsp&nbsp</span><a href="/{{ redirect_path }}">&nbsp{{ path }}&nbsp</a>
+                {% endif %}
+              {% endif %}
+            </li>
+
+            {% url 'student_course' course_name slug as student_course_url %}
+            {% if request.get_full_path ==  student_course_url %}
+              <li><a href="{% url 'courses' %}">Courses</a></li>
+            {% endif %}
+
+            {% url 'chapter' course_name slug as chapter_url %}
+            {% if request.get_full_path ==  chapter_url %}
+              <li><a href="{% url 'professor_course' course_name %}">{{ course_name }}</a></li>
+            {% endif %}
+
+            {% url 'edit_txt' course_name slug text_id as chapter_url %}
+            {% if request.get_full_path ==  chapter_url %}
+              <li><a href="{% url 'chapter' course_name slug %}">{{ course_name }}</a></li>
+            {% endif %}
+
+            {% url 'edit_chapter' course_name chapter_id as chapter_url %}
+            {% if request.get_full_path ==  chapter_url %}
+              <li><a href="{% url 'professor_course' course_name %}">{{ course_name }}</a></li>
+            {% endif %}
+
+            {% url 'edit_link' course_name slug yt_id as chapter_url %}
+            {% if request.get_full_path ==  chapter_url %}
+              <li><a href="{% url 'chapter' course_name slug %}">{{ course_name }}</a></li>
+            {% endif %}
+          </ul>
+        <div>
+        </div>
+        </section>
+      </div>
+    </div>
+<!-- end breadcrumb -->
+<div class="col-md-12">
+  <h3 class="font1">{{ title }} </h3>
       <div class="col-md-2">
         {% if chapter_list %}
+
+        <div class="col-xs-12  col-md-6 col-md-offset-3">
+          {% if messages %}
+            {% for message in messages %}
+              <p{% if message.tags %} class="alert alert-success"{% endif %}>{{ message }}</p>
+            {% endfor %}
+          {% endif %}
+        </div>
 
           <ul class="sidebar-nav">
             <li>
@@ -22,34 +81,9 @@
 
         {% endif %}
       </div>
-
-      <div class="col-md-10">
-        {% if result_list %}
-          {% for item in result_list %}
-            {% if item.link %}
-              {% if 'youtube.com' in item.link %}
-                <div class="course-inner-content video">
-                  <iframe width="640" height="360" src="{{ item.link }}" frameborder="0" allowfullscreen></iframe>
-                </div>
-              {% else %}
-                <div class="course-inner-content">
-                {{ item.link|safe }}
-                </div>
-                {% endif %}
-            {% elif item.lesson %}
-              <div class="course-inner-content">
-                {{ item.lesson|safe }}
-              </div>
-            {% else %}
-              <div class="course-inner-content">
-                <a href='{{ item.file.url }}'>{{ item.file }}</a>
-              </div>
-            {% endif %}
-          {% endfor %}
-        {% endif %}
-      </div>
     </div>
   </div>
+</div>
 
   <script>
     $(document).ready(function () {
