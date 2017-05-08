@@ -9,7 +9,7 @@ from .forms import *
 from .models import *
 
 
-
+@login_required()
 def forum(request):
     topic_list = Topic.objects.all().order_by('-stamp_updated')
     add_new_topic = AddNewTopic(request.POST or None)
