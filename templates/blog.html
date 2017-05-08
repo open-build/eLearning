@@ -56,7 +56,9 @@
                 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Harum, dolor quis. Sunt, ut, explicabo, aliquam tenetur ratione tempore quidem voluptates cupiditate voluptas illo saepe quaerat numquam recusandae? Qui, necessitatibus, est!</p>
                 </div>
                 <!-- Post Content -->
-                <button class="btn btn-danger" data-toggle="collapse" data-target="#post">Write a New Post</button>
+                {% if request.user.is_admin %}
+                    <button class="btn btn-danger" data-toggle="collapse" data-target="#post">Write a New Post</button>
+                {% endif %}
 
                 <div id="post" class="collapse" style="margin-top:20px">
                     <form method='POST' action='/blog/'>
