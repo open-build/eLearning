@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block content %}
+  <link href="{% static 'css/sidebar.css' %}" rel="stylesheet"/>
+  <link href="{% static 'css/courser.css' %}" rel="stylesheet"/>
+  {% include 'breadcrumb.html' %}
+
+  <div class="container student-course">
+    <div class="row">
+      <div class="col-md-10"> 
+
+        <div class="row">
+            <h1 style="text-align: center;">{{ text.lesson_name }}</h1>
+            <p>{{ text.lesson|safe }}</p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
+  <script>
+    $(document).ready(function () {
+      /* Make left-border same height as parent */
+      var rightColumn = $(".col-md-10");
+      var parentHeight = rightColumn.parent().height();
+      rightColumn.css("height", parentHeight);
+
+      /* Add active class on chapter change */
+      var pathname = window.location.pathname;
+      pathname = pathname.substring(0, pathname.length - 1);
+      $('.sidebar-nav > li a[href="' + pathname + '"]').addClass('active-sidebar');
+    });
+  </script>
+
+{% endblock %}
