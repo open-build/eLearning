@@ -42,7 +42,7 @@ class AddLinkForm(forms.ModelForm):
 class AddTxtForm(forms.ModelForm):
     class Meta:
         model = TextBlock
-        fields = ["lesson"]
+        fields = ["lesson_name", "lesson"]
 
 
 class EditCourseForm(forms.ModelForm):
@@ -66,7 +66,7 @@ class EditYTLinkForm(forms.ModelForm):
 class EditTxtForm(forms.ModelForm):
     class Meta:
         model = TextBlock
-        fields = ["lesson"]
+        fields = ["lesson_name","lesson"]
 
 
 class FileUploadForm(forms.ModelForm):

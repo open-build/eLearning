@@ -3,36 +3,80 @@
 
 {% block content %}
   <link href="{% static 'css/sidebar.css' %}" rel="stylesheet"/>
+  <link href="{% static 'css/courser.css' %}" rel="stylesheet"/>
   {% include 'breadcrumb.html' %}
 
   <div class="container student-course">
     <div class="row">
       <div class="col-md-10"> 
-          {% if result_list %} 
-          {% for item in result_list %} 
-          {% if item.link %} 
-          {% if 'youtube.com' in item.link %} 
-          <div class="course-inner-content video"> 
-              <iframe width="640" height="360" src="{{ item.link }}" frameborder="0" allowfullscreen></iframe> 
-          </div> 
-          {% else %} 
-          <div class="course-inner-content"> 
-              {{ item.link|safe }} 
-          </div> 
-          {% endif %} 
-          {% elif item.lesson %} 
-          <div class="course-inner-content"> 
-              {{ item.lesson|safe }} 
-          </div> 
-          {% else %} 
-          <div class="course-inner-content"> 
-              <a href='{{ item.file.url }}'>{{ item.file }}</a> 
-          </div> 
-          {% endif %} 
-          {% endfor %} 
-          {% endif %} 
-      </div>
 
+    <!-- Chapter text row -->
+    <div class="row">
+      {% if text %}
+        <table class="table table-bordered generic-table scroll">
+          <thead>
+          <tr>
+            <th>Lesson Name</th>
+            <th>View</th>
+          </tr>
+          </thead>
+          {% for instance in text %}
+            <tr>
+              <td class="col-md-8">{{ instance.lesson_name }}</td>
+              <td class="col-md-2">
+                <a href='{% url "student_lesson" course_name slug instance.id %}'><input class='btn btn-success btn-sm' value='View Lesson'/></a>
+              </td>
+            </tr>
+          {% endfor %}
+        </table>
+      {% endif %}
+    </div>
+
+
+    <!-- Link row -->
+    <div class="row">
+      {% if videos %}
+        <table class="table table-bordered generic-table scroll_table">
+          <thead>
+          <tr>
+            <th>Link</th>
+            <th>View Video</th>
+          </tr>
+          </thead>
+          {% for instance in videos %}
+            <tr>
+              <td class="col-md-8">{{ instance.link }}</td>
+              <td class="col-md-2"><a href="{{ instance.link }}">View Video</a></td>
+            </tr>
+          {% endfor %}
+        </table>
+      {% endif %}
+    </div>
+
+
+
+    <!-- File row -->
+    <div class="row">
+      {% if files %}
+        <table class="table table-bordered generic-table scroll_table">
+          <thead>
+          <thead>
+          <tr>
+            <th>File</th>
+            <th>Download</th>
+          </tr>
+          </thead>
+          {% for instance in files %}
+            <tr>
+              <td class="col-md-8">{{ instance.file }}</td>
+              <td class="col-md-2"><a href="{{ instance.file.url }}">Download</a></td>
+            </tr>
+          {% endfor %}
+        </table>
+      {% endif %}
+    </div>
+  </div>
+             </div>
     </div>
   </div>
 

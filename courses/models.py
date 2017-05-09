@@ -65,6 +65,7 @@ pre_save.connect(pre_save_receiver, sender=Chapter)
 
 
 class TextBlock(models.Model):
+    lesson_name = models.CharField(max_length=50, unique=False, default="Untitled Lesson")
     lesson = models.TextField()
     text_block_fk = models.ForeignKey(Chapter, default=1)
     date_created = models.DateTimeField(auto_now_add=True)

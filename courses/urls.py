@@ -8,6 +8,8 @@ urlpatterns = [
     url(r'^student/(?P<course_name>[\w ]+)/$', user_views.course_homepage, name='course_homepage'),
     url(r'^student/(?P<course_name>[\w ]+)/(?P<slug>[\w-]+)/$', user_views.student_course,
         name='student_course'),
+    url(r'^student/(?P<course_name>[\w ]+)/(?P<slug>[\w-]+)/(?P<txt_id>[\d ]+)/$', user_views.student_lesson,
+        name='student_lesson'),
 
     url(r'^professor/(?P<course_name>[\w ]+)/$', course_views.course, name='professor_course'),
     url(r'^professor/(?P<course_name>[\w ]+)/delete/$', course_views.delete_course, name='delete'),
