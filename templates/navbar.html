@@ -39,21 +39,6 @@
                     {% endif %}
                     </li>
                     <li>
-                    {% if request.user.is_authenticated %}
-                        {% if request.user.is_site_admin %}
-                          <li><a href="{% url 'admin' %}"><span class="glyphicon glyphicon-education"></span>Manage Users</a></li>
-                          <li><a href="{% url 'admin_courses' %}"><span class="glyphicon glyphicon-education"></span>Manage Courses</a></li>
-                        {% endif %}
-                    {% endif %}
-                    </li>
-                    <li>
-                    {% if request.user.is_authenticated %}
-                        {% if request.user.is_professor %}
-                          <li><a href="{% url 'professor' %}"><span class="glyphicon glyphicon-education"></span>Manage Courses</a></li>
-                        {% endif %}
-                    {% endif %}
-                    </li>
-                    <li>
                         <a class="page-scroll" href="/forum"><span class="glyphicon glyphicon-comment"></span>Forum</a>
                     </li>
                 </ul>
@@ -94,9 +79,16 @@
                     <li>
                        <a href="" class="page-scroll  dropdown-toggle" data-toggle="dropdown" type="button"><span class="glyphicon glyphicon-user"></span> {{request.user}} <span class="caret"></span> </a>
                         <ul class="dropdown-menu">
-                            <li><a href="{% url 'profile' %}"><i class="fa fa-users" aria-hidden="true"></i> Manage Users</a></li>                       
-                            <li><a href="{% url 'profile' %}"><span class="glyphicon glyphicon-education"></span> Manage Courses</a></li>                       
-                            <li><a href="/accounts/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+                             <li>
+                                    {% if request.is_superuser%}
+                                     <li><a href="{% url 'admin' %}"><i class="fa fa-users" aria-hidden="true"></i> Manage Users</a></li>  
+                                     {% endif %}                                      
+                                    {% if request.user.is_professor %}
+                                    <li><a href="{% url 'professor' %}"><span class="glyphicon glyphicon-education"></span>Manage Courses</a></li>
+                                    {% endif %}
+                                <li><a href="/accounts/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+                                
+                            </li>                      
                         </ul>
                     </li>
                     {% endif %}
