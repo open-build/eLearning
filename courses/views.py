@@ -36,11 +36,11 @@ def course(request, course_name=None):
 
     if add_chapter_form.is_valid():
         instance = add_chapter_form.save(commit=False)
-        instance.course = Course.objects.get(course_name="course 1")
+        instance.course = Course.objects.get(course_name=course_name)
         instance.save()
         return redirect(reverse('professor_course', kwargs={'course_name': course_name}))
 
-    return professor(request, course_name=None)
+    return professor(request,course_name=course_name)
 
 
 @user_passes_test(lambda user: user.is_professor)

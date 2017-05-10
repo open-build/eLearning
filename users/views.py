@@ -99,13 +99,14 @@ def admin(request):
 @user_passes_test(lambda user: user.is_professor)
 def professor(request, course_name=None):
     add_course_form = AddCourseForm(request.POST or None)
-    queryset_course = Course.objects.filter(user__username=request.user).filter(is_active=True)
-    queryset_chapter = Chapter.objects.filter(course__course_name="course 1").filter(is_active=True)
-    # queryset_chapter = Chapter.objects.filter(course__course_name=course_name).filter(is_active=True)
-    course = Course.objects.get(course_name="course 1")
-    added_students = UserProfile.objects.filter(students_to_course=course)
-    excluded_students = UserProfile.objects.exclude(students_to_course=course).filter(is_professor=False).filter(
+    queryset_course = Course.objects.filter(user__username=request.user).filter(is_active=True).prefetch_related('chapter_set')
+    print queryset_course
+    
+    for q in queryset_course:
+        excluded_students = UserProfile.objects.exclude(students_to_course=q.id).filter(is_professor=False).filter(
         is_site_admin=False)
+        q.excluded_students = excluded_students
+
 
     query_first = request.GET.get("q1")
     if query_first:
@@ -119,9 +120,7 @@ def professor(request, course_name=None):
 
     context = {
         "title": "Professor",
-        "queryset_chapter": queryset_chapter,
         "excluded_students": excluded_students,
-        "added_students": added_students,
         "add_course_form": add_course_form,
         "add_chapter_form" : add_chapter_form,
         "queryset_course": queryset_course,
@@ -132,12 +131,6 @@ def professor(request, course_name=None):
         course_name = add_course_form.cleaned_data.get("course_name")
         instance = add_course_form.save(commit=False)
         instance.user = request.user
-        instance.save()
-        return redirect(reverse('professor_course', kwargs={'course_name': course_name}))
-
-    if add_chapter_form.is_valid():
-        instance = add_chapter_form.save(commit=False)
-        instance.course = Course.objects.get(course_name=course)
         instance.save()
         return redirect(reverse('professor_course', kwargs={'course_name': course_name}))
 

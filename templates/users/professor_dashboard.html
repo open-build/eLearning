@@ -48,7 +48,7 @@
                         <!-- chapter form -->
                           <div class="col-md-12">
                             <div class="col-md-3">
-                              <form method='POST' action=''>
+                              <form method='POST' action='/courses/professor/{{instance.course_name}}/'>
                                 {% csrf_token %}
                                 {{ add_chapter_form|crispy }}
                                 <input class='btn btn-primary' type='submit' value='Add chapter'/>
@@ -56,7 +56,7 @@
                             </div>
                           </div>
                           <!-- chapter_list -->
-                          {% if queryset_chapter %}
+                          {% if instance.chapter_set.all %}
                             <table class="table table-condensed table-hover generic-table">
                               <thead>
                               <tr>
@@ -65,9 +65,9 @@
                                 <th>Actions</th>
                               </tr>
                               </thead>
-                              {% for instance in queryset_chapter %}
+                              {% for instance in instance.chapter_set.all %}
                                 <tr>
-                                  <td class="col-md-5"><!-- <a href="{{ instance.get_absolute_url }}"> -->{{ instance.chapter_name }}<!-- </a> --></td>
+                                  <td class="col-md-5" style="text-align:left"><!-- <a href="{{ instance.get_absolute_url }}"> -->{{ instance.chapter_name }}<!-- </a> --></td>
                                   <td class="col-md-3">{{ instance.chapter_created_date }}</td>
                                   <td class="col-md-4">
                                    
@@ -96,6 +96,74 @@
                           <input onclick=" return confirm('Are you sure you wnt to delete {{instance.course_name}}')"
                                  class='btn btn-danger btn-sm' type='submit' value='Delete Course'/>
                         </a>
+                         <button class="btn btn-success btn-sm" data-toggle="collapse" data-target="#course_students{{instance.id}}">Students</button>
+
+                          <div id="course_students{{instance.id}}" class="collapse">
+                            <div style="margin-top:20px">
+                              <div class="row">
+                                <div class="col-md-6">
+
+                                  <form class="form-inline" method='GET' action="" role="form">
+                                    <div class="form-group">
+                                      <input class="form-control" type="text" name="q1" placeholder="Search students"
+                                             value="{{ request.GET.q }}"/>
+                                      <button class="btn btn-danger btn-md">Submit</button>
+                                    </div>
+                                  </form>
+
+                                  <h5>Available students:</h5>
+                                  {% if excluded_students %}
+                                    <table class="table table-condensed table-hover generic-table">
+                                      <thead>
+                                      <tr>
+                                        <th>User name</th>
+                                        <th>Action</th>
+                                      </tr>
+                                      </thead>
+                                      {% for student in instance.excluded_students %}
+                                        <tr>
+                                          <td class="col-md-5" style="text-align: left">{{ student.username }}</td>
+                                          <td class="col-md-1"><a href="/courses/professor/{{instance.course_name}}/students/{{student.id}}/add/">
+                                            <input class='btn btn-primary btn-xs' type='submit' value='Add Student'/>
+                                          </a>
+                                          </td>
+                                        </tr>
+                                      {% endfor %}
+                                    </table>
+                                  {% endif %}
+                                </div>
+
+                                <div class="col-md-6">
+                                  <form class="form-inline" method='GET' action="" role="form">
+                                    <div class="form-group">
+                                      <input class="form-control" type="text" name="q2" placeholder="Search students"
+                                             value="{{ request.GET.q }}"/>
+                                      <button class="btn btn-danger btn-md">Submit</button>
+                                    </div>
+                                  </form>
+
+                                  <h5>Added students:</h5>
+                                    <table class="table table-condensed table-hover generic-table">
+                                      <thead>
+                                      <tr>
+                                        <th>User name</th>
+                                        <th>Action</th>
+                                      </tr>
+                                      </thead>
+                                      {% for student in instance.students.all %}
+                                        <tr>
+                                          <td class="col-md-5" style="text-align: left">{{ student.username }}</td>
+                                          <td class="col-md-1"><a href="/courses/professor/{{instance.course_name}}/students/{{student.id}}/remove/">
+                                            <input class='btn btn-danger btn-xs' type='submit' value='Remove Student'/>
+                                          </a>
+                                          </td>
+                                        </tr>
+                                      {% endfor %}
+                                    </table>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
                       </div>
                     </div>
                   </div>
@@ -107,72 +175,7 @@
       </div>
     </div>
     <div id="students" class="tab-pane fade ">
-        <div class="container col-md-12">
-    <div class="row">
-      <div class="col-md-6">
-
-        <form class="form-inline" method='GET' action="" role="form">
-          <div class="form-group">
-            <input class="form-control" type="text" name="q1" placeholder="Search students"
-                   value="{{ request.GET.q }}"/>
-            <button class="btn btn-danger btn-md">Submit</button>
-          </div>
-        </form>
-
-        <h5>Available students:</h5>
-        {% if excluded_students %}
-          <table class="table table-condensed table-hover generic-table">
-            <thead>
-            <tr>
-              <th>User name</th>
-              <th>Action</th>
-            </tr>
-            </thead>
-            {% for instance in excluded_students %}
-              <tr>
-                <td class="col-md-5" style="text-align: left">{{ instance.username }}</td>
-                <td class="col-md-1"><a href="{% url 'add_students' course_name instance.id %}">
-                  <input class='btn btn-primary btn-xs' type='submit' value='Add Student'/>
-                </a>
-                </td>
-              </tr>
-            {% endfor %}
-          </table>
-        {% endif %}
-      </div>
-
-      <div class="col-md-6">
-        <form class="form-inline" method='GET' action="" role="form">
-          <div class="form-group">
-            <input class="form-control" type="text" name="q2" placeholder="Search students"
-                   value="{{ request.GET.q }}"/>
-            <button class="btn btn-danger btn-md">Submit</button>
-          </div>
-        </form>
-
-        <h5>Added students:</h5>
-        {% if added_students %}
-          <table class="table table-condensed table-hover generic-table">
-            <thead>
-            <tr>
-              <th>User name</th>
-              <th>Action</th>
-            </tr>
-            </thead>
-            {% for instance in added_students %}
-              <tr>
-                <td class="col-md-5" style="text-align: left">{{ instance.username }}</td>
-                <td class="col-md-1"><a href="{% url 'remove_students' course_name instance.id %}">
-                  <input class='btn btn-danger btn-xs' type='submit' value='Remove Student'/>
-                </a>
-                </td>
-              </tr>
-            {% endfor %}
-          </table>
-        {% endif %}
-      </div>
-    </div>
-  </div>
+        
     </div>
   </div>
 </div>

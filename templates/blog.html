@@ -29,53 +29,22 @@
 
             <!-- Blog Post Content Column -->
             <div class="col-md-8">
+                {% if recent_post %}
+                    <!-- Title -->
+                    <h3 class="font1">{{recent_post.title}}</h3>
 
-                <!-- Blog Post -->
+                    <!-- Date and Author -->
+                    <p class="blog_details">
+                    <span class="glyphicon glyphicon-time"></span> Posted on {{recent_post.date_created|date}} at {{recent_post.date_created|time}} by <a href="#" class="title">{{recent_post.created_by|force_escape}}</a></p>
 
-                <!-- Title -->
-                <h3 class="font1">Embracing the Latest Technology</h3>
-
-                <!-- Date and Author -->
-                <p class="blog_details">
-                <span class="glyphicon glyphicon-time"></span> Posted on April 24, 2017 at 9:00 PM by <a href="#">Open Build Team</a></p>
-
-                <hr>
-                    
-                <img class="img-responsive" src="{% static '/static/img/latest-technology.jpg' %}" style="width:800px;height:300px;margin-bottom:10px;" alt="">
-                <!-- Preview Image -->
-                
-                <div class="blog_content">
-                {% for blog in blog_post %}
-                <p>{{blog.details|safe}}</p>
-                {% endfor %}
-                    
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ducimus, vero, obcaecati, aut, error quam sapiente nemo saepe quibusdam sit excepturi nam quia corporis eligendi eos magni recusandae laborum minus inventore?</p>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ut, tenetur natus doloremque laborum quos iste ipsum rerum obcaecati impedit odit illo dolorum ab tempora nihil dicta earum fugiat. Temporibus, voluptatibus.</p>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eos, doloribus, dolorem iusto blanditiis unde eius illum consequuntur neque dicta incidunt ullam ea hic porro optio ratione repellat perspiciatis. Enim, iure!</p>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Error, nostrum, aliquid, animi, ut quas placeat totam sunt tempora commodi nihil ullam alias modi dicta saepe minima ab quo voluptatem obcaecati?</p>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Harum, dolor quis. Sunt, ut, explicabo, aliquam tenetur ratione tempore quidem voluptates cupiditate voluptas illo saepe quaerat numquam recusandae? Qui, necessitatibus, est!</p>
-                </div>
-                <!-- Post Content -->
-                {% if request.user.is_admin %}
-                    <button class="btn btn-danger" data-toggle="collapse" data-target="#post">Write a New Post</button>
-                {% endif %}
-
-                <div id="post" class="collapse" style="margin-top:20px">
-                    <form method='POST' action='/blog/'>
-                    {% csrf_token %}
-                    <div>
+                    <hr>
                         
-                        <label class="col-md 2">Title</label>
-                        <input type="text" id="title" class=" form-control" maxlength="30" name="title" placeholder="Title of the Post" />
+                    <img class="img-responsive" src="{% static '/static/img/latest-technology.jpg' %}" style="width:800px;height:300px;margin-bottom:10px;" alt="">
+                    <!-- Preview Image -->
+                    
+                    <div class="blog_content">
+                    <p>{{recent_post.details|safe|urlizetrunc:100}}</p>
                     </div>
-                    <div>
-                        
-                        <label>Details</label>
-                        <textarea class="post form-control" id="details" name="details" placeholder="Content for the Post"></textarea>
-                    </div>
-                        <input type="submit" name="post" value="Post">
-                    </form>
-                </div>
                 <hr>
 
                 <!-- Blog Comments -->
@@ -101,7 +70,7 @@
                         <img class="media-object" src="http://placehold.it/64x64" alt="">
                     </a>
                     <div class="media-body">
-                        <h4 class="media-heading">Start Bootstrap
+                        <h4 class="media-heading">Comment 1
                             <small>August 25, 2014 at 9:30 PM</small>
                         </h4>
                         Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
@@ -114,7 +83,7 @@
                         <img class="media-object" src="http://placehold.it/64x64" alt="">
                     </a>
                     <div class="media-body">
-                        <h4 class="media-heading">Start Bootstrap
+                        <h4 class="media-heading">Comment 2
                             <small>August 25, 2014 at 9:30 PM</small>
                         </h4>
                         Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
@@ -124,7 +93,7 @@
                                 <img class="media-object" src="http://placehold.it/64x64" alt="">
                             </a>
                             <div class="media-body">
-                                <h4 class="media-heading">Nested Start Bootstrap
+                                <h4 class="media-heading">Reply to comment 2
                                     <small>August 25, 2014 at 9:30 PM</small>
                                 </h4>
                                 Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
@@ -133,58 +102,65 @@
                         <!-- End Nested Comment -->
                     </div>
                 </div>
-
+                {% else %}
+                    <p>There are no blog posts available.Clickon the button below to write a new post.</p>
+                {% endif %}
+                <!-- Post Content -->
+                {% if user.is_site_admin %}
+                    <button class="btn btn-danger" style="margin:20px" data-toggle="collapse" data-target="#post">Write a New Post</button>
+                {% endif %}
+                <div id="post" class="collapse" style="margin-top:20px">
+                    <form method='POST' action='/blog/'>
+                    {% csrf_token %}
+                    <div style="margin-bottom:10px;">
+                        
+                        <label>Title</label>
+                        <input type="text" id="title" class=" form-control" name="title" placeholder="Title of the Post" />
+                    </div>
+                    <div>
+                        
+                        <label>Details</label>
+                        <textarea class="post form-control" id="details" name="details" placeholder="Content for the Post"></textarea>
+                    </div>
+                        <input type="submit" name="post" value="Post">
+                    </form>
+                </div>
             </div>
 
             <!-- Blog Sidebar Widgets Column -->
             <div class="col-md-4">
-
-                <!-- Blog Search Well -->
-                <div class="well">
-                    <h4>Blog Search</h4>
-                    <div class="input-group">
-                        <input type="text" class="form-control">
-                        <span class="input-group-btn">
-                            <button class="btn btn-default" type="button">
-                                <span class="glyphicon glyphicon-search"></span>
-                        </button>
-                        </span>
-                    </div>
-                    <!-- /.input-group -->
-                </div>
-
-                <!-- Blog Categories Well -->
-                <div class="well">
-                    <h4>Recent Blogs</h4>
-                    <div class="row">
-                        <div class="col-lg-6">
-                            <ul class="list-unstyled">
-                                <li><a href="#">Category Name</a>
-                                </li>
-                                <li><a href="#">Category Name</a>
-                                </li>
-                                <li><a href="#">Category Name</a>
-                                </li>
-                                <li><a href="#">Category Name</a>
-                                </li>
-                            </ul>
+                {% if recent_post %}
+                    <!-- Blog Search Well -->
+                    <div class="well">
+                        <h4>Blog Search</h4>
+                        <div class="input-group">
+                            <input type="text" class="form-control">
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" type="button">
+                                    <span class="glyphicon glyphicon-search"></span>
+                            </button>
+                            </span>
                         </div>
-                        <div class="col-lg-6">
-                            <ul class="list-unstyled">
-                                <li><a href="#">Category Name</a>
-                                </li>
-                                <li><a href="#">Category Name</a>
-                                </li>
-                                <li><a href="#">Category Name</a>
-                                </li>
-                                <li><a href="#">Category Name</a>
-                                </li>
-                            </ul>
-                        </div>
+                        <!-- /.input-group -->
                     </div>
-                    <!-- /.row -->
-                </div>
 
+                    <!-- Blog Categories Well -->
+                    <div class="well">
+                        <h4>Recent Blogs</h4>
+                        <div class="row">
+                            <div>
+                                <ul class="list-unstyled recent_blogs">
+                                {% for blog in blog_post reversed %}
+                                    <li><!-- <a href="#" class="font1">{{blog.title}}</a> -->
+                                        <form action='/blog/' ><a type="submit" class="font1" name="older" value="{{blog.id}}" href='/blog/post={{blog.title}}'>{{blog.title}} {{blog.id}}</a></form>
+                                    </li>
+                                {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- /.row -->
+                    </div>
+                {% endif %}
                 <!-- Side Widget Well -->
                 <div class="well col-md-12" >
                     <h4 class="font2">Do not miss out!</h4>
