@@ -192,10 +192,10 @@ def delete_user(request, username):
 
 @login_required
 def course_homepage(request, course_name):
-    chapter_list = Chapter.objects.filter(course__course_name=course_name)
+    chapter_list = Chapter.objects.filter(course__course_name=course_name, is_active=True)
     if chapter_list:
-        course = Course.objects.get(course_name=course_name)
-        chapter_list = Chapter.objects.filter(course=course)
+        course = Course.objects.get(course_name=course_name, is_active=True)
+        chapter_list = Chapter.objects.filter(course=course, is_active=True)
         user = request.user
 
         if user in course.students.all() or user.is_professor or user.is_site_admin or course.for_everybody:
@@ -217,34 +217,58 @@ def course_homepage(request, course_name):
 
 @login_required
 def student_course(request, course_name, slug=None):
-    course = Course.objects.get(course_name=course_name)
-    chapter_list = Chapter.objects.filter(course=course)
-    chapter = Chapter.objects.get(course__course_name=course_name, slug=slug)
-    text = TextBlock.objects.filter(text_block_fk=chapter)
-    videos = YTLink.objects.filter(yt_link_fk=chapter)
-    files = FileUpload.objects.filter(file_fk=chapter)
+    course = Course.objects.get(course_name=course_name, is_active=True)
+    chapter_list = Chapter.objects.filter(course=course, is_active=True)
+    chapter = Chapter.objects.get(course__course_name=course_name, slug=slug, is_active=True)
+    text = TextBlock.objects.filter(text_block_fk=chapter).filter(is_active=True).values('lesson_name','date_created','id')
+    videos = YTLink.objects.filter(yt_link_fk=chapter, is_active=True)
+    files = FileUpload.objects.filter(file_fk=chapter, is_active=True)
     user = request.user
 
 
     if user in course.students.all() or user.is_professor or user.is_site_admin or course.for_everybody:
-        result_list = sorted(
-            chain(text, videos, files),
-            key=lambda instance: instance.date_created)
+        videos = sorted(videos,key=lambda instance: instance.date_created, reverse=True)
+        files = sorted(files,key=lambda instance: instance.date_created, reverse=True)
+        text = sorted(text,key=lambda instance: instance.get('date_created'), reverse=True)
 
         context = {
             "course_name": course_name,
             "chapter_list": chapter_list,
             "chapter_name": chapter.chapter_name,
             "slug": chapter.slug,
-            "result_list": result_list,
+            "text": text,
+            "files": files,
+            "videos": videos,
             "title": course_name + ' : ' + chapter.chapter_name,
         }
-        if len(result_list) == 0:
+        if len(text) +len(files) +len(videos)  == 0:
             warning_message = "Currently there are no materials for %s "%(chapter.chapter_name)
             messages.warning(request, warning_message)
             return redirect(reverse('course_homepage', kwargs={"course_name":course_name}))
 
         return render(request, "users/student_chapter.html", context)
+
+    else:
+        raise Http404
+
+
+@login_required
+def student_lesson(request, course_name, slug=None, txt_id = None):
+    course = Course.objects.get(course_name=course_name, is_active=True)
+    chapter = Chapter.objects.get(course__course_name=course_name, slug=slug, is_active=True)
+    text = TextBlock.objects.get(id=txt_id, is_active=True)
+    user = request.user
+
+    if user in course.students.all() or user.is_professor or user.is_site_admin or course.for_everybody:
+
+        context = {
+            "course_name": course_name,
+            "chapter_name": chapter.chapter_name,
+            "slug": chapter.slug,
+            "text": text,
+            "title": course_name + ' : ' + chapter.chapter_name + ' : ' + text.lesson_name,
+        }
+        return render(request, "users/student_lesson.html", context)
 
     else:
         raise Http404

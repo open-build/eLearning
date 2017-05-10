@@ -34,7 +34,7 @@
           </thead>
           {% for instance in queryset_txt_block %}
             <tr>
-              <td class="col-md-8">{{ instance.lesson|safe }}</td>
+              <td class="col-md-8">{{ instance.lesson_name }}</td>
               <td class="col-md-2">{{ instance.date_created }}</td>
               <td class="col-md-2">{{ instance.is_active }}</td>
               <td class="col-md-2">
