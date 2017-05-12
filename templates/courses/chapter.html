@@ -1,4 +1,3 @@
-{% extends 'base.html' %}
 {% load crispy_forms_tags %}
 {% load staticfiles %}
 
@@ -51,11 +50,9 @@
           </thead>
           {% for instance in queryset_txt_block %}
             <tr>
-              <td class="col-md-8">{{ instance.lesson_name }}</td>
+              <td class="col-md-7">{{ instance.lesson|safe }}</td>
               <td class="col-md-2">{{ instance.date_created }}</td>
-              <td class="col-md-2">
-                <input onclick="openNav(`{{ instance.lesson_name }}`,`{{ instance.lesson }}`)" class='btn btn-success btn-sm' value='View Lesson'
-                data-toggle="modal" data-target="#myModal"/>
+              <td class="col-md-3">
                 <a href="{% url 'edit_txt' course_name slug instance.id %}">
                   <input class='btn btn-primary btn-sm' type='submit' value='Edit Lesson'/>
                 </a>

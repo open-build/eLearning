@@ -6,5 +6,4 @@ slug
 venv
 source/settings.py
 .DS_Store
-assets/
-media/
+
