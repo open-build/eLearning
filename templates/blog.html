@@ -106,7 +106,7 @@
                     <p>There are no blog posts available.</p>
                 {% endif %}
                 <!-- Post Content -->
-                {% if user.is_site_admin %}
+                {% if request.user.is_site_admin %}
                     <button class="btn btn-danger" style="margin:20px" data-toggle="collapse" data-target="#post">Write a New Post</button>
                 {% endif %}
                 <div id="post" class="collapse" style="margin-top:20px">
@@ -152,7 +152,7 @@
                                 <ul class="list-unstyled recent_blogs">
                                 {% for blog in blog_post reversed %}
                                     <li><!-- <a href="#" class="font1">{{blog.title}}</a> -->
-                                        <form action='/blog/' ><a type="submit" class="font1" name="older" value="{{blog.id}}" href='/blog/post={{blog.title}}'>{{blog.title}} {{blog.id}}</a></form>
+                                        <a type="submit" class="font1" name="older" value="{{blog.id}}" href='/blog/{{blog.id}}/'>{{blog.title}}</a>
                                     </li>
                                 {% endfor %}
                                 </ul>

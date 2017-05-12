@@ -18,7 +18,6 @@ from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
 from users import views as user_views
-from blog import views as blog_views
 from registration.backends.default.views import RegistrationView
 from users.forms import AddUser
 
@@ -27,11 +26,11 @@ urlpatterns = [
     url(r'^ourteam/$', user_views.ourteam, name='ourteam'),
     url(r'^about/$', user_views.about, name='about'),
     url(r'^contact/$', user_views.contact, name='contact'),
-    url(r'^blog', blog_views.blog, name='blog'),
 
     url(r'^admin/', admin.site.urls),
     url(r'^courses/', include('courses.urls')),
     url(r'^forum/', include('forum.urls')),
+    url(r'^blog/', include('blog.urls')),
     url(r'^profile/', include('users.urls')),
     url(r'^accounts/', include('registration.backends.default.urls')),
 ]
