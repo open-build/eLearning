@@ -16,7 +16,7 @@
       <script>
 
         tinymce.init({
-          selector: "textarea.post",  // change this value according to your HTML
+          selector: "textarea#post",  // change this value according to your HTML
           plugins: "code    image"
         });
 
@@ -134,19 +134,39 @@
                     <div class="well">
                         <h4>Blog Search</h4>
                         <div class="input-group">
-                            <input type="text" class="form-control">
+                            <!-- <input type="text" class="form-control">
                             <span class="input-group-btn">
                                 <button class="btn btn-default" type="button">
                                     <span class="glyphicon glyphicon-search"></span>
                             </button>
-                            </span>
+                            </span> -->
+                            <form class="input-group" method='get' action="/blog/0/">
+                  <input type="text" name='search' class="form-control" placeholder="Search" id='search'>
+                  <span class="input-group-btn">
+                    <button  class="btn btn-info" type="button" onclick="submit_query()"><span class="glyphicon glyphicon-search"></span></button>
+                    <script type="text/javascript">
+                      function submit_query(){
+                         var input = document.getElementById("search").value;
+                          if (input!==""){ 
+                          window.location.href =  '/blog/{{recent_post.id}}/?{% if query_string %}{{ query_string }}&{% endif %}search='+input;
+                          }
+                          else
+                            alert("Kindly enter a search term");
+                      }
+                  </script>
+                  </span>
+                </form>
                         </div>
                         <!-- /.input-group -->
                     </div>
 
                     <!-- Blog Categories Well -->
                     <div class="well">
+                        {% if query %}
+                            <h4>{{num_blog}} blog(s) found for {{query}}</h4>
+                        {% else %}
                         <h4>Recent Blogs</h4>
+                        {% endif %}
                         <div class="row">
                             <div>
                                 <ul class="list-unstyled recent_blogs">
