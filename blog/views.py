@@ -4,6 +4,8 @@ from django.shortcuts import render, redirect
 from django.core.urlresolvers import reverse
 from datetime import datetime
 from django.db.models import Q
+from django.shortcuts import get_object_or_404
+from django.http import HttpResponseRedirect
 
 
 def blog(request,id):
@@ -13,18 +15,17 @@ def blog(request,id):
         created_by = request.user
         date_created = datetime.now()
         post = BlogPost(title=title, details=details, date_created=date_created, created_by = created_by)
-        post.save()
-        return redirect(reverse('blog')) 
+        post.save() 
     
+    # latest posts
+    blog_post = BlogPost.objects.all().prefetch_related('blog_comments').order_by("date_created")
 
     recent_post = {}
     if int(id) == 0:
-        recent_post =  BlogPost.objects.all().order_by("date_created").latest("date_created")
+        recent_post =  blog_post.latest("date_created")
     else:
-        recent_post =  BlogPost.objects.get(id=id)
+        recent_post =  blog_post.get(id=id)
 
-    # most recent posts
-    blog_post = BlogPost.objects.all().order_by("date_created")
 
     # search blogs
     key_word = request.GET.get('search', None)
@@ -42,7 +43,10 @@ def blog(request,id):
             )
 
             blog_post = blog_post.filter(qset)
-    # end search        
+    # end search  
+
+    #comment
+    comments =  BlogComment.objects.all()    
 
     querydict = request.GET.copy()
 
@@ -57,3 +61,16 @@ def blog(request,id):
     } 
 
     return render(request, "blog.html", context)
+
+def post_comment(request,blog_id):
+    blog = get_object_or_404(BlogPost, id=blog_id)
+
+    if request.method == 'POST':
+        blog_id = blog
+        comment = request.POST.get("comment")
+        created_by = request.POST.get("name")
+        sender_email = request.POST.get("email")
+        posted_date = datetime.now()
+        comment = BlogComment(blog_id=blog_id, comment=comment, created_by=created_by, sender_email=sender_email,posted_date=posted_date)
+        comment.save()
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER')) 
