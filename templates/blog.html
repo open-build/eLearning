@@ -11,16 +11,6 @@
     <link href="{% static "css/home.css" %}" rel="stylesheet">
     <link href="{% static "css/blog-post.css" %}" rel="stylesheet">
     <link href="{% static "css/bootstrap-social.css" %}" rel="stylesheet">
-    <script src="{% static "js/tinymce/jquery.tinymce.min.js" %}"></script>
-      <script src="{% static "js/tinymce/tinymce.min.js" %}"></script>
-      <script>
-
-        tinymce.init({
-          selector: "textarea.post",  // change this value according to your HTML
-          plugins: "code    image"
-        });
-
-      </script>
     <section style="background:#fff">
     <!-- Page Content -->
     <div class="container">
@@ -45,40 +35,35 @@
                     <div class="blog_content">
                     <p>{{recent_post.details|safe|urlizetrunc:100}}</p>
                     </div>
-                <hr>
-
-                <!-- Blog Comments -->
-
-                <!-- Comments Form -->
-                <div class="well">
-                    <h4>Leave a Comment:</h4>
-                    <form role="form">
-                        <div class="form-group">
-                            <textarea class="form-control" rows="3"></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Submit</button>
-                    </form>
-                </div>
 
                 <hr>
 
                 <!-- Posted Comments -->
-
+                <h3>Comments</h3>
                 <!-- Comment -->
-                <div class="media">
-                    <a class="pull-left" href="#">
-                        <img class="media-object" src="http://placehold.it/64x64" alt="">
-                    </a>
-                    <div class="media-body">
-                        <h4 class="media-heading">Comment 1
-                            <small>August 25, 2014 at 9:30 PM</small>
-                        </h4>
-                        Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
+                {% if recent_post.blog_comments.all %}
+                    {% for comment in recent_post.blog_comments.all %}
+                    <div class="media">
+                        <a class="pull-left" href="#">
+                            <img class="media-object" src="http://placehold.it/64x64" alt="">
+                        </a>
+                        <div class="media-body">
+                            <h4 class="media-heading">{{comment.created_by}}
+                                <small>{{comment.posted_date|date}} at {{comment.posted_date|time}}</small>
+                            </h4>
+                            {{comment.comment|safe|urlizetrunc:100}}
+                        </div>
                     </div>
-                </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="media">
+                        There are no comments for this post. Use the button below to comment.
+                    </div>
+                {% endif %}
+
 
                 <!-- Comment -->
-                <div class="media">
+                <!-- <div class="media">
                     <a class="pull-left" href="#">
                         <img class="media-object" src="http://placehold.it/64x64" alt="">
                     </a>
@@ -87,7 +72,7 @@
                             <small>August 25, 2014 at 9:30 PM</small>
                         </h4>
                         Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
-                        <!-- Nested Comment -->
+                        
                         <div class="media">
                             <a class="pull-left" href="#">
                                 <img class="media-object" src="http://placehold.it/64x64" alt="">
@@ -99,9 +84,50 @@
                                 Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
                             </div>
                         </div>
-                        <!-- End Nested Comment -->
                     </div>
+                </div> -->
+                <hr>
+
+                <!-- Blog Comments -->
+                 <button class="btn btn-primary" data-toggle="collapse" data-target="#comment">Leave a comment</button>
+
+                <div id="comment" class="collapse" style="margin-top:20px">
+                    <!-- Comments Form -->
+                <div class="well">
+                    <h4>Leave a Comment:</h4>
+                    <form method='POST' action='/blog/comment/{{recent_post.id}}/'>
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <div class="row col-md-12 blog_content">
+                                <div class="col-md-2"> 
+                                    <label>Name:</label> 
+                                </div>
+                                <div class="col-md-10"> 
+                                    <input class="form-control" name="name" id="name" type="text">
+                                </div>
+                            </div>
+                            <div class="row col-md-12 blog_content">
+                                <div class="col-md-2"> 
+                                    <label>Email:</label> 
+                                </div>
+                                <div class="col-md-10"> 
+                                    <input class="form-control" name="email" id="email" type="text">
+                                </div>
+                            </div>
+                            <div class="row col-md-12 blog_content">
+                                <div class="col-md-2"> 
+                                    <label>Comment:</label> 
+                                </div>
+                                <div class="col-md-10"> 
+                                    <textarea class="form-control" name="comment" id="comment" rows="3"> </textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary submit_comment">Submit</button>
+                    </form>
                 </div>
+                </div> 
+                
                 {% else %}
                     <p>There are no blog posts available.</p>
                 {% endif %}
@@ -133,20 +159,31 @@
                     <!-- Blog Search Well -->
                     <div class="well">
                         <h4>Blog Search</h4>
-                        <div class="input-group">
-                            <input type="text" class="form-control">
-                            <span class="input-group-btn">
-                                <button class="btn btn-default" type="button">
-                                    <span class="glyphicon glyphicon-search"></span>
-                            </button>
-                            </span>
-                        </div>
-                        <!-- /.input-group -->
+                        <form class="input-group" method='get' action="/blog/0/">
+                          <input type="text" name='search' class="form-control" placeholder="Search" id='search'>
+                          <span class="input-group-btn">
+                            <button  class="btn btn-info" type="button" onclick="submit_query()"><span class="glyphicon glyphicon-search"></span></button>
+                          </span>
+                            <script type="text/javascript">
+                              function submit_query(){
+                                 var input = document.getElementById("search").value;
+                                  if (input!==""){ 
+                                  window.location.href =  '/blog/{{recent_post.id}}/?{% if query_string %}{{ query_string }}&{% endif %}search='+input;
+                                  }
+                                  else
+                                    alert("Kindly enter a search term");
+                              }
+                          </script>
+                        </form>
                     </div>
 
                     <!-- Blog Categories Well -->
                     <div class="well">
+                        {% if query %}
+                            <h4>{{num_blog}} blog(s) found for {{query}}</h4>
+                        {% else %}
                         <h4>Recent Blogs</h4>
+                        {% endif %}
                         <div class="row">
                             <div>
                                 <ul class="list-unstyled recent_blogs">

@@ -137,8 +137,7 @@ a {
 
 /*--feature content--*/
 .featured_content {
-    background-color: whitesmoke;
-
+    background-color: rgba(255,255,255,0.4);
     padding-bottom: 4px;
 }
 
@@ -193,7 +192,7 @@ h3.m_1 a:hover {
 }
 
 p.m_2 {
-    color: #275B91;
+    color:  #696969;
     font-size: 0.95em;
     line-height: 1.2em;
 }
@@ -235,6 +234,7 @@ p.m_2 {
 .banner-back {
     background: #fff;
     background-size: 100% 100%;
+
 }
 
 @media (min-width: 900px) and (min-height: 650px) {
