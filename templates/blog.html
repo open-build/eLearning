@@ -28,7 +28,7 @@
                     <span class="glyphicon glyphicon-time"></span> Posted on {{recent_post.date_created|date}} at {{recent_post.date_created|time}} by <a href="#" class="title">{{recent_post.created_by|force_escape}}</a></p>
 
                     <hr>
-                        
+                        {{recent_post.image}}
                     <img class="img-responsive" src="{% static '/static/img/latest-technology.jpg' %}" style="width:800px;height:300px;margin-bottom:10px;" alt="">
                     <!-- Preview Image -->
                     
@@ -52,6 +52,58 @@
                                 <small>{{comment.posted_date|date}} at {{comment.posted_date|time}}</small>
                             </h4>
                             {{comment.comment|safe|urlizetrunc:100}}
+                            <a href="#reply{{comment.id}}" data-toggle="collapse" data-target="#reply{{comment.id}}">Reply</a>
+                            <div id="reply{{comment.id}}" class="collapse">
+                                <div class="row col-md-12 blog_content">
+                                    <div class="well">
+                                        <form method='POST' action='/blog/reply/{{recent_post.id}}/{{comment.id}}/'>
+                                            {% csrf_token %}
+                                            <div class="col-md-12 blog_content"> 
+                                                <div class="col-md-2"> 
+                                                    <label>Response</label> 
+                                                </div>
+                                                <textarea class="form-control" name="reply" id="reply" rows="3"> </textarea>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6 blog_content">
+                                                    <div class="col-md-2"> 
+                                                        <label>Name:</label> 
+                                                    </div>
+                                                    <div class="col-md-10"> 
+                                                        <input class="form-control" name="name" id="name" type="text">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6 blog_content">
+                                                    <div class="col-md-2"> 
+                                                        <label>Email:</label> 
+                                                    </div>
+                                                    <div class="col-md-10"> 
+                                                        <input class="form-control" name="email" id="email" type="text">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <button type="submit" class="btn btn-primary submit_comment" style="margin-top:5px">Reply</button>
+                                        </form>    
+                                    </div>
+                                </div>
+                                
+                            </div>
+                            <!-- display replies -->
+                            {% if comment.reply.all %}
+                                {% for reply in recent_post.response.all %}
+                                    <div class="media col-md-12">
+                                        <a class="pull-left" href="#">
+                                            <img class="media-object" src="http://placehold.it/64x64" alt="">
+                                        </a>
+                                        <div class="media-body">
+                                            <h4 class="media-heading">{{reply.created_by}}
+                                                <small>{{reply.posted_date|date}} at {{reply.posted_date|time}}</small>
+                                            </h4>
+                                            {{reply.reply}}
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
                         </div>
                     </div>
                     {% endfor %}
@@ -60,32 +112,6 @@
                         There are no comments for this post. Use the button below to comment.
                     </div>
                 {% endif %}
-
-
-                <!-- Comment -->
-                <!-- <div class="media">
-                    <a class="pull-left" href="#">
-                        <img class="media-object" src="http://placehold.it/64x64" alt="">
-                    </a>
-                    <div class="media-body">
-                        <h4 class="media-heading">Comment 2
-                            <small>August 25, 2014 at 9:30 PM</small>
-                        </h4>
-                        Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
-                        
-                        <div class="media">
-                            <a class="pull-left" href="#">
-                                <img class="media-object" src="http://placehold.it/64x64" alt="">
-                            </a>
-                            <div class="media-body">
-                                <h4 class="media-heading">Reply to comment 2
-                                    <small>August 25, 2014 at 9:30 PM</small>
-                                </h4>
-                                Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
-                            </div>
-                        </div>
-                    </div>
-                </div> -->
                 <hr>
 
                 <!-- Blog Comments -->
@@ -134,23 +160,31 @@
                 <!-- Post Content -->
                 {% if request.user.is_site_admin %}
                     <button class="btn btn-danger" style="margin:20px" data-toggle="collapse" data-target="#post">Write a New Post</button>
-                {% endif %}
+                
                 <div id="post" class="collapse" style="margin-top:20px">
-                    <form method='POST' action='/blog/'>
-                    {% csrf_token %}
-                    <div style="margin-bottom:10px;">
-                        
-                        <label>Title</label>
-                        <input type="text" id="title" class=" form-control" name="title" placeholder="Title of the Post" />
+                    <div class="well">
+                        <h4>New Post</h4>
+                        <form method='POST' action='/blog/{{recent_post.id}}/' enctype="multipart/form-data">
+                        {% csrf_token %}
+                            <div style="margin-bottom:10px;">
+                                
+                                <label>Title</label>
+                                <input type="text" id="title" class=" form-control" name="title" placeholder="Title of the Post" />
+                            </div>
+                            <div style="margin-bottom:10px;">
+                                
+                                <label>Details</label>
+                                <textarea class="post form-control" id="details" name="details" placeholder="Content for the Post"></textarea>
+                            </div>
+                            <div style="margin-bottom:10px;">
+                                <label>Upload an image for the post</label>
+                                <input type="file" name="image">
+                            </div>
+                            <input type="submit" class="btn btn-primary" name="post" value="Post">
+                        </form>
                     </div>
-                    <div>
-                        
-                        <label>Details</label>
-                        <textarea class="post form-control" id="details" name="details" placeholder="Content for the Post"></textarea>
-                    </div>
-                        <input type="submit" name="post" value="Post">
-                    </form>
                 </div>
+                {% endif %}
             </div>
 
             <!-- Blog Sidebar Widgets Column -->
