@@ -21,7 +21,7 @@
             <div class="col-md-8">
                 <!-- Post Content -->
                 {% if request.user.is_site_admin %}
-                    <button class="btn btn-danger" style="margin-bottom:20px; float:right" data-toggle="collapse" data-target="#post">Write a New Post</button>
+                    <button class="btn btn-danger" style=" float:right" data-toggle="collapse" data-target="#post">Write a New Post</button>
                     
                     <div id="post" class="collapse col-md-12" style="margin-top:20px">
                         <div class="well">
@@ -79,7 +79,7 @@
                     {% for comment in recent_post.blog_comments.all %}
                     <div class="media">
                         <a class="pull-left" href="#">
-                            <img class="media-object" src="http://placehold.it/64x64" alt="">
+                            <font style="font-size:30px;color:#969696" ><span class="glyphicon glyphicon-user"></span></font>
                         </a>
                         <div class="media-body">
                             <h4 class="media-heading">{{comment.created_by}}
@@ -92,29 +92,29 @@
                                     <div class="well">
                                         <form method='POST' action='/blog/reply/{{recent_post.id}}/{{comment.id}}/'>
                                             {% csrf_token %}
+                                            <div class="row">
+                                                <div class="col-md-6 blog_content" {% if request.user.is_authenticated %} hidden {% endif %}>
+                                                    <div class="col-md-2"> 
+                                                        <label>Name:</label> 
+                                                    </div>
+                                                    <div class="col-md-10"> 
+                                                        <input class="form-control" name="name" id="name" {% if request.user.is_authenticated %} value="{{request.user.username}}" hidden {% endif %} type="text">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6 blog_content" {% if request.user.is_authenticated %} hidden {% endif %}>
+                                                    <div class="col-md-2"> 
+                                                        <label>Email:</label> 
+                                                    </div>
+                                                    <div class="col-md-10"> 
+                                                        <input class="form-control" {% if request.user.is_authenticated %} value="{{request.user.email}}" hidden {% endif %} name="email" id="email" type="text">
+                                                    </div>
+                                                </div>
+                                            </div>
                                             <div class="col-md-12 blog_content"> 
                                                 <div class="col-md-2"> 
                                                     <label>Response</label> 
                                                 </div>
                                                 <textarea class="form-control" name="reply" id="reply" rows="3"> </textarea>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-6 blog_content">
-                                                    <div class="col-md-2"> 
-                                                        <label>Name:</label> 
-                                                    </div>
-                                                    <div class="col-md-10"> 
-                                                        <input class="form-control" name="name" id="name" type="text">
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6 blog_content">
-                                                    <div class="col-md-2"> 
-                                                        <label>Email:</label> 
-                                                    </div>
-                                                    <div class="col-md-10"> 
-                                                        <input class="form-control" name="email" id="email" type="text">
-                                                    </div>
-                                                </div>
                                             </div>
                                             <button type="submit" class="btn btn-primary submit_comment" style="margin-top:5px">Reply</button>
                                         </form>    
@@ -127,7 +127,7 @@
                                 {% for reply in recent_post.response.all %}
                                     <div class="media col-md-12">
                                         <a class="pull-left" href="#">
-                                            <img class="media-object" src="http://placehold.it/64x64" alt="">
+                                            <font style="font-size:30px;color:#969696" ><span class="glyphicon glyphicon-user"></span></font>
                                         </a>
                                         <div class="media-body">
                                             <h4 class="media-heading">{{reply.created_by}}
@@ -158,20 +158,20 @@
                     <form method='POST' action='/blog/comment/{{recent_post.id}}/'>
                         {% csrf_token %}
                         <div class="form-group">
-                            <div class="row col-md-12 blog_content">
+                            <div class="row col-md-12 blog_content" {% if request.user.is_authenticated %} hidden {% endif %}>
                                 <div class="col-md-2"> 
                                     <label>Name:</label> 
                                 </div>
                                 <div class="col-md-10"> 
-                                    <input class="form-control" name="name" id="name" type="text">
+                                    <input class="form-control" {% if request.user.is_authenticated %} value="{{request.user.username}}" hidden {% endif %} name="name" id="name" type="text">
                                 </div>
                             </div>
-                            <div class="row col-md-12 blog_content">
+                            <div class="row col-md-12 blog_content" {% if request.user.is_authenticated %} hidden {% endif %}>
                                 <div class="col-md-2"> 
                                     <label>Email:</label> 
                                 </div>
                                 <div class="col-md-10"> 
-                                    <input class="form-control" name="email" id="email" type="text">
+                                    <input class="form-control" {% if request.user.is_authenticated %} value="{{request.user.email}}" hidden {% endif %} name="email" id="email" type="text">
                                 </div>
                             </div>
                             <div class="row col-md-12 blog_content">
