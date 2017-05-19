@@ -6,7 +6,6 @@ from datetime import datetime
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
-from PIL import Image
 
 def blog(request,id):
     if request.method == 'POST':
@@ -23,16 +22,16 @@ def blog(request,id):
     blog_post = BlogPost.objects.all().prefetch_related('blog_comments','response').order_by("date_created")
     
     recent_post = {}
-    if blog_post and int(id) == 0:
-        recent_post =  blog_post.latest("date_created")
-    else:
-        recent_post =  blog_post.get(id=id)
 
-    # print "Anne"
-    # print image 
-    # show_image = Image.open(image)
+    if blog_post:
+
+        if int(id) == 0:
+            recent_post =  blog_post.latest("date_created")
+
+        else:
+            recent_post =  blog_post.get(id=id)
+
     # search blogs
-    # image = recent_post.image
     key_word = request.GET.get('search', None)
 
     if key_word:
@@ -95,8 +94,6 @@ def comment_reply(request,blog_id,comment_id):
 def file_attachment(request, blog):
     files = []
     if request.FILES:
-        print "Anne"
-        print request.FILES
         import mimetypes, os
         for file in request.FILES.getlist('image'):
             filename = file.name.encode('ascii', 'ignore')
