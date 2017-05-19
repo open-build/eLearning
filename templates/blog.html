@@ -19,18 +19,52 @@
 
             <!-- Blog Post Content Column -->
             <div class="col-md-8">
+                <!-- Post Content -->
+                {% if request.user.is_site_admin %}
+                    <button class="btn btn-danger" style="margin-bottom:20px; float:right" data-toggle="collapse" data-target="#post">Write a New Post</button>
+                    
+                    <div id="post" class="collapse col-md-12" style="margin-top:20px">
+                        <div class="well">
+                            <h4>New Post</h4>
+                            <form method='POST' action='/blog/{{recent_post.id}}/' enctype="multipart/form-data">
+                            {% csrf_token %}
+                                <div style="margin-bottom:10px;">
+                                    
+                                    <label>Title</label>
+                                    <input type="text" id="title" class=" form-control" name="title" placeholder="Title of the Post" />
+                                </div>
+                                <div style="margin-bottom:10px;">
+                                    
+                                    <label>Details</label>
+                                    <textarea class="post form-control" id="details" name="details" placeholder="Content for the Post"></textarea>
+                                </div>
+                                <div style="margin-bottom:10px;">
+                                    <label>Upload an image for the post</label>
+                                    <input type="file" name="image">
+                                </div>
+                                <input type="submit" class="btn btn-primary" name="post" value="Post">
+                            </form>
+                        </div>
+                    </div>
+                {% endif %}
+                <!-- end post content -->
                 {% if recent_post %}
                     <!-- Title -->
-                    <h3 class="font1">{{recent_post.title}}</h3>
+                    <div class="col-md-12">
+                        <h3 class="font1">{{recent_post.title}}</h3>
 
-                    <!-- Date and Author -->
-                    <p class="blog_details">
-                    <span class="glyphicon glyphicon-time"></span> Posted on {{recent_post.date_created|date}} at {{recent_post.date_created|time}} by <a href="#" class="title">{{recent_post.created_by|force_escape}}</a></p>
+                        <!-- Date and Author -->
+                        <p class="blog_details">
+                        <span class="glyphicon glyphicon-time"></span> Posted on {{recent_post.date_created|date}} at {{recent_post.date_created|time}} by <a href="#" class="title">{{recent_post.created_by|force_escape}}</a></p>
+                        <hr>
+                    </div>
 
-                    <hr>
-                        {{recent_post.image}}
-                    <img class="img-responsive" src="{% static '/static/img/latest-technology.jpg' %}" style="width:800px;height:300px;margin-bottom:10px;" alt="">
-                    <!-- Preview Image -->
+                    {% if recent_post.blogattachment_set.all %}
+                        {% for image in recent_post.blogattachment_set.all %}
+                        <img class="img-responsive" src="{{image.file.url}}" style="width:800px;height:300px;margin-bottom:10px;" alt="">
+                        <!-- Preview Image -->
+                        {% endfor %}
+                    {% endif %}
                     
                     <div class="blog_content">
                     <p>{{recent_post.details|safe|urlizetrunc:100}}</p>
@@ -108,14 +142,14 @@
                     </div>
                     {% endfor %}
                 {% else %}
-                    <div class="media">
+                    <div class="media comment_font">
                         There are no comments for this post. Use the button below to comment.
                     </div>
                 {% endif %}
                 <hr>
 
                 <!-- Blog Comments -->
-                 <button class="btn btn-primary" data-toggle="collapse" data-target="#comment">Leave a comment</button>
+                 <button class="btn btn-primary" style="margin-bottom:20px" data-toggle="collapse" data-target="#comment">Leave a comment</button>
 
                 <div id="comment" class="collapse" style="margin-top:20px">
                     <!-- Comments Form -->
@@ -157,34 +191,6 @@
                 {% else %}
                     <p>There are no blog posts available.</p>
                 {% endif %}
-                <!-- Post Content -->
-                {% if request.user.is_site_admin %}
-                    <button class="btn btn-danger" style="margin:20px" data-toggle="collapse" data-target="#post">Write a New Post</button>
-                
-                <div id="post" class="collapse" style="margin-top:20px">
-                    <div class="well">
-                        <h4>New Post</h4>
-                        <form method='POST' action='/blog/{{recent_post.id}}/' enctype="multipart/form-data">
-                        {% csrf_token %}
-                            <div style="margin-bottom:10px;">
-                                
-                                <label>Title</label>
-                                <input type="text" id="title" class=" form-control" name="title" placeholder="Title of the Post" />
-                            </div>
-                            <div style="margin-bottom:10px;">
-                                
-                                <label>Details</label>
-                                <textarea class="post form-control" id="details" name="details" placeholder="Content for the Post"></textarea>
-                            </div>
-                            <div style="margin-bottom:10px;">
-                                <label>Upload an image for the post</label>
-                                <input type="file" name="image">
-                            </div>
-                            <input type="submit" class="btn btn-primary" name="post" value="Post">
-                        </form>
-                    </div>
-                </div>
-                {% endif %}
             </div>
 
             <!-- Blog Sidebar Widgets Column -->
@@ -221,7 +227,7 @@
                         <div class="row">
                             <div>
                                 <ul class="list-unstyled recent_blogs">
-                                {% for blog in blog_post reversed %}
+                                {% for blog in blog_post.reverse|slice:"5"%}
                                     <li><!-- <a href="#" class="font1">{{blog.title}}</a> -->
                                         <a type="submit" class="font1" name="older" value="{{blog.id}}" href='/blog/{{blog.id}}/'>{{blog.title}}</a>
                                     </li>

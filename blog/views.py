@@ -12,22 +12,18 @@ def blog(request,id):
     if request.method == 'POST':
         title = request.POST.get("title")
         details = request.POST.get("details")
-        image = {}
-        if request.FILES:
-            image = request.FILES['image']
-        print "Anne"
-        print image
         created_by = request.user
         date_created = datetime.now()
-        post = BlogPost(title=title, details=details, image=image, date_created=date_created, created_by = created_by)
+        post = BlogPost(title=title, details=details, date_created=date_created, created_by = created_by)
         post.save()
+        file_attachment(request, post)
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))  
     
     # latest posts
     blog_post = BlogPost.objects.all().prefetch_related('blog_comments','response').order_by("date_created")
     
     recent_post = {}
-    if int(id) == 0:
+    if blog_post and int(id) == 0:
         recent_post =  blog_post.latest("date_created")
     else:
         recent_post =  blog_post.get(id=id)
@@ -95,3 +91,29 @@ def comment_reply(request,blog_id,comment_id):
         reply = Response(blog_id=blog_id, comment_id=comment_id, reply=reply, created_by=created_by, sender_email=sender_email,posted_date=posted_date)
         reply.save()
         return HttpResponseRedirect(request.META.get('HTTP_REFERER')) 
+
+def file_attachment(request, blog):
+    files = []
+    if request.FILES:
+        print "Anne"
+        print request.FILES
+        import mimetypes, os
+        for file in request.FILES.getlist('image'):
+            filename = file.name.encode('ascii', 'ignore')
+            a = BlogAttachment(
+                blog=blog,
+                filename=filename,
+                mime_type=mimetypes.guess_type(filename)[0] or 'application/octet-stream',
+                size=file.size,
+                )
+            a.file.save(filename, file, save=False)
+            a.save()
+
+            if file.size < getattr(settings, 'MAX_EMAIL_ATTACHMENT_SIZE', 512000):
+                # Only files smaller than 512kb (or as defined in
+                #settings.MAX_EMAIL_ATTACHMENT_SIZE) are sent via email.
+                try:
+                    files.append([a.filename, a.file])
+                except NotImplementedError:
+                    pass
+    return

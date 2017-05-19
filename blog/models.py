@@ -1,23 +1,52 @@
 from django.db import models
+from django.utils.translation import ugettext as _
+from django.conf import settings
 
-def attachment_path(filename):
-    # defining the unique path to the blog image
+class BlogPost(models.Model):
+    title = models.CharField("Title", max_length=300,)
+    details = models.TextField("Details", null=True, blank=True)
+    date_created = models.DateTimeField(null=True, blank=True)
+    created_by = models.CharField("author", default="OpenBuild Team", max_length=100,)
+
+
+def attachment_path(instance, filename):
+    """
+    Provide a file path that will help prevent files being overwritten, by
+    putting attachments in a folder off attachments for ticket/followup_id/.
+    """
     import os
     from django.conf import settings
     os.umask(0)
-    path = 'blog/attachments/%s'
+    path = 'blog/attachments/%s' % (instance.blog.id )
     att_path = os.path.join(settings.MEDIA_ROOT, path)
     if settings.DEFAULT_FILE_STORAGE == "django.core.files.storage.FileSystemStorage":
         if not os.path.exists(att_path):
             os.makedirs(att_path, 0o777)
     return os.path.join(path, filename)
 
-class BlogPost(models.Model):
-    title = models.CharField("Title", max_length=300,)
-    details = models.TextField("Details", null=True, blank=True)
-    image =  models.ImageField(upload_to="/openbuild/elearning/media/blog/", null=True, blank=True)
-    date_created = models.DateTimeField(null=True, blank=True)
-    created_by = models.CharField("author", default="OpenBuild Team", max_length=100,)
+class BlogAttachment(models.Model):
+    blog = models.ForeignKey(BlogPost,verbose_name=('blog'),)
+    file = models.FileField(_('File'),upload_to=attachment_path, max_length=1000,)
+    filename = models.CharField(_('Filename'),max_length=1000,)
+    mime_type = models.CharField(_('MIME Type'),max_length=255,)
+    size = models.IntegerField(_('Size'),help_text=_('Size of this file in bytes'),)
+
+    def get_upload_to(self, field_attname):
+        """ Get upload_to path specific to this item """
+        if not self.id:
+            return u''
+        return u'blog/attachments/%s' % (
+            
+            self.task.id
+            )
+
+    def __unicode__(self):
+        return u'%s' % self.filename
+
+    class Meta:
+        ordering = ['filename',]
+        verbose_name = _('Attachment')
+        verbose_name_plural = _('Attachments')
 
 
 class BlogComment(models.Model):
