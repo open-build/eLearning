@@ -64,3 +64,6 @@ class Response(models.Model):
 	created_by = models.CharField("Sender", default="Anonymous", max_length=100,)
 	sender_email = models.EmailField("Sender email ", blank=True, null=True,)
 	posted_date = models.DateTimeField(null=True, blank=True)
+
+class BlogSubscription(models.Model):
+    email = models.EmailField("subscriber email ", null=True,)

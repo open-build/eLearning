@@ -114,3 +114,10 @@ def file_attachment(request, blog):
                 except NotImplementedError:
                     pass
     return
+
+def subscribe(request,blog_id):
+    if request.method == 'POST':
+        email =  request.POST.get("subscribe")
+        subscribe = BlogSubscription(email=email)
+        subscribe.save()
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))

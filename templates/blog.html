@@ -229,7 +229,7 @@
                                 <ul class="list-unstyled recent_blogs">
                                 {% for blog in blog_post.reverse|slice:"5"%}
                                     <li><!-- <a href="#" class="font1">{{blog.title}}</a> -->
-                                        <a type="submit" class="font1" name="older" value="{{blog.id}}" href='/blog/{{blog.id}}/'>{{blog.title}}</a>
+                                        <a type="submit" class="font1" name="older" value="{{blog.id}}" href='/blog/{{blog.id}}/'><i class="fa fa-book" aria-hidden="true"></i> {{blog.title}}</a>
                                     </li>
                                 {% endfor %}
                                 </ul>
@@ -241,12 +241,16 @@
                 <!-- Side Widget Well -->
                 <div class="well col-md-12" >
                     <h4 class="font2">Do not miss out!</h4>
-                    <div class="col-md-12">
-                        <input type="email" class="form-control" id="id_email" maxlength="30" name="email" placeholder="Email Address" />
-                    </div>
-                    <div class="col-md-12"> 
-                    <input class="btn btn-primary"  style="margin-top:10px" type="submit" value="Subscribe" />
-                    </div>
+                    <form method='POST' action='/blog/subscribe/{{recent_post.id}}/'>
+                        {% csrf_token %}
+                        <div class="col-md-12">
+                            <input type="email" class="form-control" id="subscribe" maxlength="30" name="subscribe" placeholder="Email Address" />
+                            <small style="font-size:11px">You will receive a notification of new posts on this email</small>
+                        </div>
+                        <div class="col-md-12"> 
+                        <input class="btn btn-primary"  style="margin-top:10px" type="submit" value="Subscribe" />
+                        </div>
+                    </form>
                     <div class="row social_buttons"> 
                         <a href="#" class="btn btn-social-icon btn-twitter">
                             <span class="fa fa-twitter"></span>
