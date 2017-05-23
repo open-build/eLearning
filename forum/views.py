@@ -60,7 +60,7 @@ def forum(request):
     return render(request, "forum/forum.html", context)
 
 
-@login_required()
+
 def topic(request, slug=None):
     add_new_comment = AddNewComment(request.POST or None)
     topic_id = Topic.objects.get(slug=slug)

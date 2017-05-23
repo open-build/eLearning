@@ -47,3 +47,11 @@ p {
     margin: 0;
 }
 
+.sidebar-wrap{
+    position: fixed;   
+    width: 60px;
+    height:auto;
+    top: 40%;
+    right:0;
+    /*margin-top: -125px;*/ /* Needs to be half of the height */
+}

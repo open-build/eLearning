@@ -1,4 +1,4 @@
-from courses.forms import AddCourseForm
+from courses.forms import AddCourseForm, AddChapterForm, EditCourseForm
 from courses.models import *
 from .forms import *
 from django.contrib.auth.hashers import make_password
@@ -97,14 +97,39 @@ def admin(request):
 
 
 @user_passes_test(lambda user: user.is_professor)
-def professor(request):
+def professor(request, course_name=None):
     add_course_form = AddCourseForm(request.POST or None)
-    queryset_course = Course.objects.filter(user__username=request.user).filter(is_active=True)
+    queryset_course = Course.objects.filter(user__username=request.user).filter(is_active=True).prefetch_related('chapter_set')
+    
+    course_instance = {}
+    for q in queryset_course:
+        excluded_students = UserProfile.objects.exclude(students_to_course=q.id).filter(is_professor=False).filter(
+        is_site_admin=False)
+        q.excluded_students = excluded_students
+        # course_instance
+        course_instance = Course.objects.get(course_name=q.course_name, is_active=True)
+
+    update_course_form = EditCourseForm(request.POST or None, instance=course_instance)
+
+
+    query_first = request.GET.get("q1")
+    if query_first:
+        excluded_students = excluded_students.filter(username__icontains=query_first)
+
+    query_second = request.GET.get("q2")
+    if query_second:
+        added_students = added_students.filter(username__icontains=query_second)
+
+    add_chapter_form = AddChapterForm(request.POST or None)
 
     context = {
         "title": "Professor",
+        "excluded_students": excluded_students,
         "add_course_form": add_course_form,
+        "update_course_form":update_course_form,
+        "add_chapter_form" : add_chapter_form,
         "queryset_course": queryset_course,
+        "course_name" : course_name,
     }
 
     if add_course_form.is_valid():
@@ -113,6 +138,10 @@ def professor(request):
         instance.user = request.user
         instance.save()
         return redirect(reverse('professor_course', kwargs={'course_name': course_name}))
+
+    if update_course_form.is_valid():
+        update_course_form.save()
+        return redirect(reverse('professor_course', kwargs={'course_name': course_name}))   
 
     return render(request, "users/professor_dashboard.html", context)
 

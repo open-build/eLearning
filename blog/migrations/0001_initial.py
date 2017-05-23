@@ -15,6 +15,18 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
+
+        migrations.CreateModel(
+            name='BlogPost',
+            fields=[
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('title', models.CharField(max_length=300, verbose_name=b'Title')),
+                ('details', models.TextField(blank=True, null=True, verbose_name=b'Details')),
+                ('date_created', models.DateTimeField(blank=True, null=True)),
+                ('created_by', models.CharField(default=b'OpenBuild Team', max_length=100, verbose_name=b'author')),
+            ],
+        ),
+
         migrations.CreateModel(
             name='BlogAttachment',
             fields=[
@@ -40,17 +52,7 @@ class Migration(migrations.Migration):
                 ('posted_date', models.DateTimeField(blank=True, null=True)),
             ],
         ),
-        migrations.CreateModel(
-            name='BlogPost',
-            fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(max_length=300, verbose_name=b'Title')),
-                ('details', models.TextField(blank=True, null=True, verbose_name=b'Details')),
-                ('date_created', models.DateTimeField(blank=True, null=True)),
-                ('created_by', models.CharField(default=b'OpenBuild Team', max_length=100, verbose_name=b'author')),
-            ],
-        ),
-        migrations.CreateModel(
+              migrations.CreateModel(
             name='Response',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),

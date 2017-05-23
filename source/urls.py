@@ -21,7 +21,6 @@ from users import views as user_views
 from registration.backends.default.views import RegistrationView
 from users.forms import AddUser
 
-
 urlpatterns = [
     url(r'^$', user_views.home, name='home'),
     url(r'^ourteam/$', user_views.ourteam, name='ourteam'),
@@ -31,6 +30,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^courses/', include('courses.urls')),
     url(r'^forum/', include('forum.urls')),
+    url(r'^blog/', include('blog.urls')),
     url(r'^profile/', include('users.urls')),
     url(r'^accounts/', include('registration.backends.default.urls')),
     url('', include('social_django.urls', namespace='social')),

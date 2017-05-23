@@ -1,0 +1,263 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+    <!-- Bootstrap Core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="{% static "css/home.css" %}" rel="stylesheet">
+    <link href="{% static "css/blog-post.css" %}" rel="stylesheet">
+    <section style="background:#fff">
+    <!-- Page Content -->
+    <div class="container">
+
+        <div class="row">
+
+            <!-- Blog Post Content Column -->
+            <div class="col-md-8">
+                <!-- Post Content -->
+                {% if request.user.is_site_admin %}
+                    <button class="btn btn-danger" style=" float:right" data-toggle="collapse" data-target="#post">Write a New Post</button>
+                    
+                    <div id="post" class="collapse col-md-12" style="margin-top:20px">
+                        <div class="well">
+                            <h4>New Post</h4>
+                            <form method='POST' action='/blog/0/' enctype="multipart/form-data">
+                            {% csrf_token %}
+                                <div style="margin-bottom:10px;">
+                                    
+                                    <label>Title</label>
+                                    <input type="text" id="title" class=" form-control" name="title" placeholder="Title of the Post" />
+                                </div>
+                                <div style="margin-bottom:10px;">
+                                    
+                                    <label>Details</label>
+                                    <textarea class="post form-control" id="details" name="details" placeholder="Content for the Post"></textarea>
+                                </div>
+                                <div style="margin-bottom:10px;">
+                                    <label>Upload an image for the post</label>
+                                    <input type="file" name="image">
+                                </div>
+                                <input type="submit" class="btn btn-primary" name="post" value="Post">
+                            </form>
+                        </div>
+                    </div>
+                {% endif %}
+                <!-- end post content -->
+                {% if recent_post %}
+                    <!-- Title -->
+                    <div class="col-md-12">
+                        <h3 class="font1">{{recent_post.title}}</h3>
+
+                        <!-- Date and Author -->
+                        <p class="blog_details">
+                        <span class="glyphicon glyphicon-time"></span> Posted on {{recent_post.date_created|date}} at {{recent_post.date_created|time}} by <a href="#" class="title">{{recent_post.created_by|force_escape}}</a></p>
+                        <hr>
+                    </div>
+
+                    {% if recent_post.blogattachment_set.all %}
+                        {% for image in recent_post.blogattachment_set.all %}
+                        <img class="img-responsive" src="{{image.file.url}}" style="width:800px;height:300px;margin-bottom:10px;" alt="">
+                        <!-- Preview Image -->
+                        {% endfor %}
+                    {% endif %}
+                    
+                    <div class="blog_content">
+                    <p>{{recent_post.details|safe|urlizetrunc:100}}</p>
+                    </div>
+
+                <hr>
+
+                <!-- Posted Comments -->
+                <h3>Comments</h3>
+                <!-- Comment -->
+                {% if recent_post.blog_comments.all %}
+                    {% for comment in recent_post.blog_comments.all %}
+                    <div class="media">
+                        <a class="pull-left" href="#">
+                            <font style="font-size:30px;color:#969696" ><span class="glyphicon glyphicon-user"></span></font>
+                        </a>
+                        <div class="media-body">
+                            <h4 class="media-heading">{{comment.created_by}}
+                                <small>{{comment.posted_date|date}} at {{comment.posted_date|time}}</small>
+                            </h4>
+                            {{comment.comment|safe|urlizetrunc:100}}
+                            <a href="#reply{{comment.id}}" data-toggle="collapse" data-target="#reply{{comment.id}}">Reply</a>
+                            <div id="reply{{comment.id}}" class="collapse">
+                                <div class="row col-md-12 blog_content">
+                                    <div class="well">
+                                        <form method='POST' action='/blog/reply/{{recent_post.id}}/{{comment.id}}/'>
+                                            {% csrf_token %}
+                                            <div class="row">
+                                                <div class="col-md-6 blog_content" {% if request.user.is_authenticated %} hidden {% endif %}>
+                                                    <div class="col-md-2"> 
+                                                        <label>Name:</label> 
+                                                    </div>
+                                                    <div class="col-md-10"> 
+                                                        <input class="form-control" name="name" id="name" {% if request.user.is_authenticated %} value="{{request.user.username}}" hidden {% endif %} type="text">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6 blog_content" {% if request.user.is_authenticated %} hidden {% endif %}>
+                                                    <div class="col-md-2"> 
+                                                        <label>Email:</label> 
+                                                    </div>
+                                                    <div class="col-md-10"> 
+                                                        <input class="form-control" {% if request.user.is_authenticated %} value="{{request.user.email}}" hidden {% endif %} name="email" id="email" type="text">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12 blog_content"> 
+                                                <div class="col-md-2"> 
+                                                    <label>Response</label> 
+                                                </div>
+                                                <textarea class="form-control" name="reply" id="reply" rows="3"> </textarea>
+                                            </div>
+                                            <button type="submit" class="btn btn-primary submit_comment" style="margin-top:5px">Reply</button>
+                                        </form>    
+                                    </div>
+                                </div>
+                                
+                            </div>
+                            <!-- display replies -->
+                            {% if comment.reply.all %}
+                                {% for reply in recent_post.response.all %}
+                                    <div class="media col-md-12">
+                                        <a class="pull-left" href="#">
+                                            <font style="font-size:30px;color:#969696" ><span class="glyphicon glyphicon-user"></span></font>
+                                        </a>
+                                        <div class="media-body">
+                                            <h4 class="media-heading">{{reply.created_by}}
+                                                <small>{{reply.posted_date|date}} at {{reply.posted_date|time}}</small>
+                                            </h4>
+                                            {{reply.reply}}
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="media comment_font">
+                        There are no comments for this post. Use the button below to comment.
+                    </div>
+                {% endif %}
+                <hr>
+
+                <!-- Blog Comments -->
+                 <button class="btn btn-primary" style="margin-bottom:20px" data-toggle="collapse" data-target="#comment">Leave a comment</button>
+
+                <div id="comment" class="collapse" style="margin-top:20px">
+                    <!-- Comments Form -->
+                <div class="well">
+                    <h4>Leave a Comment:</h4>
+                    <form method='POST' action='/blog/comment/{{recent_post.id}}/'>
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <div class="row col-md-12 blog_content" {% if request.user.is_authenticated %} hidden {% endif %}>
+                                <div class="col-md-2"> 
+                                    <label>Name:</label> 
+                                </div>
+                                <div class="col-md-10"> 
+                                    <input class="form-control" {% if request.user.is_authenticated %} value="{{request.user.username}}" hidden {% endif %} name="name" id="name" type="text">
+                                </div>
+                            </div>
+                            <div class="row col-md-12 blog_content" {% if request.user.is_authenticated %} hidden {% endif %}>
+                                <div class="col-md-2"> 
+                                    <label>Email:</label> 
+                                </div>
+                                <div class="col-md-10"> 
+                                    <input class="form-control" {% if request.user.is_authenticated %} value="{{request.user.email}}" hidden {% endif %} name="email" id="email" type="text">
+                                </div>
+                            </div>
+                            <div class="row col-md-12 blog_content">
+                                <div class="col-md-2"> 
+                                    <label>Comment:</label> 
+                                </div>
+                                <div class="col-md-10"> 
+                                    <textarea class="form-control" name="comment" id="comment" rows="3"> </textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary submit_comment">Submit</button>
+                    </form>
+                </div>
+                </div> 
+                
+                {% else %}
+                    <p>There are no blog posts available.</p>
+                {% endif %}
+            </div>
+
+            <!-- Blog Sidebar Widgets Column -->
+            <div class="col-md-4">
+                {% if recent_post %}
+                    <!-- Blog Search Well -->
+                    <div class="well">
+                        <h4>Blog Search</h4>
+                        <form class="input-group" method='get' action="/blog/0/">
+                          <input type="text" name='search' class="form-control" placeholder="Search" id='search'>
+                          <span class="input-group-btn">
+                            <button  class="btn btn-info" type="button" onclick="submit_query()"><span class="glyphicon glyphicon-search"></span></button>
+                          </span>
+                            <script type="text/javascript">
+                              function submit_query(){
+                                 var input = document.getElementById("search").value;
+                                  if (input!==""){ 
+                                  window.location.href =  '/blog/{{recent_post.id}}/?{% if query_string %}{{ query_string }}&{% endif %}search='+input;
+                                  }
+                                  else
+                                    alert("Kindly enter a search term");
+                              }
+                          </script>
+                        </form>
+                    </div>
+
+                    <!-- Blog Categories Well -->
+                    <div class="well">
+                        {% if query %}
+                            <h4>{{num_blog}} blog(s) found for {{query}}</h4>
+                        {% else %}
+                        <h4>Recent Blogs</h4>
+                        {% endif %}
+                        <div class="row">
+                            <div>
+                                <ul class="list-unstyled recent_blogs">
+                                {% for blog in blog_post.reverse|slice:"5"%}
+                                    <li><!-- <a href="#" class="font1">{{blog.title}}</a> -->
+                                        <a type="submit" class="font1" name="older" value="{{blog.id}}" href='/blog/{{blog.id}}/'><i class="fa fa-book" aria-hidden="true"></i> {{blog.title}}</a>
+                                    </li>
+                                {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- /.row -->
+                    </div>
+                {% endif %}
+                <!-- Side Widget Well -->
+                <div class="well col-md-12" >
+                    <h4 class="font2">Do not miss out!</h4>
+                    <form method='POST' action='/blog/subscribe/{{recent_post.id}}/'>
+                        {% csrf_token %}
+                        <div class="col-md-12">
+                            <input type="email" class="form-control" id="subscribe" maxlength="30" name="subscribe" placeholder="Email Address" />
+                            <small style="font-size:11px">You will receive a notification of new posts on this email</small>
+                        </div>
+                        <div class="col-md-12"> 
+                        <input class="btn btn-primary"  style="margin-top:10px" type="submit" value="Subscribe" />
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+
+        </div>
+        <!-- /.row -->
+
+    </div>
+    <!-- /.container -->
+</section>
+{% endblock %}
