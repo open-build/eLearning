@@ -4,13 +4,41 @@
 {% block content %}
   <!-- Chapter css is in course core css -->
   <link href="{% static "css/course.css" %}" rel="stylesheet"/>
+  <link href="{% static "css/professor.css" %}" rel="stylesheet"/>
+  <link href="{% static "css/breadcrumb.css" %}" rel="stylesheet"/>
   <script src="{% static "js/tinymce/jquery.tinymce.min.js" %}"></script>
   <script src="{% static "js/tinymce/tinymce.min.js" %}"></script>
   </script>
+  {% include 'head_css.html' %}
+  {% include 'javascript.html' %} 
+  <div class="container professor-panel-content">
+      <div class="prof-course">
+      <section class="bread-course" >
+        <ul class="nav nav-tabs course_nav">
+          <li><a  href="/">OpenBuild</a></li>
+          <li ><a href="{% url 'professor' %}">My Courses</a></li>
+          {% url 'chapter' course_name slug as chapter_url %}
+        {% if request.get_full_path ==  chapter_url %}
+          <li class="active"><a href="#">{{ course_name }}</a></li>
+        {% endif %}
 
-  <div class="container">
-    <div class="row">
-  {% include 'breadcrumb.html' %}
+        <div class="collapse navbar-collapse navbar-right">
+          <ul class="nav nav-tabs">
+              <li>
+                 <a href="" class=" dropdown-toggle" data-toggle="dropdown" type="button"><span class="glyphicon glyphicon-user"></span> <font class="prof">{{request.user}}</font>  <span class="caret"></span> </a>
+                  <ul class="dropdown-menu"> 
+                      <li><a href="/accounts/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>                     
+                  </ul>
+              </li>
+          </ul>
+        </div>
+        </ul>
+      </section>
+    </div>
+    <div class="col-md-12"><h3 >{{ title }} </h3></div>
+
+    <div class="col-md-12 row tab-content">
+
       <div class="col-md-6 chapter-text-input">
         <form method='POST' action=''>
           {% csrf_token %}
@@ -38,7 +66,7 @@
   
 
     <!-- Chapter text row -->
-    <div class="row">
+    <div class="col-md-12">
       {% if queryset_txt_block %}
         <table class="table table-bordered generic-table scroll">
           <thead>
@@ -50,7 +78,7 @@
           </thead>
           {% for instance in queryset_txt_block %}
             <tr>
-              <td class="col-md-7">{{ instance.lesson|safe }}</td>
+              <td class="col-md-7" style="text-align:left">{{ instance.lesson|safe }}</td>
               <td class="col-md-2">{{ instance.date_created }}</td>
               <td class="col-md-3">
                 <a href="{% url 'edit_txt' course_name slug instance.id %}">

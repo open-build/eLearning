@@ -1,21 +1,57 @@
-{% extends 'base.html' %}
 {% load crispy_forms_tags %}
-{% include 'head_css.html' %}
-{% include 'javascript.html' %}
 {% load staticfiles %}
 
 {% block content %}
-  {% include 'breadcrumb.html' %}
+  <link href="{% static "css/professor.css" %}" rel="stylesheet"/>
+  <link href="{% static "css/breadcrumb.css" %}" rel="stylesheet"/>
   <script src="{% static "js/tinymce/jquery.tinymce.min.js" %}"></script>
   <script src="{% static "js/tinymce/tinymce.min.js" %}"></script>
+  {% include 'head_css.html' %}
+  {% include 'javascript.html' %} 
+  <div class="container professor-panel-content">
+    <!-- navbar -->
+    <div class="prof-course">
+      <section class="bread-course" >
+        <ul class="nav nav-tabs course_nav">
+          <li><a  href="/">OpenBuild</a></li>
+          <li ><a href="{% url 'professor' %}">My Courses</a></li>
+          {% url 'edit_txt' course_name slug text_id as chapter_url %}
+          {% if request.get_full_path ==  chapter_url %}
+            <li class="active"><a  href="{% url 'chapter' course_name slug %}">{{ course_name }}</a></li>
+          {% endif %}
 
-  <div class="row">
-    <div class="col-md-6 col-md-offset-3">
-      <form method='POST' action=''>
-        {% csrf_token %}
-        {{ form|crispy }}
-        <input class='btn btn-primary' type='submit' value='Edit'/>
-      </form>
+        <div class="collapse navbar-collapse navbar-right">
+          <ul class="nav nav-tabs">
+              <li>
+                 <a href="" class=" dropdown-toggle" data-toggle="dropdown" type="button"><span class="glyphicon glyphicon-user"></span> <font class="prof">{{request.user}}</font>  <span class="caret"></span> </a>
+                  <ul class="dropdown-menu"> 
+                      <li><a href="/accounts/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>                     
+                  </ul>
+              </li>
+          </ul>
+        </div>
+        </ul>
+      </section>
+    </div>
+    <!-- end navbar -->
+
+    <div class="col-md-12 row">
+      <h3 >{{ title }} </h3> 
+      <div style="float:right">
+        {% url 'edit_txt' course_name slug text_id as chapter_url %}
+            {% if request.get_full_path ==  chapter_url %}
+              <a class="btn btn-sm btn-success" href="{% url 'chapter' course_name slug %}">Back to {{ course_name }}</a>
+            {% endif %}
+      </div>
+    </div>
+    <div class=" col-md-12 row">
+      <div class="col-md-6 col-md-offset-3">
+        <form method='POST' action=''>
+          {% csrf_token %}
+          {{ form|crispy }}
+          <input class='btn btn-primary' type='submit' value='Edit'/>
+        </form>
+      </div>
     </div>
   </div>
 
