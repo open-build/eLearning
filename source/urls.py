@@ -33,6 +33,7 @@ urlpatterns = [
     url(r'^forum/', include('forum.urls')),
     url(r'^profile/', include('users.urls')),
     url(r'^accounts/', include('registration.backends.default.urls')),
+    url('', include('social_django.urls', namespace='social')),
 ]
 
 # Remove this in project deployment
