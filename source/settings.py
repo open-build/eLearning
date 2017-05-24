@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 """
 
 import os
-
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -154,7 +153,8 @@ REGISTRATION_AUTO_LOGIN = True
 
 REGISTRATION_OPEN = True
 
-LOGIN_REDIRECT_URL = '/courses'
+LOGIN_REDIRECT_URL = '/profile/login_redirect'
+ 
 LOGIN_URL = '/accounts/login'
 
 SITE_ID = 1

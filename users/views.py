@@ -19,6 +19,11 @@ def home(request):
 
     return render(request, "home.html", context)
 
+def login_redirect(request):
+    if request.user.is_professor:
+        return redirect("professor") 
+    return redirect ("courses")     
+
 
 def about(request):
     context = {
