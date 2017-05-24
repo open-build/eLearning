@@ -2,7 +2,7 @@ html,
 body {
     font-family: 'Source Sans Pro', sans-serif;
     font-size: 100%;
-    background-color: #F6F6F6;
+    background-color: #fff;
     height: 100%;
     /* The html and body elements cannot have any padding or margin. */
 }
@@ -20,16 +20,24 @@ body {
 }
 
 /* Set the fixed height of the footer here */
-#footer {
+/*#footer {
     height: 30px;
     background-color: #275B91;
     text-align: center;
     color: white;
     margin-top: 2em;
-}
-
-#footer > .container {
+}*/
+#footer {
     position: fixed;
+    bottom: 0px;
+    height: 30px;
+    text-align: center;
+    color: #275B91;
+    background-color: #e5e5e5;
+    vertical-align: top;
+    z-index: 100;
+}
+#footer > .container {
     padding-top: 2px;
 }
 
