@@ -106,10 +106,7 @@ def professor(request, course_name=None):
         excluded_students = UserProfile.objects.exclude(students_to_course=q.id).filter(is_professor=False).filter(
         is_site_admin=False)
         q.excluded_students = excluded_students
-        # course_instance
-        course_instance = Course.objects.get(course_name=q.course_name, is_active=True)
-
-    update_course_form = EditCourseForm(request.POST or None, instance=course_instance)
+    
 
 
     query_first = request.GET.get("q1")
@@ -126,7 +123,6 @@ def professor(request, course_name=None):
         "title": "Professor",
         "excluded_students": excluded_students,
         "add_course_form": add_course_form,
-        "update_course_form":update_course_form,
         "add_chapter_form" : add_chapter_form,
         "queryset_course": queryset_course,
         "course_name" : course_name,
@@ -137,11 +133,7 @@ def professor(request, course_name=None):
         instance = add_course_form.save(commit=False)
         instance.user = request.user
         instance.save()
-        return redirect(reverse('professor_course', kwargs={'course_name': course_name}))
-
-    if update_course_form.is_valid():
-        update_course_form.save()
-        return redirect(reverse('professor_course', kwargs={'course_name': course_name}))   
+        return redirect(reverse('professor_course', kwargs={'course_name': course_name})) 
 
     return render(request, "users/professor_dashboard.html", context)
 
@@ -201,61 +193,43 @@ def delete_user(request, username):
 
 @login_required
 def course_homepage(request, course_name):
-    chapter_list = Chapter.objects.filter(course__course_name=course_name, is_active=True)
+    chapter_list = Chapter.objects.filter(course__course_name=course_name)
+
     if chapter_list:
-        course = Course.objects.get(course_name=course_name, is_active=True)
-        chapter_list = Chapter.objects.filter(course=course, is_active=True)
-        user = request.user
-
-        if user in course.students.all() or user.is_professor or user.is_site_admin or course.for_everybody:
-            context = {
-                "course_name": course_name,
-                "chapter_list": chapter_list,
-                "title": course_name ,
-            }
-
-            return render(request, "users/student_courses.html", context)
-
-        else:
-            raise Http404
+        return redirect(reverse(student_course, kwargs={'course_name': course_name,
+                                                        "slug": chapter_list[0].slug}))
     else:
-        warning_message = "Currently there are no chapters for %s "%(course_name)
+        warning_message = "Currently there are no chapters for this course "
         messages.warning(request, warning_message)
         return redirect(reverse('courses'))
 
 
 @login_required
 def student_course(request, course_name, slug=None):
-    course = Course.objects.get(course_name=course_name, is_active=True)
-    chapter_list = Chapter.objects.filter(course=course, is_active=True)
-    chapter = Chapter.objects.get(course__course_name=course_name, slug=slug, is_active=True)
-    text = TextBlock.objects.filter(text_block_fk=chapter).filter(is_active=True).values('lesson_name','date_created','id')
-    videos = YTLink.objects.filter(yt_link_fk=chapter, is_active=True)
-    files = FileUpload.objects.filter(file_fk=chapter, is_active=True)
+    course = Course.objects.get(course_name=course_name)
+    chapter_list = Chapter.objects.filter(course=course)
+    chapter = Chapter.objects.get(course__course_name=course_name, slug=slug)
+    text = TextBlock.objects.filter(text_block_fk=chapter)
+    videos = YTLink.objects.filter(yt_link_fk=chapter)
+    files = FileUpload.objects.filter(file_fk=chapter)
     user = request.user
 
-
     if user in course.students.all() or user.is_professor or user.is_site_admin or course.for_everybody:
-        videos = sorted(videos,key=lambda instance: instance.date_created, reverse=True)
-        files = sorted(files,key=lambda instance: instance.date_created, reverse=True)
-        text = sorted(text,key=lambda instance: instance.get('date_created'), reverse=True)
+        result_list = sorted(
+            chain(text, videos, files),
+            key=lambda instance: instance.date_created)
 
         context = {
             "course_name": course_name,
             "chapter_list": chapter_list,
             "chapter_name": chapter.chapter_name,
             "slug": chapter.slug,
-            "text": text,
-            "files": files,
-            "videos": videos,
+            "result_list": result_list,
+            "title1": course_name,
             "title": course_name + ' : ' + chapter.chapter_name,
         }
-        if len(text) +len(files) +len(videos)  == 0:
-            warning_message = "Currently there are no materials for %s "%(chapter.chapter_name)
-            messages.warning(request, warning_message)
-            return redirect(reverse('course_homepage', kwargs={"course_name":course_name}))
 
-        return render(request, "users/student_chapter.html", context)
+        return render(request, "users/student_courses.html", context)
 
     else:
         raise Http404
