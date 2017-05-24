@@ -144,48 +144,27 @@ def delete_file(request, file_id=None):
 @user_passes_test(lambda user: user.is_professor)
 def update_course(request, course_name=None):
     instance = Course.objects.get(course_name=course_name, is_active=True)
-    update_course_form = EditCourseForm(request.POST or None, instance=instance)
+    
+    if request.method == 'POST':
+        new_name = request.POST.get('new_course')
+        course = Course(id=instance.id, course_name=new_name)
+        course.save(update_fields=['course_name'])
 
-    path = request.path.split('/')[1]
-    redirect_path = path
-    path = path.title()
-
-    context = {
-        "title": "Edit",
-        "form": update_course_form,
-        "path": path,
-        "redirect_path": redirect_path,
-    }
-
-    if update_course_form.is_valid():
-        update_course_form.save()
-        return redirect(reverse('profile'))
-
-    return render(request, "courses/edit.html", context)
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
 @user_passes_test(lambda user: user.is_professor)
 def update_chapter(request, course_name=None, slug=None):
     instance = Chapter.objects.get(slug=slug, is_active=True)
-    update_chapter_form = EditChapterForm(request.POST or None, instance=instance)
 
-    path = request.path.split('/')[1]
-    redirect_path = path
-    path = path.title()
 
-    context = {
-        "title": "Edit",
-        "course_name": course_name,
-        "form": update_chapter_form,
-        "path": path,
-        "redirect_path": redirect_path,
-    }
+    if request.method == 'POST':
+        title = request.POST.get('new_chapter')
+        chapter = Chapter(id=instance.id, chapter_name=title)
+        chapter.save(update_fields=['chapter_name'])
 
-    if update_chapter_form.is_valid():
-        update_chapter_form.save()
-        return redirect(reverse('professor_course', kwargs={'course_name': course_name}))
-
-    return render(request, "courses/edit.html", context)
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+        
 
 
 @user_passes_test(lambda user: user.is_professor)
