@@ -4,7 +4,7 @@
 {% block content %}
   <!-- Course core css -->
   <link href="{% static "css/course.css" %}" rel="stylesheet"/>
-  <div class="container">
+  <div class="container" style="margin-top:100px">
 
 
     <div class="message">
@@ -16,7 +16,6 @@
     </div>
 
     <div class="row">
-      {% include 'breadcrumb.html' %}
       {% include 'courses/course_box_model.html' %}
     </div>
 
