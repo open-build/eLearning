@@ -84,8 +84,8 @@
                                     <a href="{{ chapter.get_absolute_url }}">
                                       <input class='btn btn-primary btn-sm' type='submit' value='Add Lesson'/>
                                     </a>
-                                    <!-- <a href="#" data-from="{% url 'edit_chapter' chapter.course chapter.slug %}" type="button"  data-toggle="modal" data-target="#myModal"> -->
-                                    <a href="{% url 'edit_chapter' chapter.course chapter.slug %}">
+                                    <a href="#" data-from="{% url 'edit_chapter' chapter.course chapter.slug %}" type="button"  data-toggle="modal" data-target="#myModal{{chapter.id}}">
+                                    <!-- <a href="{% url 'edit_chapter' chapter.course chapter.slug %}"> -->
                                       <input class='btn btn-primary btn-sm' value='Rename'/>
                                     </a>
                                     <a href="{% url 'delete_chapter' chapter.course chapter.slug%}">
@@ -95,7 +95,7 @@
                                   </td>
                                 </tr>
                                 <!-- Edit chapter modal -->
-                                <div id="myModal" class="modal fade" role="dialog">
+                                <div id="myModal{{chapter.id}}" class="modal fade" role="dialog">
                                   <div class="modal-dialog">
 
                                     <!-- Modal content-->
@@ -106,11 +106,19 @@
                                       </div>
                                       <div class="modal-body">
                                         <div class="row">
-                                          <div class="col-md-6 col-md-offset-3">
-                                            <form method='POST' action=''>
+                                          <div class="col-md-12">
+                                            <form method='POST' action='{% url 'edit_chapter' chapter.course chapter.slug %}'>
                                               {% csrf_token %}
-                                              {{ form|crispy }}
-                                              <input class='btn btn-primary' type='submit' value='Edit'/>
+                                              <div  class="col-md-12 row" style="margin-bottom:10px;">
+                                    
+                                                  <label class="col-md-3">Chapter Name</label>
+                                                  <div class="col-md-8">
+                                                    <input type="text" id="new_chapter" class="  form-control" name="new_chapter" value="{{chapter.chapter_name}}" />
+                                                  </div>
+                                              </div>
+                                              <div style="margin-left:15px">
+                                                <input class='btn btn-primary col-md-offset-3' type='submit' value='Edit'/>
+                                              </div>
                                             </form>
                                           </div>
                                         </div>
@@ -128,9 +136,9 @@
                           {% endif %}
                         </div>
                       </div>
-                      <div class="panel-footer">
-                        <a href="{% url 'edit' instance.course_name %}">
-                        <!-- <a href="#" data-toggle="modal" data-target="#courseModal{{instance.id}}"> -->
+                      <div class="panel-footer"><!-- 
+                        <a href="{% url 'edit' instance.course_name %}"> -->
+                        <a href="#" data-toggle="modal" data-target="#courseModal{{instance.id}}">
                           <input class='btn btn-primary btn-sm' type='submit' value='Edit Course'/>
                         </a>
 
@@ -146,14 +154,22 @@
                               </div>
                               <div class="modal-body">
                                 <div class="row">
-                            <div class="col-md-6 col-md-offset-3">
-                              <form method='POST' action=''>
-                                {% csrf_token %}
-                                {{ form|crispy }}
-                                <input class='btn btn-primary' type='submit' value='Edit'/>
-                              </form>
-                            </div>
-                          </div>
+                                  <div class="col-md-12">
+                                    <form method='POST' action='{% url 'edit' instance.course_name %}'>
+                                      {% csrf_token %}
+                                      <div  class="col-md-12 row" style="margin-bottom:10px;">
+                            
+                                          <label class="col-md-3">Course Name</label>
+                                          <div class="col-md-8">
+                                            <input type="text" id="new_course" class="  form-control" name="new_course" value="{{instance.course_name}}" />
+                                          </div>
+                                      </div>
+                                      <div style="margin-left:15px">
+                                        <input class='btn btn-primary col-md-offset-3' type='submit' value='Edit'/>
+                                      </div>
+                                    </form>
+                                  </div>
+                                </div>
                               </div>
                               <div class="modal-footer">
                                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
