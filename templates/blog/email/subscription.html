@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+	<link href="{% static "css/blog-post.css" %}" rel="stylesheet">
+    <section style="background:#fff">
+    <div class="container">
+
+        <div class="row">
+            <div class="col-md-8">
+            	<div class="col-md-12">
+                    <h3 class="font1">{{recent_post.title}}</h3>
+
+                    <!-- Date and Author -->
+                    <p class="blog_details">
+                    <span class="glyphicon glyphicon-time"></span> Posted on {{recent_post.date_created|date}} at {{recent_post.date_created|time}} by <a href="#" class="title">{{recent_post.created_by|force_escape}}</a></p>
+                    <hr>
+                </div>
+                <div class="blog_content">
+                	<p>{{recent_post.details|safe|urlizetrunc:100}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

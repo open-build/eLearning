@@ -1,0 +1,6 @@
+Read a new post 
+{{blog.title}} on OpenBuild.
+
+Posted on {{blog.date_created|date}} at {{blog.date_created|time}} by {{blog.created_by|force_escape}}
+
+{{blog.details|safe|urlizetrunc:100}}

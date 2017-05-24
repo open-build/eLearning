@@ -2,12 +2,15 @@ from models import *
 from .forms import *
 from django.shortcuts import render, redirect
 from django.core.urlresolvers import reverse
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
 from datetime import datetime
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
 
 def blog(request,id):
+    send_to = []
     if request.method == 'POST':
         title = request.POST.get("title")
         details = request.POST.get("details")
@@ -16,6 +19,11 @@ def blog(request,id):
         post = BlogPost(title=title, details=details, date_created=date_created, created_by = created_by)
         post.save()
         file_attachment(request, post)
+        subscribers = BlogSubscription.objects.all()
+        for subscriber in subscribers:
+            send_to.append(subscriber.email)   
+        email(post,send_to) 
+           
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))  
     
     # latest posts
@@ -61,7 +69,19 @@ def blog(request,id):
 
     } 
 
-    return render(request, "blog.html", context)
+    return render(request, "blog/blog.html", context)
+
+def blog_notification(request,id):
+    recent_post = BlogPost.objects.all().prefetch_related('blog_comments','response').latest("date_created")
+    
+
+    context = {
+        "title": "New Post",
+        "recent_post":recent_post,
+
+    } 
+
+    return render(request, "blog/subscription.html", context)
 
 def post_comment(request,blog_id):
     blog = get_object_or_404(BlogPost, id=blog_id)
@@ -121,3 +141,12 @@ def subscribe(request,blog_id):
         subscribe = BlogSubscription(email=email)
         subscribe.save()
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+# send post to subscribers    
+def email(blog,send_to):
+    text_message = render_to_string('blog/email/subscription.txt',{'blog':blog})
+    html_message = render_to_string('blog/email/subscription.html',{'blog':blog})
+
+    send_mail('OpenBuild New Post',text_message,'OpenBuild Team',[send_to],fail_silently=False,html_message=html_message)
+
+    

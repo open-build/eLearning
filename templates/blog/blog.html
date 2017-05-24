@@ -13,14 +13,11 @@
     <section style="background:#fff">
     <!-- Page Content -->
     <div class="container">
-
-        <div class="row">
-
             <!-- Blog Post Content Column -->
             <div class="col-md-8">
                 <!-- Post Content -->
                 {% if request.user.is_site_admin %}
-                    <button class="btn btn-danger" style=" float:right" data-toggle="collapse" data-target="#post">Write a New Post</button>
+                    <button class="btn btn-primary" style=" float:right" data-toggle="collapse" data-target="#post">Write a New Post</button>
                     
                     <div id="post" class="collapse col-md-12" style="margin-top:20px">
                         <div class="well">
@@ -49,28 +46,32 @@
                 <!-- end post content -->
                 {% if recent_post %}
                     <!-- Title -->
-                    <div class="col-md-12">
+                    <div class="col-md-10">
                         <h3 class="font1">{{recent_post.title}}</h3>
 
                         <!-- Date and Author -->
                         <p class="blog_details">
                         <span class="glyphicon glyphicon-time"></span> Posted on {{recent_post.date_created|date}} at {{recent_post.date_created|time}} by <a href="#" class="title">{{recent_post.created_by|force_escape}}</a></p>
-                        <hr>
+                    </div>
+                    <div class="col-md-10" ><hr></div>
+                    <div class="col-md-12">
+                        {% if recent_post.blogattachment_set.all %}
+                            {% for image in recent_post.blogattachment_set.all %}
+                            <img class="img-responsive" src="{{image.file.url}}" style="width:800px;height:300px;margin-bottom:10px;" alt="">
+                            <!-- Preview Image -->
+                            {% endfor %}
+                        {% endif %}
                     </div>
 
-                    {% if recent_post.blogattachment_set.all %}
-                        {% for image in recent_post.blogattachment_set.all %}
-                        <img class="img-responsive" src="{{image.file.url}}" style="width:800px;height:300px;margin-bottom:10px;" alt="">
-                        <!-- Preview Image -->
-                        {% endfor %}
-                    {% endif %}
                     
-                    <div class="blog_content">
+                    <div class="col-md-12 blog_content">
                     <p>{{recent_post.details|safe|urlizetrunc:100}}</p>
                     </div>
 
-                <hr>
-
+                    <div class="col-md-12" ><hr></div>
+                <div class="col-md-12">
+                    
+               
                 <!-- Posted Comments -->
                 <h3>Comments</h3>
                 <!-- Comment -->
@@ -145,8 +146,9 @@
                         There are no comments for this post. Use the button below to comment.
                     </div>
                 {% endif %}
-                <hr>
-
+                 </div>
+                <div class="col-md-12"><hr></div>
+                <div class="col-md-12">
                 <!-- Blog Comments -->
                  <button class="btn btn-primary" style="margin-bottom:20px" data-toggle="collapse" data-target="#comment">Leave a comment</button>
 
@@ -186,7 +188,7 @@
                     </form>
                 </div>
                 </div> 
-                
+                </div>
                 {% else %}
                     <p>There are no blog posts available.</p>
                 {% endif %}
@@ -253,9 +255,6 @@
                 </div>
 
             </div>
-
-        </div>
-        <!-- /.row -->
 
     </div>
     <!-- /.container -->
