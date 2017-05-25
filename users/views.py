@@ -113,6 +113,7 @@ def professor(request, course_name=None):
     queryset_course = Course.objects.filter(user__username=request.user).filter(is_active=True).prefetch_related('chapter_set')
     
     course_instance = {}
+    excluded_students = {}
     for q in queryset_course:
         excluded_students = UserProfile.objects.exclude(students_to_course=q.id).filter(is_professor=False).filter(
         is_site_admin=False)
