@@ -26,6 +26,7 @@ urlpatterns = [
     url(r'^ourteam/$', user_views.ourteam, name='ourteam'),
     url(r'^about/$', user_views.about, name='about'),
     url(r'^contact/$', user_views.contact, name='contact'),
+    url(r'^logout_view/$', user_views.logout_view, name='logout_view'),
 
     url(r'^admin/', admin.site.urls),
     url(r'^courses/', include('courses.urls')),

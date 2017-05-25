@@ -10,6 +10,7 @@ from django.contrib import messages
 from django.shortcuts import render, redirect
 from itertools import chain
 from django.http import Http404
+from django.contrib.auth.views import logout
 
 
 def home(request):
@@ -24,6 +25,10 @@ def login_redirect(request):
         return redirect("professor") 
 
     return redirect("courses")     
+
+def logout_view(request):
+    logout(request)
+    return redirect("home")
 
 
 def about(request):
