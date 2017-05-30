@@ -2,27 +2,15 @@ from __future__ import unicode_literals
 
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from django.shortcuts import render, redirect
-
-
+from django.contrib.auth.signals import user_logged_in
+from django.contrib.auth.views import login
 
 class UserProfile(AbstractUser):
     is_professor = models.BooleanField(default=False)
     is_site_admin = models.BooleanField(default=False)
 
-from django.contrib.auth.signals import user_logged_in
-from django.template import RequestContext
 
-
-def do_stuff(sender, user, request, **kwargs):
-    print('hello world')
-    response = render(request, "users/contact.html")
-    response.set_cookie('cookie_name', 'cookie_value')
-
-
-user_logged_in.connect(do_stuff)
-
-class simple_middleware(object):
+class app_tour_middleware(object):
     # One-time configuration and initialization.
 
     def process_response(self, request, response):
@@ -31,11 +19,13 @@ class simple_middleware(object):
         # Code to be executed for each request/response after
         # the view is called.
         print("setting cookie")
-        if hasattr(request, 'user'):
-            if request.user.is_authenticated() and ( not request.COOKIES.get('user') or request.COOKIES.get('user') != 'Hello Cookie'):
-                response.set_cookie("user", 'Hello Cookie')
+        if hasattr(request,'user') and request.user.is_authenticated():
+            if request.COOKIES.get('show_app_tour',False):
+                response.set_cookie("show_app_tour", False)
             else:
-                # else if if no user and cookie remove user cookie, logout
-                response.set_cookie("user", 'Bye Cookie')
+                response.set_cookie("show_app_tour", True)
+        else:
+            if request.COOKIES.get('show_app_tour',False):
+                response.delete_cookie('show_app_tour')
         return response
 
