@@ -9,12 +9,22 @@ $( document ).ready(function() {
                         <h3 class='popover-title'></h3>
                         <div class='popover-content'></div>
                         <div class='popover-navigation'>
-                            <button class='btn btn-default' data-role='prev'>« Prev</button>
+                            <button class='btn btn-default' data-role='prev'>« Prev button again</button>
                             <span data-role='separator'>|</span>
                             <button class='btn btn-default' data-role='next'>Next »</button>
                         </div>
                         <button class='btn btn-default' data-role='end'>End tour</button>
                       </div>`
+
+    var redirectFunction = function(){
+        alert(this)
+        if(this == window.location.pathname){
+        }
+        else{
+            document.location.href = this;
+        }
+        return (new jQuery.Deferred()).promise();
+      };
 
     var tours = [
                     {
@@ -25,22 +35,24 @@ $( document ).ready(function() {
                             },
                             steps_data:[
                                 {
-                                    element: "#toladata",
-                                    placement: "bottom",
-                                    title: "first tour",
-                                    content: "This tour will guide you through some of the features we'd like to point out."
-                                  },
-                                  {
                                     element: "#contact",
                                     placement: "bottom",
+                                    title: "first tour",
+                                    path: "/"
+                                  },
+                                  {
+                                    element: "#footer",
+                                    placement: "bottom",
                                     title: "<code>hello world</code>",
-                                    content: "Here are the sections of this page, easily laid out."
+                                    content: "Here are the sections of this page, easily laid out.",
+                                    path: "/"
                                   },
                                   {
                                     element: "#contact",
                                     placement: "top",
                                     title: "Main section",
-                                    content: "This is a section that you can read. It has valuable information."
+                                    content: "This is a section that you can read. It has valuable information.",
+                                    path: "/"
                                   }
                             ]
                          }
@@ -54,22 +66,25 @@ $( document ).ready(function() {
                             },
                             steps_data:[
                                 {
-                                    element: "#toladata",
+                                    element: "#page-top",
                                     placement: "bottom",
                                     title: "second tour",
-                                    content: "This tour will guide you through some of the features we'd like to point out."
+                                    content: "This tour will guide you through some of the features we'd like to point out.",
+                                    redirect: "/"
                                   },
                                   {
                                     element: "#contact",
                                     placement: "bottom",
                                     title: "<code>hello world</code>",
-                                    content: "Here are the sections of this page, easily laid out."
+                                    path: "Here are the sections of this page, easily laid out.",
+                                    redirect: "/"
                                   },
                                   {
                                     element: "#contact",
                                     placement: "top",
                                     title: "Main section",
-                                    content: "This is a section that you can read. It has valuable information."
+                                    content: "This is a section that you can read. It has valuable information.",
+                                    redirect: "/"
                                   }
                             ]
                          }
@@ -83,28 +98,37 @@ $( document ).ready(function() {
                             },
                             steps_data:[
                                 {
-                                    element: "#toladata",
+                                    element: "#contact",
                                     placement: "bottom",
                                     title: "third tour",
-                                    content: "This tour will guide you through some of the features we'd like to point out."
+                                    content: "This tour will guide you through some of the features we'd like to point out.",
+                                    redirect: "/"
                                   },
                                   {
                                     element: "#contact",
                                     placement: "bottom",
                                     title: "<code>hello world</code>",
-                                    content: "Here are the sections of this page, easily laid out."
+                                    content: "Here are the sections of this page, easily laid out.",
+                                    redirect: "/"
                                   },
                                   {
                                     element: "#contact",
                                     placement: "top",
                                     title: "Main section",
-                                    content: "This is a section that you can read. It has valuable information."
+                                    content: "This is a section that you can read. It has valuable information.",
+                                    redirect: "/"
                                   }
                             ]
                          }
 
                     }
                 ]
+   sessionStorage.removeItem('tours')
+   sessionStorage.setItem('tours',JSON.stringify(tours))
+
+
+
+
 
     var createTour = function(config){
         var tour = new Tour({
@@ -120,17 +144,23 @@ $( document ).ready(function() {
     }
 
     var app_tours = [];
-    tours.forEach(function(val,index){
+    JSON.parse(sessionStorage.getItem("tours")).forEach(function(val,index){
         app_tours.push(val.tourName);
     });
 
-    if (document.cookie.includes("show_app_tour=False") == true){
+    var fillModalTable = function(){
+        $(".modal-body table").remove("tr")
         app_tours.forEach(function(val,index){
-        var re = /\s/g;
-        str_val = val.replace(re,'_')
-        $(".modal-body table").append(`<tr id='${str_val}'><td>false</td><td>${val}</td><td>true</td></tr>`)
+            var re = /\s/g;
+            str_val = val.replace(re,'_')
+            $(".modal-body table").append(`<tr id='${str_val}'><td>false</td><td>${val}</td><td>true</td></tr>`)
         })
-        $('#myModal').modal('show');
+    }
+    fillModalTable()
+
+
+    if (document.cookie.includes("show_app_tour=True") == true){
+
      }
 
      app_tours.forEach(function(val,index){
@@ -138,7 +168,11 @@ $( document ).ready(function() {
         str_val = val.replace(re,'_')
         $(`#${str_val}`).click(function(){
             $('#myModal').modal('hide');
-            tour_config = tours.filter(function(element, index, array){return element.tourName == val;})[0].config
+            tour_config = JSON.parse(sessionStorage.getItem("tours")).filter(function(element, index, array){return element.tourName == val;})[0].config
+            tour_config.steps_data.forEach(function(val,index){
+                loc = val.path
+                val.onNext = redirectFunction.bind(loc)
+            })
             createTour(tour_config);
         });
      });
