@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'courses',
     'forum',
     'blog',
+    'apptours',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -59,7 +60,7 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'users.models.app_tour_middleware'
+    'apptours.apptour_middleware.app_tour_middleware'
 ]
 
 ROOT_URLCONF = 'source.urls'

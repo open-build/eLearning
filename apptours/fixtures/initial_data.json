@@ -1,0 +1,69 @@
+[
+{
+    "model": "apptours.tour",
+    "pk": 1,
+    "fields": {
+        "tour_name": "testtour"
+    }
+},
+  {
+    "model": "apptours.step",
+    "pk": 1,
+    "fields": {
+        "element": "#content",
+        "placement": "top",
+        "tour": 1,
+        "title": "test title",
+        "content": "test content",
+        "path": "/",
+        "order": 1
+    }
+},
+  {
+    "model": "apptours.step",
+    "pk": 2,
+    "fields": {
+        "element": "#content",
+        "placement": "top",
+        "tour": 1,
+        "title": "test title",
+        "content": "test content",
+        "path": "/",
+        "order": 2
+    }
+},
+{
+    "model": "apptours.tour",
+    "pk": 2,
+    "fields": {
+        "tour_name": "testtour2"
+    }
+},
+  {
+    "model": "apptours.step",
+    "pk": 3,
+    "fields": {
+        "element": "#content",
+        "placement": "top",
+        "tour": 2,
+        "title": "test title",
+        "content": "test content",
+        "path": "/",
+        "order": 1
+    }
+},
+  {
+    "model": "apptours.step",
+    "pk": 4,
+    "fields": {
+        "element": "#content",
+        "placement": "top",
+        "tour": 2,
+        "title": "test title",
+        "content": "test content",
+        "path": "/",
+        "order": 2
+    }
+}
+
+]

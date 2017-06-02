@@ -16,16 +16,6 @@ $( document ).ready(function() {
                         <button class='btn btn-default' data-role='end'>End tour</button>
                       </div>`
 
-    var redirectFunction = function(){
-        alert(this)
-        if(this == window.location.pathname){
-        }
-        else{
-            document.location.href = this;
-        }
-        return (new jQuery.Deferred()).promise();
-      };
-
     var tours = [
                     {
                         tourName: "my first product tour which used as a demo",
@@ -70,21 +60,21 @@ $( document ).ready(function() {
                                     placement: "bottom",
                                     title: "second tour",
                                     content: "This tour will guide you through some of the features we'd like to point out.",
-                                    redirect: "/"
+                                    path: "/"
                                   },
                                   {
                                     element: "#contact",
                                     placement: "bottom",
                                     title: "<code>hello world</code>",
                                     path: "Here are the sections of this page, easily laid out.",
-                                    redirect: "/"
+                                    path: "/"
                                   },
                                   {
                                     element: "#contact",
                                     placement: "top",
                                     title: "Main section",
                                     content: "This is a section that you can read. It has valuable information.",
-                                    redirect: "/"
+                                    path: "/"
                                   }
                             ]
                          }
@@ -102,33 +92,46 @@ $( document ).ready(function() {
                                     placement: "bottom",
                                     title: "third tour",
                                     content: "This tour will guide you through some of the features we'd like to point out.",
-                                    redirect: "/"
+                                    path: "/"
                                   },
                                   {
                                     element: "#contact",
                                     placement: "bottom",
                                     title: "<code>hello world</code>",
                                     content: "Here are the sections of this page, easily laid out.",
-                                    redirect: "/"
+                                    path: "/"
                                   },
                                   {
                                     element: "#contact",
                                     placement: "top",
                                     title: "Main section",
                                     content: "This is a section that you can read. It has valuable information.",
-                                    redirect: "/"
+                                    path: "/"
                                   }
                             ]
                          }
 
                     }
                 ]
-   sessionStorage.removeItem('tours')
-   sessionStorage.setItem('tours',JSON.stringify(tours))
+
+    var getAppTours = function(){
+        $.ajax({
+            url: '/apptours/hello',
+            type: 'get', // This is the default though, you don't actually need to always mention it
+            success: function(data) {
+                alert(data);
+            },
+            failure: function(data) {
+                alert('Got an error dude');
+            }
+        });
+
+    }
 
 
 
-
+    sessionStorage.removeItem('tours')
+    sessionStorage.setItem('tours',JSON.stringify(tours))
 
     var createTour = function(config){
         var tour = new Tour({
@@ -156,26 +159,50 @@ $( document ).ready(function() {
             $(".modal-body table").append(`<tr id='${str_val}'><td>false</td><td>${val}</td><td>true</td></tr>`)
         })
     }
+
+    var redirectFunction = function(){
+        if(this == window.location.pathname){
+        }
+        else{
+            document.location.href = this;
+        }
+        return (new jQuery.Deferred()).promise();
+    };
+
+    var createMultipageTours = function(){
+        this.steps_data.forEach(function(val,index){
+            loc = val.path
+            val.onNext = redirectFunction.bind(loc)
+        })
+    }
+
+
+
     fillModalTable()
 
-
-    if (document.cookie.includes("show_app_tour=True") == true){
-
+    if (document.cookie.includes("show_app_tour=False") == true){
+        getAppTours()
      }
 
-     app_tours.forEach(function(val,index){
-        var re = /\s/g;
-        str_val = val.replace(re,'_')
-        $(`#${str_val}`).click(function(){
-            $('#myModal').modal('hide');
-            tour_config = JSON.parse(sessionStorage.getItem("tours")).filter(function(element, index, array){return element.tourName == val;})[0].config
-            tour_config.steps_data.forEach(function(val,index){
-                loc = val.path
-                val.onNext = redirectFunction.bind(loc)
-            })
-            createTour(tour_config);
+     var addListenerToTours = function(tours_array){
+        tours_array.forEach(function(val,index){
+            var re = /\s/g;
+            str_val = val.replace(re,'_')
+            $(`#${str_val}`).click(function(){
+                $('#myModal').modal('hide');
+                tour_config = JSON.parse(sessionStorage.getItem("tours"))
+                .filter(function(element, index, array){return element.tourName == val;})[0].config
+                //tour_config.steps_data.forEach(function(val,index){
+                    //loc = val.path
+                    //val.onNext = redirectFunction.bind(loc)
+                //})
+                createTour(tour_config);
+            });
         });
-     });
+     }
+
+     addListenerToTours(app_tours);
+
 
 
 });
