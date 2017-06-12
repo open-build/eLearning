@@ -1,8 +1,7 @@
-$( document ).ready(function() {
+window.onload = function() {
 
-    $("#myBtn").click(function(){
-            $("#myModal").modal();
-     });
+
+
 
     var tour_template = `<div style="background-color: black;color: grey;" class='popover tour'>
                         <div class='arrow'></div>
@@ -16,148 +15,111 @@ $( document ).ready(function() {
                         <button class='btn btn-default' data-role='end'>End tour</button>
                       </div>`
 
-    var tours = [
-                    {
-                        tourName: "my first product tour which used as a demo",
-                         config:{
-                            tour_data:{
+    var fillToursArray = function(){
+        var app_tours = [];
+        JSON.parse(sessionStorage.getItem("tours")).forEach(function(val,index){
+            app_tours.push(val.tour_name);
+        });
+        return app_tours
+    }
 
-                            },
-                            steps_data:[
-                                {
-                                    element: "#contact",
-                                    placement: "bottom",
-                                    title: "first tour",
-                                    path: "/"
-                                  },
-                                  {
-                                    element: "#footer",
-                                    placement: "bottom",
-                                    title: "<code>hello world</code>",
-                                    content: "Here are the sections of this page, easily laid out.",
-                                    path: "/"
-                                  },
-                                  {
-                                    element: "#contact",
-                                    placement: "top",
-                                    title: "Main section",
-                                    content: "This is a section that you can read. It has valuable information.",
-                                    path: "/"
-                                  }
-                            ]
-                         }
+    var createTour = function(tour_config, steps_config, tour_step=0){
+        var tour_steps = [];
+        for(var i = 1; i <= steps_config.length; i++){
+            step = steps_config.filter(function(conf){
+                return conf.order == i;
+            })[0]
 
-                    },
-                    {
-                        tourName: "my second product tour which used as a demo",
-                         config:{
-                            tour_data:{
+            addStep = {
+                orphan: true,
+                title: step.title,
+                content: step.content,
+                placement: step.placement,
+                element: step.element,
+                path:step.path
+            }
 
-                            },
-                            steps_data:[
-                                {
-                                    element: "#page-top",
-                                    placement: "bottom",
-                                    title: "second tour",
-                                    content: "This tour will guide you through some of the features we'd like to point out.",
-                                    path: "/"
-                                  },
-                                  {
-                                    element: "#contact",
-                                    placement: "bottom",
-                                    title: "<code>hello world</code>",
-                                    path: "Here are the sections of this page, easily laid out.",
-                                    path: "/"
-                                  },
-                                  {
-                                    element: "#contact",
-                                    placement: "top",
-                                    title: "Main section",
-                                    content: "This is a section that you can read. It has valuable information.",
-                                    path: "/"
-                                  }
-                            ]
-                         }
+            tour_steps.push(addStep)
+        }
 
-                    },
-                    {
-                        tourName: "my third product tour which used as a demo",
-                         config:{
-                            tour_data:{
+        var tour = new Tour({
+            name: tour_config.name + "__tour",
+            template: tour_template,
+            onStart: function(tour){
+                localStorage.setItem("tour_in_progress",true);
+                localStorage.setItem("tour_config",JSON.stringify(tour_config)); 
+                localStorage.setItem("steps_config",JSON.stringify(steps_config));
+            },
+            onEnd: function (tour){
+                localStorage.removeItem("tour_in_progress");
+                localStorage.removeItem("tour_config"); 
+                localStorage.removeItem("steps_config");
+                $('#myModal').modal('show');
+                localStorage.clear();
+            },
+            steps:tour_steps
+        });
 
-                            },
-                            steps_data:[
-                                {
-                                    element: "#contact",
-                                    placement: "bottom",
-                                    title: "third tour",
-                                    content: "This tour will guide you through some of the features we'd like to point out.",
-                                    path: "/"
-                                  },
-                                  {
-                                    element: "#contact",
-                                    placement: "bottom",
-                                    title: "<code>hello world</code>",
-                                    content: "Here are the sections of this page, easily laid out.",
-                                    path: "/"
-                                  },
-                                  {
-                                    element: "#contact",
-                                    placement: "top",
-                                    title: "Main section",
-                                    content: "This is a section that you can read. It has valuable information.",
-                                    path: "/"
-                                  }
-                            ]
-                         }
+        // Initialize and start the tour
+        tour.init();
+        tour.start()
+    }
 
-                    }
-                ]
+
+    if(localStorage.getItem("tour_config") != null 
+        && localStorage.getItem("steps_config") != null 
+        && localStorage.getItem("tour_in_progress") != null){ 
+
+            createTour( 
+                JSON.parse(localStorage.getItem("steps_config")), 
+                JSON.parse(localStorage.getItem("steps_config"))
+            );
+       } 
+
+
+    var addListenersToTours = function(tours_array){
+        tours_array.forEach(function(val,index){
+            var re = /\s/g;
+            str_val = val.replace(re,'_')
+            $(`#${str_val}`).click(function(){
+                $('#myModal').modal('hide');
+                tour = JSON.parse(sessionStorage.getItem("tours"))
+                .filter(function(element, index, array){return element.tour_name == val;})[0]
+                //tour_config.steps_data.forEach(function(val,index){
+                    //loc = val.path
+                    //val.onNext = redirectFunction.bind(loc)
+                //})
+                createTour(tour_config={}, steps_config=tour.steps);
+            });
+        });
+     }
 
     var getAppTours = function(){
         $.ajax({
             url: '/apptours/hello',
             type: 'get', // This is the default though, you don't actually need to always mention it
             success: function(data) {
-                alert(data);
+                sessionStorage.removeItem('tours');
+                sessionStorage.setItem('tours',data);
+                app_tours = fillToursArray();
+                fillModalTable(app_tours);
+                addListenersToTours(app_tours);
             },
             failure: function(data) {
                 alert('Got an error dude');
+                return null;
             }
         });
 
     }
 
-
-
-    sessionStorage.removeItem('tours')
-    sessionStorage.setItem('tours',JSON.stringify(tours))
-
-    var createTour = function(config){
-        var tour = new Tour({
-            storage : false,
-            template: tour_template,
-            onEnd: function (tour) {$('#myModal').modal('show');},
-        });
-        tour.addSteps(config.steps_data);
-        // Initialize and start the tour
-        tour.init();
-        tour.start();
-        return tour;
-    }
-
-    var app_tours = [];
-    JSON.parse(sessionStorage.getItem("tours")).forEach(function(val,index){
-        app_tours.push(val.tourName);
-    });
-
-    var fillModalTable = function(){
+    var fillModalTable = function(app_tours){
         $(".modal-body table").remove("tr")
         app_tours.forEach(function(val,index){
             var re = /\s/g;
             str_val = val.replace(re,'_')
             $(".modal-body table").append(`<tr id='${str_val}'><td>false</td><td>${val}</td><td>true</td></tr>`)
-        })
+        });
     }
 
     var redirectFunction = function(){
@@ -176,33 +138,13 @@ $( document ).ready(function() {
         })
     }
 
+    var app_tours = getAppTours();
 
+    if (document.cookie.includes("show_app_tour=True") == true){
+        app_tours = getAppTours();
+        $("#apptour_modal_btn").click();
 
-    fillModalTable()
-
-    if (document.cookie.includes("show_app_tour=False") == true){
-        getAppTours()
      }
 
-     var addListenerToTours = function(tours_array){
-        tours_array.forEach(function(val,index){
-            var re = /\s/g;
-            str_val = val.replace(re,'_')
-            $(`#${str_val}`).click(function(){
-                $('#myModal').modal('hide');
-                tour_config = JSON.parse(sessionStorage.getItem("tours"))
-                .filter(function(element, index, array){return element.tourName == val;})[0].config
-                //tour_config.steps_data.forEach(function(val,index){
-                    //loc = val.path
-                    //val.onNext = redirectFunction.bind(loc)
-                //})
-                createTour(tour_config);
-            });
-        });
-     }
 
-     addListenerToTours(app_tours);
-
-
-
-});
+};
