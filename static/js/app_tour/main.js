@@ -3,7 +3,7 @@ window.onload = function() {
 
 
 
-    var tour_template = `<div style="background-color: black;color: grey;" class='popover tour'>
+    var tour_template = `<div style="color: grey;" class='popover tour'>
                         <div class='arrow'></div>
                         <h3 class='popover-title'></h3>
                         <div class='popover-content'></div>
@@ -44,7 +44,7 @@ window.onload = function() {
 
         var tour = new Tour({
             name: tour_config.name + "__tour",
-            template: tour_template,
+            //template: tour_template,
             onStart: function(tour){
                 localStorage.setItem("tour_in_progress",true);
                 localStorage.setItem("tour_config",JSON.stringify(tour_config)); 
@@ -84,11 +84,7 @@ window.onload = function() {
             $(`#${str_val}`).click(function(){
                 $('#myModal').modal('hide');
                 tour = JSON.parse(sessionStorage.getItem("tours"))
-                .filter(function(element, index, array){return element.tour_name == val;})[0]
-                //tour_config.steps_data.forEach(function(val,index){
-                    //loc = val.path
-                    //val.onNext = redirectFunction.bind(loc)
-                //})
+                    .filter(function(element, index, array){return element.tour_name == val;})[0]
                 createTour(tour_config={}, steps_config=tour.steps);
             });
         });
@@ -120,22 +116,6 @@ window.onload = function() {
             str_val = val.replace(re,'_')
             $(".modal-body table").append(`<tr id='${str_val}'><td>false</td><td>${val}</td><td>true</td></tr>`)
         });
-    }
-
-    var redirectFunction = function(){
-        if(this == window.location.pathname){
-        }
-        else{
-            document.location.href = this;
-        }
-        return (new jQuery.Deferred()).promise();
-    };
-
-    var createMultipageTours = function(){
-        this.steps_data.forEach(function(val,index){
-            loc = val.path
-            val.onNext = redirectFunction.bind(loc)
-        })
     }
 
     var app_tours = getAppTours();

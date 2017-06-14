@@ -1,15 +1,142 @@
 window.onload = function(){
 
 
-    $(document).on('click', '.app_tour_iframe_link', function(){alert($(this).parent().attr("id").slice(-1))});
+    //declare varibles to hold temporary state
+    var iframe_num = null;
+    var dblclicked = false;
+    var chosen_path = null;
+    var chosen_element = null;
+    var chosen_placement = null;
+
+    $("iframe").load(function(){
+        //The iframe has loaded or reloaded.
+        $("#app-tour-iframe").contents().find("*").dblclick(function(e) {
+            //if not a current popup in the iframe add one
+            if(!dblclicked){
+                dblclick_fctn();
+            }
+            return false;
+        });
+    });
 
     $("#app-tour-iframe").contents().find("*").dblclick(function(e) {
-        var path = [];
+        //if not a current popup in the iframe add one
+        if(!dblclicked){
+            dblclick_fctn();
+        }
+        return false;
+    });
 
-        var index = $(this).index()
-        var id = $(this).attr("id");
-        var clss = $(this).attr("class");
-        var element = $(this).get(0).tagName
+    var dblclick_fctn = function(){
+        //set variables for this clicked location
+        dbclicked = true;
+        chosen_element = get_element_location(this);
+        chosen_path = get_iframe_path();
+        alert(chosen_element);
+        alert(chosen_path)
+        //chosen_placement = get_placement(e, this);
+        //create popover
+        $("#app-tour-iframe").contents()
+            .find(chosen_element)
+            .attr("data-toggle","popover")
+            .attr("data-placement",chosen_placement);
+        $("[data-toggle=popover]").popover({
+            placement: chosen_placement,
+            html: 'true',
+            trigger: "manual",
+            template: `<div class="popover" role="tooltip">
+                            <div class="popover-arrow"></div>
+                            <div class="popover-content">
+                                <button id="choose_element" type="button" class="btn btn-primary">Choose</button>
+                                <button id="dont_choose_element" type="button" class="btn btn-danger">Exit</button>
+                            </div>
+                       </div>`
+        });
+        $("[data-toggle=popover]").popover("show");
+    }
+
+    $(document).on('click', '.app_tour_iframe_link', function(){
+        iframe_num = $(this).parent().attr("id").slice(-1)
+    });
+
+    /*iframe_contents.find("*").click(function(e) {
+        //if currently shoing popover
+        if(dblclicked){
+            //if popover clicked do nothing
+            if(['popover','popover-arrow','popover-content'].indexOf($(this).attr("class")) != -1){
+                return;
+            }
+            //if choose clicked save vars to form and exit iframe and remove popover
+            if($(this).attr("id") == "choose_element"){
+                $(chosen_path).popover("hide");
+                $("#app-tour-iframe").contents().find(chosen_path)
+                    .removeAttr("data-toggle").removeAttr("data-placement");
+                $('#app_tour_iframe_modal').modal('toggle');
+                $("step${iframe_num}_path").val(chosen_path);
+                $("step${iframe_num}_element").val(chosen_element);
+                $("step${iframe_num}_position").val(chosen_position);
+                iframe_num = null;
+                dblclicked = false;
+                chosen_path = null;
+                chosen_element = null;
+                chosen_placement = null;
+            }
+            //if exit clicked or outside of popover clicked or modal closed remove popover and reset vars to null
+            if($(this).attr("id") == "dont_choose_element"){
+                if(dblclicked){
+                    $(chosen_path).popover("hide");
+                    $("#app-tour-iframe").contents().find(chosen_path)
+                        .removeAttr("data-toggle").removeAttr("data-placement");
+                }
+                dblclicked = false;
+                chosen_path = null;
+                chosen_element = null;
+                chosen_placement = null;
+            }
+        }
+    });*/
+
+
+    //if doubleclicked and modal goes away reset
+    $("#app_tour_iframe_modal").on('hidden.bs.modal',function(){
+        if(dblclicked){
+            $(chosen_path).popover("hide");
+            $("#app-tour-iframe").contents().find(chosen_path)
+            .removeAttr("data-toggle").removeAttr("data-placement");
+        }
+        iframe_num = null;
+        dblclicked = false;
+        chosen_path = null;
+        chosen_element = null;
+        chosen_placement = null;
+    });
+
+
+    function get_placement(event, element){
+        var xpos = event.pageX;
+        var ypos = event.pageY;
+        var right = (xpos - $(this).offset().left)/ ($(this).width()/2);
+        var left = 1 - right;
+        var bottom = (ypos - $(this).offset().top)/ ($(this).height()/2);
+        var top = 1 - bottom;
+        var max_placement = Math.max([right,left,bottom,top]);
+        if (right == max_placement){
+            return "right";
+        }else if(left == max_placement){
+            return "left";
+        }else if(top == max_placement){
+            return "top";
+        }else if(bottom == max_placement){
+            return "bottom";
+        }else return null;
+    }
+
+    function get_element_location(element){
+        var path = [];
+        var index = $(element).index()
+        var id = $(element).attr("id");
+        var clss = $(element).attr("class");
+        var element = $(element).get(0).tagName
         added_selector = (id != undefined ? " #" + id.split(" ")[0] :
                 (clss != undefined ? " ." + clss.split(" ")[0]: element)
             )
@@ -17,8 +144,7 @@ window.onload = function(){
             added_selector += `:nth-of-type(${index})`
         }
         path.push(added_selector);
-
-        $.each($(this).parents(), function(index, value) {
+        $.each($(element).parents(), function(index, value) {
             var index = $(value).index()
             var id = $(value).attr("id");
             var clss = $(value).attr("class");
@@ -31,15 +157,14 @@ window.onload = function(){
             }
             path.push(added_selector);
         });
-        alert( $('#app-tour-iframe').contents().get(0).location.pathname );
+        css_path = path.reverse().join(" ");
+        return css_path;
+    }
 
-        css_path = path.reverse().join(" ")
-        $("#app-tour-iframe").contents().find(css_path)
-            .append("<span id='spantest'>hey</span>");
-        $("#spantest").tooltip();
-        console.log(css_path);
-        return false;
-    });
+    function get_iframe_path(){
+        return $('#app-tour-iframe').contents().get(0).location.pathname;
+    }
+
 
     // This function gets cookie with a given name
     function getCookie(name) {
@@ -99,14 +224,14 @@ window.onload = function(){
         var i = 0;
         for(; i < num_of_steps;){
             i += 1;
-            index = i.toString();
+            num_of_steps = i.toString();
             step = {
-                title:$(`#step${index}_title`).val(),
-                content:$(`#step${index}_content`).val(),
-                placement:$(`#step${index}_placement`).val(),
-                path:$(`#step${index}_path`).val(),
-                element:$(`#step${index}_element`).val(),
-                order:$(`#step${index}_order`).val(),
+                title:$(`#step${num_of_steps}_title`).val(),
+                content:$(`#step${num_of_steps}_content`).val(),
+                placement:$(`#step${num_of_steps}_placement`).val(),
+                path:$(`#step${num_of_steps}_path`).val(),
+                element:$(`#step${num_of_steps}_element`).val(),
+                order:$(`#step${num_of_steps}_order`).val(),
             }
             post.steps.push(step)
         }
@@ -145,9 +270,7 @@ window.onload = function(){
         $('#post-form').trigger("reset");
     }
 
-    var num_of_steps = 1;
-
-        // Submit post on submit
+    // Submit post on submit
     $('#post-form').on('submit', function(event){
         event.preventDefault();
         console.log("form submitted!")  // sanity check
@@ -156,46 +279,56 @@ window.onload = function(){
 
 
     var num_of_steps = 1;
+
+    var get_step_form_content = function(num_of_steps){
+        var step_form_content =
+            `<button type="button" class="btn btn-primary">Step <span class="badge">${num_of_steps}</span></button>
+              <div id="step${num_of_steps}">
+                <div class="form-group">
+                    <label >Title:</label>
+                    <input class="form-control" id="step${num_of_steps}_title">
+                  </div>
+                <div class="form-group">
+                    <label >Content:</label>
+                    <textarea class="form-control" id="step${num_of_steps}_content"></textarea>
+                  </div>
+                <div class="form-group">
+                    <label >Placement:</label>
+                    <select readonly id="step${num_of_steps}_placement" class="form-control">
+                        <option value="top">Top</option>
+                        <option value="bottom">Bottom</option>
+                        <option value="left">Left</option>
+                        <option value="right">Right</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label >Path:</label>
+                    <input readonly class="form-control" id="step${num_of_steps}_path">
+                  </div>
+                <div class="form-group">
+                    <label >Element:</label>
+                    <input readonly class="form-control" id="step${num_of_steps}_element">
+                  </div>
+                 <div class="form-group">
+                    <label >Order:</label>
+                      <input readonly value="${num_of_steps}" class="form-control" id="step${num_of_steps}_order">
+                </div>
+                  <a class="app_tour_iframe_link" data-toggle="modal" data-target="#app_tour_iframe_modal" href="">view iframe of site to find elements</a>
+            </div>`
+
+        return step_form_content;
+    }
+
+
     var i = 0;
     for(; i < num_of_steps;){
         $("#steps").empty()
         i += 1;
-        index = i.toString();
-        step_form_content = `<lable>Step ${index}</lable>
-                          <div id="step${index}">
-                            <div class="form-group">
-                                <label >Title:</label>
-                                <input class="form-control" id="step${index}_title">
-                              </div>
-                            <div class="form-group">
-                                <label >Content:</label>
-                                <textarea class="form-control" id="step${index}_content"></textarea>
-                              </div>
-                            <div class="form-group">
-                                <label >Placement:</label>
-                                <select id="step${index}_placement" class="form-control">
-                                    <option value="top">Top</option>
-                                    <option value="bottom">Bottom</option>
-                                    <option value="left">Left</option>
-                                    <option value="right">Right</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label >Path:</label>
-                                <input class="form-control" id="step${index}_path">
-                              </div>
-                            <div class="form-group">
-                                <label >Element:</label>
-                                <input class="form-control" id="step${index}_element">
-                              </div>
-                              <a class="app_tour_iframe_link" data-toggle="modal" data-target="#app_tour_iframe" href="">view iframe of site to find elements</a>
-                            <input value="${index}" readonly type="hidden" class="form-control" id="step${index}_order">
-                        </div>`
-        $("#steps").append(step_form_content)
+        $("#steps").append(get_step_form_content(num_of_steps))
     }
 
     function removeLastStep(){
-        $('#steps lable').last().remove();
+        $('#steps button').last().remove();
         $(`#step${num_of_steps}`).remove()
         num_of_steps -= 1;
     }
@@ -207,37 +340,10 @@ window.onload = function(){
 
     $("#add_step").click(function(){
         num_of_steps += 1
-        index = num_of_steps;
-        step_form_content = `<lable>Step ${index}</lable>
-                          <div id="step${index}">
-                            <div class="form-group">
-                                <label >Title:</label>
-                                <input class="form-control" id="step${index}_title">
-                              </div>
-                            <div class="form-group">
-                                <label >Content:</label>
-                                <textarea class="form-control" id="step${index}_content"></textarea>
-                              </div>
-                            <div class="form-group">
-                                <label >Placement:</label>
-                                <select id="step${index}_placement" class="form-control">
-                                    <option value="top">Top</option>
-                                    <option value="bottom">Bottom</option>
-                                    <option value="left">Left</option>
-                                    <option value="right">Right</option>
-                                </select>
-                            </div>
-                            <div claxss="form-group">
-                                <label >Path:</label>
-                                <input class="form-control" id="step${index}_path">
-                              </div>
-                            <div class="form-group">
-                                <label >Element:</label>
-                                <input class="form-control" id="step${index}_element">
-                              </div>
-                              <a class="app_tour_iframe_link" data-toggle="modal" data-target="#app_tour_iframe" href="">view iframe of site to find elements</a>
-                            <input value="${index}" readonly type="hidden" class="form-control" id="step${index}_order">
-                        </div>`
-        $("#steps").append(step_form_content)
+        num_of_steps = num_of_steps;
+        $("#steps").append(get_step_form_content(num_of_steps))
     })
+
+
+
 };
