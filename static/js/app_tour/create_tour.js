@@ -10,19 +10,34 @@ window.onload = function(){
 
     $("iframe").load(function(){
         //The iframe has loaded or reloaded.
+        $("#app-tour-iframe").contents()
+            .find("[data-toggle=popover]").popover('hide');
+        $("#app-tour-iframe").contents().find(chosen_element)
+            .removeAttr("data-toggle");
+        dblclicked = false;
+        chosen_path = null;
+        chosen_element = null;
+        chosen_placement = null;
+
         $("#app-tour-iframe").contents().find("*").dblclick(function(e) {
             //if not a current popup in the iframe add one
-
-            if(dblclicked != true){
+            if(dblclicked == true){
+                click_fctn(e);
+            }
+            else{
                 dblclick_fctn(this,e);
             }
             return false;
         });
     });
 
+
     $("#app-tour-iframe").contents().find("*").dblclick(function(e) {
         //if not a current popup in the iframe add one
-        if(dblclicked != true){
+        if(dblclicked == true){
+            click_fctn(e);
+        }
+        else{
             dblclick_fctn(this,e);
         }
         return false;
@@ -57,44 +72,40 @@ window.onload = function(){
                 .find("[data-toggle=popover]").popover('show');
     }
 
+    var click_fctn = function(e){
+        //if popover clicked do nothing
+        //if choose clicked save vars to form and exit iframe and remove popover
+        if(e.target.id == "choose_element"){
+            $(`#step${iframe_num}_path`).val(chosen_path);
+            $(`#step${iframe_num}_element`).val(chosen_element);
+            $(`#step${iframe_num}_placement`).val(chosen_placement);
+            iframe_num = null;
+            dblclicked = false;
+            chosen_path = null;
+            chosen_element = null;
+            chosen_placement = null;
+            $("#app-tour-iframe").contents()
+                .find("[data-toggle=popover]").popover('hide');
+            $("#app-tour-iframe").contents().find(chosen_element)
+                .removeAttr("data-toggle");
+            $('[data-dismiss=modal').click();
+        }
+        //if exit clicked or outside of popover clicked or modal closed remove popover and reset vars to null
+        if(e.target.id == "dont_choose_element"){
+            $("#app-tour-iframe").contents()
+                .find("[data-toggle=popover]").popover('hide');
+            $("#app-tour-iframe").contents().find(chosen_element)
+                .removeAttr("data-toggle");
+            dblclicked = false;
+            chosen_path = null;
+            chosen_element = null;
+            chosen_placement = null;
+        }
+    }
+
     $(document).on('click', '.app_tour_iframe_link', function(){
         iframe_num = $(this).parent().attr("id").slice(-1)
     });
-
-    $("#app-tour-iframe").contents()
-        .find("*").click(function(e) {
-            //if currently shoing popover
-            if(dblclicked){
-                //if popover clicked do nothing
-                //if choose clicked save vars to form and exit iframe and remove popover
-                if(e.target.id == "choose_element"){
-                    $(`#step${iframe_num}_path`).val(chosen_path);
-                    $(`#step${iframe_num}_element`).val(chosen_element);
-                    $(`#step${iframe_num}_placement`).val(chosen_placement);
-                    iframe_num = null;
-                    dblclicked = false;
-                    chosen_path = null;
-                    chosen_element = null;
-                    chosen_placement = null;
-                    $("#app-tour-iframe").contents()
-                        .find("[data-toggle=popover]").popover('hide');
-                    $("#app-tour-iframe").contents().find(chosen_element)
-                        .removeAttr("data-toggle");
-                    $('[data-dismiss=modal').click();
-                }
-                //if exit clicked or outside of popover clicked or modal closed remove popover and reset vars to null
-                if(e.target.id == "dont_choose_element"){
-                    $("#app-tour-iframe").contents()
-                        .find("[data-toggle=popover]").popover('hide');
-                    $("#app-tour-iframe").contents().find(chosen_element)
-                        .removeAttr("data-toggle");
-                    dblclicked = false;
-                    chosen_path = null;
-                    chosen_element = null;
-                    chosen_placement = null;
-                }
-            }
-        });
 
 
     //if doubleclicked and modal goes away reset
@@ -251,7 +262,8 @@ window.onload = function(){
                 $('#post-text').val(''); // remove the value from the input
                 console.log(json); // log the returned json to the console
                 console.log("success"); // another sanity check
-                resetForm()
+                resetForm();
+                location.reload();
             },
 
             // handle a non-successful response
