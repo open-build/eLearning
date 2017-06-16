@@ -8,7 +8,8 @@ from django.core.urlresolvers import reverse
 
 # Create your views here.
 
-def hello(request):
+@login_required
+def get_tours(request):
     tours = Tour.objects.all().values()
     response = []
     for tour in tours:

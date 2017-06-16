@@ -12,8 +12,9 @@ window.onload = function(){
         //The iframe has loaded or reloaded.
         $("#app-tour-iframe").contents().find("*").dblclick(function(e) {
             //if not a current popup in the iframe add one
-            if(!dblclicked){
-                dblclick_fctn();
+
+            if(dblclicked != true){
+                dblclick_fctn(this,e);
             }
             return false;
         });
@@ -21,80 +22,79 @@ window.onload = function(){
 
     $("#app-tour-iframe").contents().find("*").dblclick(function(e) {
         //if not a current popup in the iframe add one
-        if(!dblclicked){
-            dblclick_fctn();
+        if(dblclicked != true){
+            dblclick_fctn(this,e);
         }
         return false;
     });
 
-    var dblclick_fctn = function(){
+
+
+
+    var dblclick_fctn = function(element, event){
         //set variables for this clicked location
-        dbclicked = true;
-        chosen_element = get_element_location(this);
+        dblclicked = true;
+        chosen_element = get_element(element);
         chosen_path = get_iframe_path();
-        alert(chosen_element);
-        alert(chosen_path)
-        //chosen_placement = get_placement(e, this);
+        chosen_placement = get_placement(element, event);
         //create popover
+        var popover_content = `<div class="popover-content">
+                                    <button id="choose_element" type="button" class="btn btn-primary">Choose</button>
+                                    <button id="dont_choose_element" type="button" class="btn btn-danger">Exit</button>
+                                </div>`
+
         $("#app-tour-iframe").contents()
-            .find(chosen_element)
-            .attr("data-toggle","popover")
-            .attr("data-placement",chosen_placement);
-        $("[data-toggle=popover]").popover({
-            placement: chosen_placement,
-            html: 'true',
-            trigger: "manual",
-            template: `<div class="popover" role="tooltip">
-                            <div class="popover-arrow"></div>
-                            <div class="popover-content">
-                                <button id="choose_element" type="button" class="btn btn-primary">Choose</button>
-                                <button id="dont_choose_element" type="button" class="btn btn-danger">Exit</button>
-                            </div>
-                       </div>`
-        });
-        $("[data-toggle=popover]").popover("show");
+                .find(chosen_element).attr("data-toggle","popover");
+         $("#app-tour-iframe").contents()
+                .find("[data-toggle=popover]").popover({
+                    placement: chosen_placement,
+                    html: true,
+                    trigger: "manual",
+                    title:"Chosen Element",
+                    content: popover_content
+                });
+         $("#app-tour-iframe").contents()
+                .find("[data-toggle=popover]").popover('show');
     }
 
     $(document).on('click', '.app_tour_iframe_link', function(){
         iframe_num = $(this).parent().attr("id").slice(-1)
     });
 
-    /*iframe_contents.find("*").click(function(e) {
-        //if currently shoing popover
-        if(dblclicked){
-            //if popover clicked do nothing
-            if(['popover','popover-arrow','popover-content'].indexOf($(this).attr("class")) != -1){
-                return;
-            }
-            //if choose clicked save vars to form and exit iframe and remove popover
-            if($(this).attr("id") == "choose_element"){
-                $(chosen_path).popover("hide");
-                $("#app-tour-iframe").contents().find(chosen_path)
-                    .removeAttr("data-toggle").removeAttr("data-placement");
-                $('#app_tour_iframe_modal').modal('toggle');
-                $("step${iframe_num}_path").val(chosen_path);
-                $("step${iframe_num}_element").val(chosen_element);
-                $("step${iframe_num}_position").val(chosen_position);
-                iframe_num = null;
-                dblclicked = false;
-                chosen_path = null;
-                chosen_element = null;
-                chosen_placement = null;
-            }
-            //if exit clicked or outside of popover clicked or modal closed remove popover and reset vars to null
-            if($(this).attr("id") == "dont_choose_element"){
-                if(dblclicked){
-                    $(chosen_path).popover("hide");
-                    $("#app-tour-iframe").contents().find(chosen_path)
-                        .removeAttr("data-toggle").removeAttr("data-placement");
+    $("#app-tour-iframe").contents()
+        .find("*").click(function(e) {
+            //if currently shoing popover
+            if(dblclicked){
+                //if popover clicked do nothing
+                //if choose clicked save vars to form and exit iframe and remove popover
+                if(e.target.id == "choose_element"){
+                    $(`#step${iframe_num}_path`).val(chosen_path);
+                    $(`#step${iframe_num}_element`).val(chosen_element);
+                    $(`#step${iframe_num}_placement`).val(chosen_placement);
+                    iframe_num = null;
+                    dblclicked = false;
+                    chosen_path = null;
+                    chosen_element = null;
+                    chosen_placement = null;
+                    $("#app-tour-iframe").contents()
+                        .find("[data-toggle=popover]").popover('hide');
+                    $("#app-tour-iframe").contents().find(chosen_element)
+                        .removeAttr("data-toggle");
+                    $('[data-dismiss=modal').click();
                 }
-                dblclicked = false;
-                chosen_path = null;
-                chosen_element = null;
-                chosen_placement = null;
+                //if exit clicked or outside of popover clicked or modal closed remove popover and reset vars to null
+                if(e.target.id == "dont_choose_element"){
+                    $("#app-tour-iframe").contents()
+                        .find("[data-toggle=popover]").popover('hide');
+                    $("#app-tour-iframe").contents().find(chosen_element)
+                        .removeAttr("data-toggle");
+                    dblclicked = false;
+                    chosen_path = null;
+                    chosen_element = null;
+                    chosen_placement = null;
+                }
             }
-        }
-    });*/
+        });
 
 
     //if doubleclicked and modal goes away reset
@@ -112,59 +112,62 @@ window.onload = function(){
     });
 
 
-    function get_placement(event, element){
+    function get_placement(element, event){
         var xpos = event.pageX;
         var ypos = event.pageY;
-        var right = (xpos - $(this).offset().left)/ ($(this).width()/2);
+        var right = (xpos - $(element).offset().left)/ $(element).width();
         var left = 1 - right;
-        var bottom = (ypos - $(this).offset().top)/ ($(this).height()/2);
+        var bottom = (ypos - $(element).offset().top)/ $(element).height();
         var top = 1 - bottom;
-        var max_placement = Math.max([right,left,bottom,top]);
+        var max_placement = Math.max(right,left,bottom,top);
+        var placement = "top";
         if (right == max_placement){
-            return "right";
+            placement = "right";
         }else if(left == max_placement){
-            return "left";
+            placement = "left";
         }else if(top == max_placement){
-            return "top";
+            placement = "top";
         }else if(bottom == max_placement){
-            return "bottom";
-        }else return null;
+            placement = "bottom";
+        }else placement = null;
+        return placement;
     }
 
-    function get_element_location(element){
-        var path = [];
-        var index = $(element).index()
-        var id = $(element).attr("id");
-        var clss = $(element).attr("class");
-        var element = $(element).get(0).tagName
-        added_selector = (id != undefined ? " #" + id.split(" ")[0] :
-                (clss != undefined ? " ." + clss.split(" ")[0]: element)
-            )
-        if (index != 0 && id == undefined){
-            added_selector += `:nth-of-type(${index})`
-        }
-        path.push(added_selector);
-        $.each($(element).parents(), function(index, value) {
-            var index = $(value).index()
-            var id = $(value).attr("id");
-            var clss = $(value).attr("class");
-            var element = $(value).get(0).tagName
-            added_selector = (id != undefined ? " #" + id.split(" ")[0] :
-                    (clss != undefined ? " ." + clss.split(" ")[0]: element)
-                )
-            if (index != 0 && id == undefined){
-                added_selector += `:nth-of-type(${index})`
-            }
-            path.push(added_selector);
-        });
-        css_path = path.reverse().join(" ");
-        return css_path;
-    }
 
     function get_iframe_path(){
         return $('#app-tour-iframe').contents().get(0).location.pathname;
     }
 
+
+    function get_element(el) {
+      var stack = [];
+      while ( el.parentNode != null ) {
+        var sibCount = 0;
+        var sibIndex = 0;
+        for ( var i = 0; i < el.parentNode.childNodes.length; i++ ) {
+          var sib = el.parentNode.childNodes[i];
+          if ( sib.nodeName == el.nodeName ) {
+            if ( sib === el ) {
+              sibIndex = (sibCount + 1);
+            }
+            sibCount++;
+          }
+        }
+        if ( el.hasAttribute('id') && el.id != '' ) {
+          stack.unshift(el.nodeName.toLowerCase() + '#' + el.id);
+        } else if ( sibCount > 1 ) {
+          stack.unshift(el.nodeName.toLowerCase() + ':nth-of-type(' + sibIndex + ')');
+        } else {
+          stack.unshift(el.nodeName.toLowerCase());
+        }
+        el = el.parentNode;
+      }
+
+      var css_path = stack.slice(1); // removes the html element
+      css_path = ("" + css_path).replace(/,/g," ");
+      css_path = css_path.substring(css_path.lastIndexOf("#"));
+      return css_path;
+    }
 
     // This function gets cookie with a given name
     function getCookie(name) {
@@ -221,17 +224,14 @@ window.onload = function(){
         post = {};
         post.tour = {tour_name: $("#tour_name").val()}
         post.steps = []
-        var i = 0;
-        for(; i < num_of_steps;){
-            i += 1;
-            num_of_steps = i.toString();
+        for(var i = 1; i <= num_of_steps;i++){
             step = {
-                title:$(`#step${num_of_steps}_title`).val(),
-                content:$(`#step${num_of_steps}_content`).val(),
-                placement:$(`#step${num_of_steps}_placement`).val(),
-                path:$(`#step${num_of_steps}_path`).val(),
-                element:$(`#step${num_of_steps}_element`).val(),
-                order:$(`#step${num_of_steps}_order`).val(),
+                title:$(`#step${i}_title`).val(),
+                content:$(`#step${i}_content`).val(),
+                placement:$(`#step${i}_placement`).val(),
+                path:$(`#step${i}_path`).val(),
+                element:$(`#step${i}_element`).val(),
+                order:$(`#step${i}_order`).val(),
             }
             post.steps.push(step)
         }
@@ -294,7 +294,7 @@ window.onload = function(){
                   </div>
                 <div class="form-group">
                     <label >Placement:</label>
-                    <select readonly id="step${num_of_steps}_placement" class="form-control">
+                    <select  id="step${num_of_steps}_placement" class="form-control">
                         <option value="top">Top</option>
                         <option value="bottom">Bottom</option>
                         <option value="left">Left</option>
@@ -303,13 +303,13 @@ window.onload = function(){
                 </div>
                 <div class="form-group">
                     <label >Path:</label>
-                    <input readonly class="form-control" id="step${num_of_steps}_path">
+                    <input class="form-control" id="step${num_of_steps}_path">
                   </div>
                 <div class="form-group">
                     <label >Element:</label>
-                    <input readonly class="form-control" id="step${num_of_steps}_element">
+                    <input class="form-control" id="step${num_of_steps}_element">
                   </div>
-                 <div class="form-group">
+                 <div  class="form-group">
                     <label >Order:</label>
                       <input readonly value="${num_of_steps}" class="form-control" id="step${num_of_steps}_order">
                 </div>
