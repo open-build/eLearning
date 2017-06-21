@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block content %}
+
+
+
+<div class="container">
+  <h2>Collapsible Panel</h2>
+  <p>Click on the collapsible panel to open and close it.</p>
+  <div class="panel-group">
+    {% for tour in tours %}
+    <div class="panel panel-default">
+      <a data-toggle="collapse" href="#collapse{{tour.id}}">
+        <div class="panel-heading">
+        <h3 class="panel-title">
+          {{tour.tour_name|upper}}
+        </h3>
+        </div>
+      </a>
+      <div id="collapse{{tour.id}}" class="panel-collapse collapse">
+        <div class="panel-body">
+          <br/>
+          <h4>Tour Steps:</h4>
+          <br/>
+          {% for step in tour.step_set.all %}
+          <h5>Title:</h5> <p style='font-family: "Times New Roman", Times, serif; font-size:1em;'>{{step.title}}</p>
+            <br/>
+          <h5>Content:</h5> <p style='font-family: "Times New Roman", Times, serif; font-size:1em;'>{{step.content}}</p>
+            <br/>
+          <pre>Path: {{step.path}}   Element: {{step.element}}    Position: {{step.placement}}    Order: {{step.order}}</pre>
+          {% endfor %}
+          <button type="button"  class="btn btn-primary">Edit Tour</button>
+          <button type="button"  class="btn btn-danger">Remove Tour</button>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+
+
+{% endblock %}
+
+

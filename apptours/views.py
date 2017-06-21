@@ -40,3 +40,10 @@ def create_tour(request):
             step.save()
     return redirect(reverse('create_apptour'))
 
+@user_passes_test(lambda user: user.is_site_admin)
+def view_tours(request):
+    tours = Tour.objects.all()
+    print(tours[0].step_set.all())
+    return render(request, "tour_views.html", {"tours":tours})
+
+
