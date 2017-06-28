@@ -4,13 +4,15 @@ import json
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import user_passes_test, login_required
 from django.core.urlresolvers import reverse
+from django.http import HttpResponseRedirect
+
 
 
 # Create your views here.
 
 @login_required
 def get_tours(request):
-    tours = Tour.objects.all().values()
+    tours = Tour.objects.filter(status="complete").values()
     response = []
     for tour in tours:
         temp_tour = {k:v for k,v in tour.items()}
@@ -30,20 +32,49 @@ def create_apptour(request):
 def create_tour(request):
     if request.method == 'POST':
         post_text = json.loads(request.POST.get('app_tour'))
-        tour = Tour(tour_name=post_text.get("tour").get("tour_name"))
-        tour.save()
-        for step in post_text.get("steps"):
-            step = Step(placement=step.get('placement'),title=step.get('title'),
-                        element=step.get('element'),content=step.get('content'),
-                        path=step.get('path'),order=step.get('order'),
-                        tour=tour)
-            step.save()
-    return redirect(reverse('create_apptour'))
+        if post_text.get("tour").get("id") is not None:
+            print(post_text)
+            print("put")
+            tour = Tour(tour_name=post_text.get("tour").get("tour_name"),
+                        id=post_text.get("tour").get("id"),
+                        status=post_text.get("tour").get("status"))
+            tour.save(force_update=True)
+            Step.objects.filter(tour__id=post_text.get("tour").get("id")).delete()
+            for step in post_text.get("steps"):
+                step = Step(placement=step.get('placement'), title=step.get('title'),
+                            element=step.get('element'), content=step.get('content'),
+                            path=step.get('path'), order=step.get('order'),
+                            tour=tour)
+                step.save(force_insert=True)
+        else:
+            print("post")
+            tour = Tour(tour_name=post_text.get("tour").get("tour_name"),
+                        status=post_text.get("tour").get("status"))
+            tour.save(force_insert=True)
+            for step in post_text.get("steps"):
+                step = Step(placement=step.get('placement'),title=step.get('title'),
+                            element=step.get('element'),content=step.get('content'),
+                            path=step.get('path'),order=step.get('order'),
+                            tour=tour)
+                step.save(force_insert=True)
+        return redirect(reverse('create_apptour'))
 
 @user_passes_test(lambda user: user.is_site_admin)
 def view_tours(request):
-    tours = Tour.objects.all()
-    print(tours[0].step_set.all())
-    return render(request, "tour_views.html", {"tours":tours})
+    tours = Tour.objects.filter(status="complete")
+    saved_tours = Tour.objects.filter(status="incomplete")
+    return render(request, "tour_views.html", {"tours":tours,"saved_tours":saved_tours})
+
+@user_passes_test(lambda user: user.is_site_admin)
+def delete_tour(request, tour_id=None):
+    instance = Tour.objects.get(id=tour_id)
+    instance.delete()
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+@user_passes_test(lambda user: user.is_site_admin)
+def update_apptour(request, tour_id=None):
+    instance = Tour.objects.get(id=tour_id)
+    return render(request, "create_app_tour.html", {"instance":instance})
+
 
 

@@ -1,6 +1,27 @@
 {% extends 'base.html' %}
-{% load staticfiles %}
+
 {% block content %}
+<script>
+  {% if instance %}
+  var instance = {tour_name: "{{instance.tour_name}}", id:{{instance.id}}};
+  instance.steps = []
+  {% for step in instance.step_set.all %}
+  var add_step ={
+        title:"{{step.title}}",
+        content:"{{step.content}}",
+        path: "{{step.path}}",
+        element: "{{step.element}}",
+        placement: "{{step.placement}}",
+        order: "{{step.order}}"
+      };
+  instance.steps.push(add_step);
+  {% endfor %}
+  {% else %}
+  var instance = null;
+  {% endif %}
+</script>
+{% load staticfiles %}
+
 <br/>
 <br/>
 <br/>
@@ -23,13 +44,13 @@
           </div>
            <button type="button" id="add_step" class="btn btn-primary">Add Step</button>
            <button type="button" id="remove_step" class="btn btn-danger">Remove Last Step</button>
+           <button type="button" id="save_tour" class="btn btn-info">Save Tour Progress</button>
         </div>
         <button type="submit" class="btn btn-success btn-block">Submit</button>
       </form>
     </div>
   </div>
 </div>
-<script src="{% static 'js/app_tour/create_tour.js'%}" rel="script"></script>
 
 
 <!-- Modal -->

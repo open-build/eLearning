@@ -1,4 +1,4 @@
-window.onload = function(){
+$(document).ready( function(){
 
 
     //declare varibles to hold temporary state
@@ -231,9 +231,15 @@ window.onload = function(){
         }
     });
 
-    function getPost(num_of_steps){
+    function getPost(num_of_steps, status){
         post = {};
-        post.tour = {tour_name: $("#tour_name").val()}
+        post.tour = {tour_name: $("#tour_name").val(), status: status}
+        if(instance != null){
+            post.tour.id = instance.id;
+        }
+        else{
+            post.tour.id = null;
+        }
         post.steps = []
         for(var i = 1; i <= num_of_steps;i++){
             step = {
@@ -250,8 +256,8 @@ window.onload = function(){
     }
 
     // AJAX for posting
-    function create_post(num_of_steps) {
-        post_data = getPost(num_of_steps)
+    function create_post(num_of_steps, status) {
+        post_data = getPost(num_of_steps, status)
         $.ajax({
             url : "/apptours/create_tour/", // the endpoint
             type : "POST", // http method
@@ -263,7 +269,7 @@ window.onload = function(){
                 console.log(json); // log the returned json to the console
                 console.log("success"); // another sanity check
                 resetForm();
-                location.reload();
+                window.location.href = "/apptours/view_tours"
             },
 
             // handle a non-successful response
@@ -286,7 +292,14 @@ window.onload = function(){
     $('#post-form').on('submit', function(event){
         event.preventDefault();
         console.log("form submitted!")  // sanity check
-        create_post(num_of_steps);
+        create_post(num_of_steps, "complete");
+    });
+
+    // Save post on save btn
+    $('#save_tour').on('click', function(event){
+        event.preventDefault();
+        console.log("form saved!")  // sanity check
+        create_post(num_of_steps, "incomplete");
     });
 
 
@@ -358,4 +371,38 @@ window.onload = function(){
 
 
 
-};
+    if (typeof variable !== 'undefined' && instance != null){
+        $("#tour_name").val(instance.tour_name);
+        for(var i=0; i<instance.steps.length;){
+            if(i > 0){
+                num_of_steps += 1
+                num_of_steps = num_of_steps;
+                $("#steps").append(get_step_form_content(num_of_steps))
+            }
+            i+=1;
+            $(`#step${i}_title`).val(instance.steps[i-1].title);
+            $(`#step${i}_content`).val(instance.steps[i-1].content);
+            $(`#step${i}_placement`).val(instance.steps[i-1].placement);
+            $(`#step${i}_path`).val(instance.steps[i-1].path);
+            $(`#step${i}_element`).val(instance.steps[i-1].element);
+            $(`#step${i}_order`).val(instance.steps[i-1].order);
+        }
+    }
+
+
+    // view saved tours
+    $('#view_saved_tours').on('click', function(event){
+        $("#saved_tours_list").show();
+        $("#complete_tours_list").hide();
+        $("#view_saved_tours").hide();
+        $("#view_complete_tours").show();
+    });
+    // view completed tours
+    $('#view_complete_tours').on('click', function(event){
+        $("#saved_tours_list").hide();
+        $("#complete_tours_list").show();
+        $("#view_saved_tours").show();
+        $("#view_complete_tours").hide();
+    });
+
+});

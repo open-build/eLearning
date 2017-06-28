@@ -6,6 +6,7 @@ from django.db import models
 
 class Tour(models.Model):
     tour_name = models.CharField(max_length=50,unique=True)
+    status = models.CharField(null=False, default="complete",max_length=10)
 
 class Step(models.Model):
     element = models.CharField(max_length=50)

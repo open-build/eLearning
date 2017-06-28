@@ -6,5 +6,9 @@ urlpatterns = [
     url(r'^create_apptour', apptours_views.create_apptour, name='create_apptour'),
     url(r'^create_tour', apptours_views.create_tour, name='create_tour'),
     url(r'^view_tours', apptours_views.view_tours,name="view_tours"),
+    url(r'^delete_tour/(?P<tour_id>[\d ]+)/$',
+        apptours_views.delete_tour, name='delete_tour'),
+    url(r'^update_apptour/(?P<tour_id>[\d ]+)/$',
+        apptours_views.update_apptour, name='update_apptour'),
 
 ]
