@@ -1,6 +1,37 @@
 $(document).ready( function(){
 
 
+
+    $("#submit_apptour").on("click",function(event){
+        event.preventDefault();
+        var post = getPost(num_of_steps, "NA")
+        $("#confirm_apptour_tourname").val(post.tour_name);
+        $("#modal_confirm").modal({backdrop: 'static', keyboard: false, backdrop: false})
+        var steps_html = "";
+        for(var i=0; i<post.steps.length;i+=1){
+            steps_html +=
+                `
+                <br/>
+                <h4>Tour Steps:</h4>
+                <br/>
+                <h5>Title:</h5> <p>${post.steps[i].title}</p>
+                <br/>
+                <h5>Content:</h5> <p>${post.steps[i].content}</p>
+                <br/>
+                <pre>Path: ${post.steps[i].path}   Element: ${post.steps[i].element}    Position: ${post.steps[i].placement}    Order: ${post.steps[i].order}</pre>
+                `
+        }
+        $("#confirm_apptour_steps").append(steps_html)
+    })
+
+    $("#modal_confirm").on('hidden.bs.modal',function(){
+        $("#confirm_apptour_steps").empty();
+    });
+
+
+
+
+
     //declare varibles to hold temporary state
     var iframe_num = null;
     var dblclicked = false;
@@ -289,7 +320,7 @@ $(document).ready( function(){
     }
 
     // Submit post on submit
-    $('#post-form').on('submit', function(event){
+    $('#confirm_apptour_submit').on('click', function(event){
         event.preventDefault();
         console.log("form submitted!")  // sanity check
         create_post(num_of_steps, "complete");
@@ -404,5 +435,6 @@ $(document).ready( function(){
         $("#view_saved_tours").show();
         $("#view_complete_tours").hide();
     });
+
 
 });

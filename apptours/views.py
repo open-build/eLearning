@@ -26,7 +26,7 @@ def get_tours(request):
 
 @user_passes_test(lambda user: user.is_site_admin)
 def create_apptour(request):
-    return render(request, "create_app_tour.html")
+    return render(request, "app_tour/create_app_tour.html")
 
 @user_passes_test(lambda user: user.is_site_admin)
 def create_tour(request):
@@ -57,13 +57,13 @@ def create_tour(request):
                             path=step.get('path'),order=step.get('order'),
                             tour=tour)
                 step.save(force_insert=True)
-        return redirect(reverse('create_apptour'))
+        return redirect(reverse('app_tour/create_apptour'))
 
 @user_passes_test(lambda user: user.is_site_admin)
 def view_tours(request):
     tours = Tour.objects.filter(status="complete")
     saved_tours = Tour.objects.filter(status="incomplete")
-    return render(request, "tour_views.html", {"tours":tours,"saved_tours":saved_tours})
+    return render(request, "app_tour/tour_views.html", {"tours":tours,"saved_tours":saved_tours})
 
 @user_passes_test(lambda user: user.is_site_admin)
 def delete_tour(request, tour_id=None):
@@ -74,7 +74,7 @@ def delete_tour(request, tour_id=None):
 @user_passes_test(lambda user: user.is_site_admin)
 def update_apptour(request, tour_id=None):
     instance = Tour.objects.get(id=tour_id)
-    return render(request, "create_app_tour.html", {"instance":instance})
+    return render(request, "app_tour/create_app_tour.html", {"instance":instance})
 
 
 
