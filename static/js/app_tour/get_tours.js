@@ -2,28 +2,20 @@ window.onload = function() {
 
 
     var tour_template = `<div style="color: grey;" class='popover tour'>
-                        <div class='arrow'></div>
-                        <h3 class='popover-title'></h3>
-                        <div class='popover-content'></div>
-                        <div class='popover-navigation'>
-                            <button class='btn btn-default' data-role='prev'>« Prev button again</button>
-                            <span data-role='separator'>|</span>
-                            <button class='btn btn-default' data-role='next'>Next »</button>
-                        </div>
-                        <button class='btn btn-default' data-role='end'>End tour</button>
-                      </div>`
+                            <div class='arrow'></div>
+                            <h3 class='popover-title'></h3>
+                            <div class='popover-content'></div>
+                            <div class='popover-navigation'>
+                                <button class='btn btn-default' data-role='prev'>« Prev button again</button>
+                                <span data-role='separator'>|</span>
+                                <button class='btn btn-default' data-role='next'>Next »</button>
+                            </div>
+                            <button class='btn btn-default' data-role='end'>End tour</button>
+                          </div>`
 
 
-    var fillToursArray = function(){
-        var app_tours = [];
-        JSON.parse(sessionStorage.getItem("tours")).forEach(function(val,index){
-            app_tours.push(val.tour_name);
-        });
-        return app_tours
-    }
 
-
-    var createTour = function(tour_config, steps_config, tour_step=0){
+    var createTour = function(tour_config, steps_config, try_tour=false){
         var tour_steps = [];
         var start_path = steps_config.filter(function(conf){
                 return conf.order == (1);
@@ -75,8 +67,13 @@ window.onload = function() {
                 localStorage.removeItem("tour_in_progress");
                 localStorage.removeItem("tour_config"); 
                 localStorage.removeItem("steps_config");
-                $('#myModal').modal('show');
                 localStorage.clear();
+                if(try_tour){
+                    localStorage.setItem("try_tour__finished",true);
+                    window.location.href = "/apptours/create_apptour"
+                } else{
+                    $('#myModal').modal('show');
+                }
             },
             steps:tour_steps
         });
@@ -87,19 +84,13 @@ window.onload = function() {
     }
 
 
-
-    if(localStorage.getItem("tour_in_progress") != null){ 
-        createTour( 
-            JSON.parse(localStorage.getItem("steps_config")), 
-            JSON.parse(localStorage.getItem("steps_config"))
-        );
-        localStorage.removeItem("tour_in_progress");
-       } else{
-        localStorage.removeItem("tour_in_progress");
-        localStorage.removeItem("tour_config"); 
-        localStorage.removeItem("steps_config");
-        localStorage.clear();
-     }
+    var fillToursArray = function(){
+        var app_tours = [];
+        JSON.parse(sessionStorage.getItem("tours")).forEach(function(val,index){
+            app_tours.push(val.tour_name);
+        });
+        return app_tours
+    }
 
 
     var addListenersToTours = function(tours_array){
@@ -135,13 +126,27 @@ window.onload = function() {
 
 
     var fillModalTable = function(app_tours){
-        $(".modal-body table").remove("tr")
+        $(".modal-body table tbody tr").remove();
         app_tours.forEach(function(val,index){
             var re = /\s/g;
             str_val = val.replace(re,'_')
             $(".modal-body table").append(`<tr id='${str_val}'><td>false</td><td>${val}</td><td>true</td></tr>`)
         });
     }
+
+
+    if(localStorage.getItem("tour_in_progress") != null){ 
+        createTour( 
+            JSON.parse(localStorage.getItem("steps_config")), 
+            JSON.parse(localStorage.getItem("steps_config"))
+        );
+        localStorage.removeItem("tour_in_progress");
+       } else{
+        localStorage.removeItem("tour_in_progress");
+        localStorage.removeItem("tour_config"); 
+        localStorage.removeItem("steps_config");
+        localStorage.clear();
+     }
 
 
     $("#myModal").on('shown.bs.modal',function(){

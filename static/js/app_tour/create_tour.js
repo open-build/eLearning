@@ -5,7 +5,7 @@ $(document).ready( function(){
     $("#submit_apptour").on("click",function(event){
         event.preventDefault();
         var post = getPost(num_of_steps, "NA")
-        $("#confirm_apptour_tourname").val(post.tour_name);
+        $("#confirm_apptour_tourname").html(post.tour.tour_name);
         $("#modal_confirm").modal({backdrop: 'static', keyboard: false, backdrop: false})
         var steps_html = "";
         for(var i=0; i<post.steps.length;i+=1){
@@ -22,11 +22,27 @@ $(document).ready( function(){
                 `
         }
         $("#confirm_apptour_steps").append(steps_html)
-    })
+    });
 
     $("#modal_confirm").on('hidden.bs.modal',function(){
         $("#confirm_apptour_steps").empty();
     });
+
+    $("#confirm_apptour_try_tour").on("click",function(event){
+        var post = getPost(num_of_steps, "NA")
+        $("#modal_confirm").modal("hide")
+        localStorage.setItem("try_tour__tour",JSON.stringify(post));
+        createTour( 
+            tour_config = {name:post.tour.tour_name}, 
+            steps_config = post.steps,
+            try_tour = true
+        );
+    });
+
+    if(localStorage.getItem("try_tour__finished") != null){ 
+        localStorage.removeItem("try_tour__finished");
+        $("#submit_apptour").click();
+    }
 
 
 
@@ -401,23 +417,27 @@ $(document).ready( function(){
     })
 
 
+    function prepopulate_tour_form(instance){ 
+        $("#tour_name").val(instance.tour_name); 
+        for(var i=0; i<instance.steps.length;){ 
+            if(i > 0){ 
+                num_of_steps += 1 
+                num_of_steps = num_of_steps; 
+                $("#steps").append(get_step_form_content(num_of_steps)) 
+            } 
+            i+=1; 
+            $(`#step${i}_title`).val(instance.steps[i-1].title); 
+            $(`#step${i}_content`).val(instance.steps[i-1].content); 
+            $(`#step${i}_placement`).val(instance.steps[i-1].placement); 
+            $(`#step${i}_path`).val(instance.steps[i-1].path); 
+            $(`#step${i}_element`).val(instance.steps[i-1].element); 
+            $(`#step${i}_order`).val(instance.steps[i-1].order); 
+        } 
+    }
 
-    if (typeof variable !== 'undefined' && instance != null){
-        $("#tour_name").val(instance.tour_name);
-        for(var i=0; i<instance.steps.length;){
-            if(i > 0){
-                num_of_steps += 1
-                num_of_steps = num_of_steps;
-                $("#steps").append(get_step_form_content(num_of_steps))
-            }
-            i+=1;
-            $(`#step${i}_title`).val(instance.steps[i-1].title);
-            $(`#step${i}_content`).val(instance.steps[i-1].content);
-            $(`#step${i}_placement`).val(instance.steps[i-1].placement);
-            $(`#step${i}_path`).val(instance.steps[i-1].path);
-            $(`#step${i}_element`).val(instance.steps[i-1].element);
-            $(`#step${i}_order`).val(instance.steps[i-1].order);
-        }
+    //when updating an apptour
+    if(typeof instance != 'undefined' && instance != null){
+        prepopulate_tour_form(instance=instance)
     }
 
 

@@ -33,7 +33,6 @@ def create_tour(request):
     if request.method == 'POST':
         post_text = json.loads(request.POST.get('app_tour'))
         if post_text.get("tour").get("id") is not None:
-            print(post_text)
             print("put")
             tour = Tour(tour_name=post_text.get("tour").get("tour_name"),
                         id=post_text.get("tour").get("id"),
@@ -57,7 +56,7 @@ def create_tour(request):
                             path=step.get('path'),order=step.get('order'),
                             tour=tour)
                 step.save(force_insert=True)
-        return redirect(reverse('app_tour/create_apptour'))
+        return redirect(reverse('create_apptour'))
 
 @user_passes_test(lambda user: user.is_site_admin)
 def view_tours(request):

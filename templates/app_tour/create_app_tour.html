@@ -1,6 +1,9 @@
 {% extends 'base.html' %}
 
 {% block content %}
+
+{% load staticfiles %}
+
 <script>
   {% if instance %}
   var instance = {tour_name: "{{instance.tour_name}}", id:{{instance.id}}};
@@ -20,7 +23,7 @@
   var instance = null;
   {% endif %}
 </script>
-{% load staticfiles %}
+
 
 <br/>
 <br/>
@@ -82,7 +85,7 @@
         <div class="modal-body">
           <div>
             <div>
-              <h4>Tour Name:</h4><h3 id="confirm_apptour_tourname"></h3>
+              <h4>Tour Name:</h4><p id="confirm_apptour_tourname"></p>
             </div>
             <div id="confirm_apptour_steps">
               <!--add steps to display dynamically-->
@@ -90,7 +93,7 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-info" data-dismiss="modal">Try Tour</button>
+          <button type="button" class="btn btn-info" id="confirm_apptour_try_tour">Try Tour</button>
           <button type="button" id="confirm_apptour_submit" class="btn btn-primary" data-dismiss="modal">Confirm Submit</button>
           <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
         </div>
