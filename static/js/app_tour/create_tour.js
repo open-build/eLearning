@@ -1,5 +1,56 @@
 $(document).ready( function(){
 
+    var num_of_steps = 1;
+
+    var get_step_form_content = function(num_of_steps){
+        var step_form_content =
+            `<button type="button" class="btn btn-primary">Step <span class="badge">${num_of_steps}</span></button>
+              <div id="step${num_of_steps}">
+                <div class="form-group">
+                    <label >Title:</label>
+                    <input class="form-control" id="step${num_of_steps}_title">
+                  </div>
+                <div class="form-group">
+                    <label >Content:</label>
+                    <textarea class="form-control" id="step${num_of_steps}_content"></textarea>
+                  </div>
+                <div class="form-group">
+                    <label >Placement:</label>
+                    <select  id="step${num_of_steps}_placement" class="form-control">
+                        <option value="top">Top</option>
+                        <option value="bottom">Bottom</option>
+                        <option value="left">Left</option>
+                        <option value="right">Right</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label >Path:</label>
+                    <input class="form-control" id="step${num_of_steps}_path">
+                  </div>
+                <div class="form-group">
+                    <label >Element:</label>
+                    <input class="form-control" id="step${num_of_steps}_element">
+                  </div>
+                 <div  class="form-group">
+                    <label >Order:</label>
+                      <input readonly value="${num_of_steps}" class="form-control" id="step${num_of_steps}_order">
+                </div>
+                  <a class="app_tour_iframe_link" data-toggle="modal" data-target="#app_tour_iframe_modal" href="">view iframe of site to find elements</a>
+            </div>`
+
+        return step_form_content;
+    }
+
+    function getFirstStep(num_of_steps){
+        for(i = 0; i < num_of_steps;){
+            $("#steps").empty()
+            i += 1;
+            $("#steps").append(get_step_form_content(num_of_steps))
+        }
+    }
+    getFirstStep(num_of_steps)
+
+
 
 
     $("#submit_apptour").on("click",function(event){
@@ -32,16 +83,25 @@ $(document).ready( function(){
         var post = getPost(num_of_steps, "NA")
         $("#modal_confirm").modal("hide")
         localStorage.setItem("try_tour__tour",JSON.stringify(post));
+        if(typeof instance != 'undefined' && instance != null){
+            localStorage.setItem("try_tour__tourinstance",JSON.stringify(instance));
+        }
         createTour( 
             tour_config = {name:post.tour.tour_name}, 
             steps_config = post.steps,
-            try_tour = true
         );
     });
 
     if(localStorage.getItem("try_tour__finished") != null){ 
         localStorage.removeItem("try_tour__finished");
+        post = JSON.parse(localStorage.getItem("try_tour__tour"));
+        localStorage.removeItem("try_tour__tour");
+        prepopulate_tour_form({tour_name:post.tour.tour_name, steps:post.steps})
         $("#submit_apptour").click();
+        if(localStorage.getItem("try_tour__tourinstance") != null){ 
+            instance = JSON.parse(localStorage.getItem("try_tour__tourinstance"));
+            localStorage.removeItem("try_tour__tourinstance");
+        }
     }
 
 
@@ -350,54 +410,6 @@ $(document).ready( function(){
     });
 
 
-    var num_of_steps = 1;
-
-    var get_step_form_content = function(num_of_steps){
-        var step_form_content =
-            `<button type="button" class="btn btn-primary">Step <span class="badge">${num_of_steps}</span></button>
-              <div id="step${num_of_steps}">
-                <div class="form-group">
-                    <label >Title:</label>
-                    <input class="form-control" id="step${num_of_steps}_title">
-                  </div>
-                <div class="form-group">
-                    <label >Content:</label>
-                    <textarea class="form-control" id="step${num_of_steps}_content"></textarea>
-                  </div>
-                <div class="form-group">
-                    <label >Placement:</label>
-                    <select  id="step${num_of_steps}_placement" class="form-control">
-                        <option value="top">Top</option>
-                        <option value="bottom">Bottom</option>
-                        <option value="left">Left</option>
-                        <option value="right">Right</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label >Path:</label>
-                    <input class="form-control" id="step${num_of_steps}_path">
-                  </div>
-                <div class="form-group">
-                    <label >Element:</label>
-                    <input class="form-control" id="step${num_of_steps}_element">
-                  </div>
-                 <div  class="form-group">
-                    <label >Order:</label>
-                      <input readonly value="${num_of_steps}" class="form-control" id="step${num_of_steps}_order">
-                </div>
-                  <a class="app_tour_iframe_link" data-toggle="modal" data-target="#app_tour_iframe_modal" href="">view iframe of site to find elements</a>
-            </div>`
-
-        return step_form_content;
-    }
-
-
-    var i = 0;
-    for(; i < num_of_steps;){
-        $("#steps").empty()
-        i += 1;
-        $("#steps").append(get_step_form_content(num_of_steps))
-    }
 
     function removeLastStep(){
         $('#steps button').last().remove();
@@ -422,7 +434,6 @@ $(document).ready( function(){
         for(var i=0; i<instance.steps.length;){ 
             if(i > 0){ 
                 num_of_steps += 1 
-                num_of_steps = num_of_steps; 
                 $("#steps").append(get_step_form_content(num_of_steps)) 
             } 
             i+=1; 
