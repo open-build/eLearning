@@ -1,5 +1,5 @@
 from django.http import HttpResponse
-from .models import Tour, Step
+from .models import Tour, Step, transform_tour_groups_field
 import json
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import user_passes_test, login_required
@@ -34,9 +34,13 @@ def create_tour(request):
         post_text = json.loads(request.POST.get('app_tour'))
         if post_text.get("tour").get("id") is not None:
             print("put")
-            tour = Tour(tour_name=post_text.get("tour").get("tour_name"),
-                        id=post_text.get("tour").get("id"),
-                        status=post_text.get("tour").get("status"))
+            tour = Tour(
+                tour_name=post_text.get("tour").get("tour_name"),
+                id=post_text.get("tour").get("id"),
+                status=post_text.get("tour").get("status"),
+                tour_groups=transform_tour_groups_field(post_text.get("tour").get("tour_groups")),
+                tour_image=post_text.get("tour").get("tour_image")
+                )
             tour.save(force_update=True)
             Step.objects.filter(tour__id=post_text.get("tour").get("id")).delete()
             for step in post_text.get("steps"):
@@ -47,8 +51,12 @@ def create_tour(request):
                 step.save(force_insert=True)
         else:
             print("post")
-            tour = Tour(tour_name=post_text.get("tour").get("tour_name"),
-                        status=post_text.get("tour").get("status"))
+            tour = Tour(
+                tour_name=post_text.get("tour").get("tour_name"),
+                status=post_text.get("tour").get("status"),
+                tour_groups=transform_tour_groups_field(post_text.get("tour").get("tour_groups")),
+                tour_image=post_text.get("tour").get("tour_image")
+                )
             tour.save(force_insert=True)
             for step in post_text.get("steps"):
                 step = Step(placement=step.get('placement'),title=step.get('title'),
@@ -58,10 +66,15 @@ def create_tour(request):
                 step.save(force_insert=True)
         return redirect(reverse('create_apptour'))
 
+
 @user_passes_test(lambda user: user.is_site_admin)
 def view_tours(request):
     tours = Tour.objects.filter(status="complete")
+    for tour in tours:
+        tour.tour_groups = transform_tour_groups_field(tour.tour_groups)
     saved_tours = Tour.objects.filter(status="incomplete")
+    for tour in saved_tours:
+        tour.tour_groups = transform_tour_groups_field(tour.tour_groups)
     return render(request, "app_tour/tour_views.html", {"tours":tours,"saved_tours":saved_tours})
 
 @user_passes_test(lambda user: user.is_site_admin)

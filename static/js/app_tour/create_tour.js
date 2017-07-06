@@ -151,6 +151,28 @@ $(document).ready( function(){
     });
 
 
+    $("#tour_image").val("")
+    $("#tour_image_display").attr("src","")
+    $("#tour_image").on("change", function(){
+        var file_hash = "";
+        if($("#tour_image").val() == ""){
+            $("#tour_image_display").attr("src",file_hash)
+        }
+        var file = this.files[0];
+        var reader = new FileReader();
+        reader.onload = function(fileload) {
+            var base64filestr = fileload.target.result;
+            file_hash = base64filestr;
+            $("#tour_image_display").attr("src",file_hash)
+        }
+        reader.readAsDataURL(file);
+    });
+    $("#tour_image_reset").click(function(){
+        $("#tour_image").val("")
+        $("#tour_image_display").attr("src","")
+    });
+
+
 
 
     var dblclick_fctn = function(element, event){
@@ -340,7 +362,16 @@ $(document).ready( function(){
 
     function getPost(num_of_steps, status){
         post = {};
-        post.tour = {tour_name: $("#tour_name").val(), status: status}
+        post.tour = {
+            tour_name: $("#tour_name").val(),
+            status: status,
+            tour_image: $("#tour_image_display").prop("src"),
+            tour_groups:{
+                user:$("#tour_group_user").prop("checked"),
+                professor:$("#tour_group_professor").prop("checked"),
+                admin:$("#tour_group_admin").prop("checked")
+                }
+            }
         if(instance != null){
             post.tour.id = instance.id;
         }
