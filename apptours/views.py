@@ -5,6 +5,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import user_passes_test, login_required
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
+from datetime import datetime
 
 
 
@@ -15,6 +16,8 @@ def get_tours(request):
     tours = Tour.objects.filter(status="complete").values()
     response = []
     for tour in tours:
+        tour["tour_groups"] = transform_tour_groups_field(str(tour["tour_groups"]))
+        tour["tour_create_date"] = tour["tour_create_date"].strftime('%Y-%m-%dT%H:%M:%S')
         temp_tour = {k:v for k,v in tour.items()}
         temp_steps = []
         tour['steps'] = Step.objects.filter(tour=tour['id']).values()
@@ -39,7 +42,8 @@ def create_tour(request):
                 id=post_text.get("tour").get("id"),
                 status=post_text.get("tour").get("status"),
                 tour_groups=transform_tour_groups_field(post_text.get("tour").get("tour_groups")),
-                tour_image=post_text.get("tour").get("tour_image")
+                tour_image=post_text.get("tour").get("tour_image"),
+                tour_create_date=datetime.now()
                 )
             tour.save(force_update=True)
             Step.objects.filter(tour__id=post_text.get("tour").get("id")).delete()
@@ -55,7 +59,8 @@ def create_tour(request):
                 tour_name=post_text.get("tour").get("tour_name"),
                 status=post_text.get("tour").get("status"),
                 tour_groups=transform_tour_groups_field(post_text.get("tour").get("tour_groups")),
-                tour_image=post_text.get("tour").get("tour_image")
+                tour_image=post_text.get("tour").get("tour_image"),
+                tour_create_date=datetime.now()
                 )
             tour.save(force_insert=True)
             for step in post_text.get("steps"):
@@ -71,10 +76,10 @@ def create_tour(request):
 def view_tours(request):
     tours = Tour.objects.filter(status="complete")
     for tour in tours:
-        tour.tour_groups = transform_tour_groups_field(tour.tour_groups)
+        tour.tour_groups = transform_tour_groups_field(str(tour.tour_groups))
     saved_tours = Tour.objects.filter(status="incomplete")
     for tour in saved_tours:
-        tour.tour_groups = transform_tour_groups_field(tour.tour_groups)
+        tour.tour_groups = transform_tour_groups_field(str(tour.tour_groups))
     return render(request, "app_tour/tour_views.html", {"tours":tours,"saved_tours":saved_tours})
 
 @user_passes_test(lambda user: user.is_site_admin)
@@ -86,6 +91,8 @@ def delete_tour(request, tour_id=None):
 @user_passes_test(lambda user: user.is_site_admin)
 def update_apptour(request, tour_id=None):
     instance = Tour.objects.get(id=tour_id)
+    instance.tour_groups = transform_tour_groups_field(str(instance.tour_groups))
+    print(instance.__dict__)
     return render(request, "app_tour/create_app_tour.html", {"instance":instance})
 
 

@@ -24,6 +24,20 @@
       <div id="collapse{{tour.id}}" class="panel-collapse collapse">
         <div class="panel-body">
           <br/>
+          <h5>
+          Created: {{tour.tour_create_date}}
+          </h5>
+          <h5>
+          Tour Groups:
+            {%for tour, group in tour.tour_groups.items%}
+            {%if group%}
+              {{tour}}
+            {%endif%}
+            {%endfor%}
+          </h5>
+          {% if tour.tour_image != '' %}
+          <img src="{{tour.tour_image}}">
+          {% endif %}
           <h4>Tour Steps:</h4>
           <br/>
           {% for step in tour.step_set.all %}

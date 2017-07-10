@@ -8,7 +8,8 @@ class Tour(models.Model):
     tour_name = models.CharField(max_length=50,unique=True)
     status = models.CharField(null=False, default="complete",max_length=10)
     tour_image = models.TextField(null=False, default="")
-    tour_groups = models.IntegerField(default=7)
+    tour_groups = models.CharField(default="users professors admin ",max_length=25)
+    tour_create_date = models.DateTimeField()
 
 class Step(models.Model):
     element = models.CharField(max_length=50)
@@ -22,14 +23,15 @@ class Step(models.Model):
 
 def transform_tour_groups_field(input):
     if type(input) == dict:
-        return (1 if input.get("user") else 0) \
-            + (2 if input.get("professor") else 0) \
-            + (4 if input.get("admin") else 0)
-    elif type(input) == int:
+        return "" \
+            + ("user " if input.get("user") else "") \
+            + ("professor " if input.get("professor") else "") \
+            + ("admin " if input.get("admin") else "")
+    elif type(input) == str:
         return {
-            "user": True if input in [1,3,5,7] else False,
-            "professor": True if input in [2,3,6,7] else False,
-            "admin": True if input in [4,5,6,7] else False,
+            "user": True if "user" in input else False,
+            "professor": True if "professor" in input else False,
+            "admin": True if "admin" in input else False,
         }
     else:
         return None

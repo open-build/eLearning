@@ -153,23 +153,22 @@ $(document).ready( function(){
 
     $("#tour_image").val("")
     $("#tour_image_display").attr("src","")
+    var image_displayed = false;
     $("#tour_image").on("change", function(){
-        var file_hash = "";
-        if($("#tour_image").val() == ""){
-            $("#tour_image_display").attr("src",file_hash)
-        }
         var file = this.files[0];
         var reader = new FileReader();
         reader.onload = function(fileload) {
             var base64filestr = fileload.target.result;
             file_hash = base64filestr;
             $("#tour_image_display").attr("src",file_hash)
+            image_displayed = true;
         }
         reader.readAsDataURL(file);
     });
     $("#tour_image_reset").click(function(){
         $("#tour_image").val("")
         $("#tour_image_display").attr("src","")
+        image_displayed = false;
     });
 
 
@@ -365,7 +364,7 @@ $(document).ready( function(){
         post.tour = {
             tour_name: $("#tour_name").val(),
             status: status,
-            tour_image: $("#tour_image_display").prop("src"),
+            tour_image: image_displayed ? $("#tour_image_display").prop("src") : "",
             tour_groups:{
                 user:$("#tour_group_user").prop("checked"),
                 professor:$("#tour_group_professor").prop("checked"),
@@ -462,6 +461,22 @@ $(document).ready( function(){
 
     function prepopulate_tour_form(instance){ 
         $("#tour_name").val(instance.tour_name); 
+        if( instance.tour_image == ""){
+            $("#tour_image_display").attr("src",instance.tour_image)
+            image_displayed = false;
+        }else{
+            $("#tour_image_display").attr("src",instance.tour_image)
+            image_displayed = true;
+        }
+        if(instance.tour_groups.user){
+            $("#tour_group_user").prop("checked",true)
+        }
+        if(instance.tour_groups.professor){
+            $("#tour_group_professorr").prop("checked",true)
+        }
+        if(instance.tour_groups.admin){
+            $("#tour_group_admin").prop("checked",true)
+        }
         for(var i=0; i<instance.steps.length;){ 
             if(i > 0){ 
                 num_of_steps += 1 

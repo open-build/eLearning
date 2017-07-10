@@ -6,7 +6,17 @@
 
 <script>
   {% if instance %}
-  var instance = {tour_name: "{{instance.tour_name}}", id:{{instance.id}}};
+  tour_groups={}
+  {% for k,v in instance.tour_groups.items%}
+  tour_groups.{{k}}="{{v}}"
+  {%endfor%}
+
+  var instance = {
+    tour_name: "{{instance.tour_name}}",
+    id:{{instance.id}},
+    tour_image:"{{instance.tour_image}}",
+    tour_groups:tour_groups
+    };
   instance.steps = []
   {% for step in instance.step_set.all %}
   var add_step ={
@@ -64,7 +74,7 @@
            <button type="button" id="remove_step" class="btn btn-danger">Remove Last Step</button>
            <button type="button" id="save_tour" class="btn btn-info">Save Tour Progress</button>
         </div>
-        <button type="submit" id="submit_apptour" class="btn btn-success btn-block">Submit</button>
+        <button type="button" id="submit_apptour" class="btn btn-success btn-block">Submit</button>
       </form>
     </div>
   </div>
