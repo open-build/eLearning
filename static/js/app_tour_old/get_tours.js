@@ -115,7 +115,7 @@ var addListenersToTours = function(tours_array){
 var getAppTours = function(){
     $.ajax({
         url: '/apptours/get_tours',
-        type: 'get', // This is the default though, you don't actually need to always mention it
+        type: 'get',
         success: function(data) {
             sessionStorage.removeItem('tours');
             sessionStorage.setItem('tours',data);
