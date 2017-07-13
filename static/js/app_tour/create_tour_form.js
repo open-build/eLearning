@@ -233,19 +233,16 @@ class CreateTourForm(){
     }
 
 
-    addListenerForTourImageVal(){
-        $("#tour_image").on("change", function(){
-            var file = this.files[0];
-            var reader = new FileReader();
-            reader.onload = function(fileload) {
-                var base64filestr = fileload.target.result;
-                file_hash = base64filestr;
-                $("#tour_image_display").attr("src",file_hash)
-                this.image_displayed = true;
-                this.image_hashed_value = file_hash;
-            }
-            reader.readAsDataURL(file);
-        });
+    hashFileImage(file){
+        var reader = new FileReader();
+        reader.onload = function(fileload) {
+            var base64filestr = fileload.target.result;
+            file_hash = base64filestr;
+            $("#tour_image_display").attr("src",file_hash)
+            this.image_displayed = true;
+            this.image_hashed_value = file_hash;
+        }
+        reader.readAsDataURL(file);
     }
 
 

@@ -7,10 +7,6 @@ class DisplayTours{
         this.tours_array = [];
         this.tours_data = '';
         this.tour_controller = new TourController();
-        //from get_tours.js
-        $("#app_tour_display_modal").on('shown.bs.modal',function(){
-            this.tour_controller.getAppTours();
-        });
 
     }
 

@@ -42,14 +42,17 @@ class TourController{
             !(/^(\/\/|http:|https:).*/.test(url));
     }
 
-    triggerCsrf(){
-        $.ajaxSetup({
-            beforeSend: function(xhr, settings) {
-                if (!this.csrfSafeMethod(settings.type) && this.sameOrigin(settings.url)) {
-                    xhr.setRequestHeader("X-CSRFToken", this.csrftoken);
-                }
+    ajaxSetup(){
+        $.ajaxSetup(
+            {
+                beforeSend: function(xhr, settings) {
+                                if (!this.csrfSafeMethod(settings.type) && this.sameOrigin(settings.url)) {
+                                    xhr.setRequestHeader("X-CSRFToken", this.csrftoken);
+                                }
+                            },
+                async: false
             }
-        });
+        );
     }
 
 
@@ -68,7 +71,6 @@ class TourController{
 
 
     createPost(post_data) {
-        this.triggerCsrf()
         $.ajax({
             url : "/apptours/create_tour/", // the endpoint
             type : "POST", // http method
@@ -87,6 +89,6 @@ class TourController{
                 console.log(errmsg)
             }
         });
-    };
+    }
 
 }
