@@ -1,5 +1,5 @@
 
-'use strict'
+
 class GenerateTourStep{
 
 
@@ -9,7 +9,6 @@ class GenerateTourStep{
         this.chosen_path = null;
         this.chosen_element = null;
         this.chosen_placement = null;
-
         this.popover_content = `<div class="popover-content">
                                     <button id="choose_element" type="button" class="btn btn-primary">Choose</button>
                                     <button id="dont_choose_element" type="button" class="btn btn-danger">Exit</button>
@@ -18,52 +17,57 @@ class GenerateTourStep{
 
 
     loadIFrame(){
+        var self = this;
         $("iframe").load(function(){
-            //The iframe has loaded or reloaded.
+            //The iframe has loaded or reloaded
+            //remove popup added and reset variables
+            self.resetChosenElement();
+            //setup listener
+            self.setupIframeListener();
+        });
+        $("#app_tour_iframe_modal").on('shown.bs.modal',function(){
+            //The iframe has loaded or reloaded
+            //remove popup added and reset variables
+            self.resetChosenElement();
+            //setup listener
+            self.setupIframeListener();
+        });
+    }
+
+
+    resetChosenElement(){
+        //remove popup added and reset variables
+        var self = this;
+        if(this.dblclicked == true){
             $("#app-tour-iframe").contents()
                 .find("[data-toggle=popover]").popover('hide');
-            $("#app-tour-iframe").contents().find(chosen_element)
+            $("#app-tour-iframe").contents().find(self.chosen_element)
                 .removeAttr("data-toggle");
             this.dblclicked = false;
             this.chosen_path = null;
             this.chosen_element = null;
             this.chosen_placement = null;
-
-            $("#app-tour-iframe").contents().find("*").dblclick(function(e) {
-                //if not a current popup in the iframe add one
-                if(this.dblclicked == true){
-                    this.click_fctn(e);
-                }
-                else{
-                    this.dblclick_fctn(this,e);
-                }
-                return false;
-            });
-        });
+        }
     }
 
 
-    doubleClickedListener(){
-        $("#app-tour-iframe").contents().find("*").dblclick(function(e) {
-            //if not a current popup in the iframe add one
-            if(dblclicked == true){
-                click_fctn(e);
+    setupIframeListener(){
+        var self = this;
+        $("#app-tour-iframe").contents().find("*").dblclick(function(event) {
+            if(self.dblclicked == true){
+                self.clickFctn(event);
             }
             else{
-                dblclick_fctn(this,e);
+                self.dblclickFctn(this,event);
             }
             return false;
         });
     }
 
 
-    dblclickFctn(){
-        //set variables for this clicked location
-        this.dblclicked = true;
-        this.chosen_element = this.get_element(element);
-        this.chosen_path = this.get_iframe_path();
-        this.chosen_placement = this.get_placement(element, event);
+    createPopover(chosen_element, chosen_placement){
         //create popover
+        var self = this;
         $("#app-tour-iframe").contents()
                 .find(chosen_element).attr("data-toggle","popover");
          $("#app-tour-iframe").contents()
@@ -72,69 +76,47 @@ class GenerateTourStep{
                     html: true,
                     trigger: "manual",
                     title:"Chosen Element",
-                    content: this.popover_content
+                    content: self.popover_content
                 });
          $("#app-tour-iframe").contents()
                 .find("[data-toggle=popover]").popover('show');
     }
 
 
-    clickFctn(e){
+    dblclickFctn(element, event){
+        //set variables for this clicked location
+        this.dblclicked = true;
+        this.chosen_element = this.getElement(element);
+        this.chosen_path = this.getIFramePath();
+        this.chosen_placement = this.getPlacement(element, event);
+        //create popover
+        this.createPopover(this.chosen_element,this.chosen_placement);
+    }
+
+
+    setCreateForm(){
+        $(`#step${this.iframe_num}_path`).val(this.chosen_path);
+        $(`#step${this.iframe_num}_element`).val(this.chosen_element);
+        $(`#step${this.iframe_num}_placement`).val(this.chosen_placement);
+    }
+
+
+    clickFctn(event){
         //if popover clicked do nothing
         //if choose clicked save vars to form and exit iframe and remove popover
-        if(e.target.id == "choose_element"){
-            $(`#step${iframe_num}_path`).val(chosen_path);
-            $(`#step${iframe_num}_element`).val(chosen_element);
-            $(`#step${iframe_num}_placement`).val(chosen_placement);
-            iframe_num = null;
-            dblclicked = false;
-            chosen_path = null;
-            chosen_element = null;
-            chosen_placement = null;
-            $("#app-tour-iframe").contents()
-                .find("[data-toggle=popover]").popover('hide');
-            $("#app-tour-iframe").contents().find(chosen_element)
-                .removeAttr("data-toggle");
+        var self = this;
+        if(event.target.id == "choose_element"){
+            self.setCreateForm();
             $('[data-dismiss=modal').click();
         }
         //if exit clicked or outside of popover clicked or modal closed remove popover and reset vars to null
-        if(e.target.id == "dont_choose_element"){
-            $("#app-tour-iframe").contents()
-                .find("[data-toggle=popover]").popover('hide');
-            $("#app-tour-iframe").contents().find(chosen_element)
-                .removeAttr("data-toggle");
-            dblclicked = false;
-            chosen_path = null;
-            chosen_element = null;
-            chosen_placement = null;
+        if(event.target.id == "dont_choose_element"){
+            self.resetChosenElement();
         }
     }
 
-    openIframeOnCLick(){
-        $(document).on('click', '.app_tour_iframe_link', function(){
-            this.iframe_num = $(this).parent().attr("id").slice(-1)
-        });
-    }
 
-
-    uponClosingIFrame(){
-        //if doubleclicked and modal goes away reset
-        $("#app_tour_iframe_modal").on('hidden.bs.modal',function(){
-            if(dblclicked){
-                $(chosen_path).popover("hide");
-                $("#app-tour-iframe").contents().find(chosen_path)
-                .removeAttr("data-toggle").removeAttr("data-placement");
-            }
-            this.iframe_num = null;
-            this.dblclicked = false;
-            this.chosen_path = null;
-            this.chosen_element = null;
-            this.chosen_placement = null;
-        });
-    }
-
-
-    get_placement(element, event){
+    getPlacement(element, event){
         var xpos = event.pageX;
         var ypos = event.pageY;
         var right = (xpos - $(element).offset().left)/ $(element).width();
@@ -156,40 +138,41 @@ class GenerateTourStep{
     }
 
 
-    get_iframe_path(){
+    getIFramePath(){
         return $('#app-tour-iframe').contents().get(0).location.pathname;
     }
 
 
-    get_element(el) {
-      var stack = [];
-      while ( el.parentNode != null ) {
-        var sibCount = 0;
-        var sibIndex = 0;
-        for ( var i = 0; i < el.parentNode.childNodes.length; i++ ) {
-          var sib = el.parentNode.childNodes[i];
-          if ( sib.nodeName == el.nodeName ) {
-            if ( sib === el ) {
-              sibIndex = (sibCount + 1);
+    getElement(element) {
+        var stack = [];
+        while ( element.parentNode != null ) {
+            var sibCount = 0;
+            var sibIndex = 0;
+            for ( var i = 0; i < element.parentNode.childNodes.length; i++ ) {
+                var sib = element.parentNode.childNodes[i];
+                if ( sib.nodeName == element.nodeName ) {
+                    if ( sib === element ) {
+                        sibIndex = (sibCount + 1);
+                    }
+                    sibCount++;
+                }
             }
-            sibCount++;
-          }
+            if ( element.hasAttribute('id') && element.id != '' ) {
+                stack.unshift(element.nodeName.toLowerCase() + '#' + element.id);
+            }
+            else if ( sibCount > 1 ) {
+                stack.unshift(element.nodeName.toLowerCase() + ':nth-of-type(' + sibIndex + ')');
+            }
+            else {
+                stack.unshift(element.nodeName.toLowerCase());
+            }
+            element = element.parentNode;
         }
-        if ( el.hasAttribute('id') && el.id != '' ) {
-          stack.unshift(el.nodeName.toLowerCase() + '#' + el.id);
-        } else if ( sibCount > 1 ) {
-          stack.unshift(el.nodeName.toLowerCase() + ':nth-of-type(' + sibIndex + ')');
-        } else {
-          stack.unshift(el.nodeName.toLowerCase());
-        }
-        el = el.parentNode;
-      }
-
-      var css_path = stack.slice(1); // removes the html element
-      css_path = ("" + css_path).replace(/,/g," ");
-      css_path = css_path.substring(css_path.lastIndexOf("#"));
-      return css_path;
-    }
+        var css_path = stack.slice(1); // removes the html element
+        css_path = ("" + css_path).replace(/,/g," ");
+        css_path = css_path.substring(css_path.lastIndexOf("#"));
+        return css_path;
+  }
 
 
 

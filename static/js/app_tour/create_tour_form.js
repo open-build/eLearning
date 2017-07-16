@@ -1,34 +1,32 @@
-
-'use strict'
-class CreateTourForm(){
+class CreateTourForm{
 
 
-    constructor(initial_num_of_steps){
+    constructor(){
 
         //add listener
         $("#modal_confirm").on('hidden.bs.modal',function(){
             $("#confirm_apptour_steps").empty();
         });
 
-        this.number_of_steps = initial_num_of_steps;
+        this.number_of_steps = 1;
 
         this.apptour = new AppTour();
 
         this.tour_controller = new TourController();
 
-        this.step_form_content = `<button type="button" class="btn btn-primary">Step <span class="badge">${num_of_steps}</span></button>
-                                  <div id="step${num_of_steps}">
+        this.step_form_content = `<button type="button" class="btn btn-primary">Step <span class="badge">__number_of_steps__</span></button>
+                                  <div id="step__number_of_steps__">
                                     <div class="form-group">
                                         <label >Title:</label>
-                                        <input class="form-control" id="step${num_of_steps}_title">
+                                        <input class="form-control" id="step__number_of_steps___title">
                                       </div>
                                     <div class="form-group">
                                         <label >Content:</label>
-                                        <textarea class="form-control" id="step${num_of_steps}_content"></textarea>
+                                        <textarea class="form-control" id="step__number_of_steps___content"></textarea>
                                       </div>
                                     <div class="form-group">
                                         <label >Placement:</label>
-                                        <select  id="step${num_of_steps}_placement" class="form-control">
+                                        <select  id="step__number_of_steps___placement" class="form-control">
                                             <option value="top">Top</option>
                                             <option value="bottom">Bottom</option>
                                             <option value="left">Left</option>
@@ -37,17 +35,17 @@ class CreateTourForm(){
                                     </div>
                                     <div class="form-group">
                                         <label >Path:</label>
-                                        <input class="form-control" id="step${num_of_steps}_path">
+                                        <input class="form-control" id="step__number_of_steps___path">
                                       </div>
                                     <div class="form-group">
                                         <label >Element:</label>
-                                        <input class="form-control" id="step${num_of_steps}_element">
+                                        <input class="form-control" id="step__number_of_steps___element">
                                       </div>
                                      <div  class="form-group">
                                         <label >Order:</label>
-                                          <input readonly value="${num_of_steps}" class="form-control" id="step${num_of_steps}_order">
+                                          <input readonly value="__number_of_steps__" class="form-control" id="step__number_of_steps___order">
                                     </div>
-                                      <a class="app_tour_iframe_link" data-toggle="modal" data-target="#app_tour_iframe_modal" href="">view iframe of site to find elements</a>
+                                      <a class="app_tour_iframe_link" href="">view iframe of site to find elements</a>
                                 </div>`
 
         this.image_displayed = false;
@@ -56,22 +54,66 @@ class CreateTourForm(){
 
 
     getStepFormContent(){
-        return this.step_form_content.replace("${num_of_steps}",this.number_of_steps)
+        return this.step_form_content.replace(/__number_of_steps__/g,this.number_of_steps)
     }
 
 
     appendStepsInitially(){
-        for(i = 0; i < this.num_of_steps;){
+        for(var i = 0; i < this.number_of_steps;i++){
             $("#steps").empty();
-            i += 1;
-            $("#steps").append(get_step_form_content(this.num_of_steps));
+            $("#steps").append(this.getStepFormContent(this.number_of_steps));
         }
+    }
+
+
+    resetForm(){
+        while(this.number_of_steps > 1){
+            this.removeLastStep();
+        }
+        $('#post-form').trigger("reset");
+    }
+
+
+    removeLastStep(){
+        if(this.number_of_steps>1){
+            $('#steps button').last().remove();
+            $(`#step${this.number_of_steps}`).remove()
+            this.number_of_steps -= 1;
+        }
+    }
+
+
+    addStep(){
+        this.number_of_steps += 1
+        $("#steps").append(this.getStepFormContent(this.number_of_steps));
+    }
+
+
+    hashFileImage(file){
+        var reader = new FileReader();
+        reader.onload = function(fileload) {
+            var base64file = fileload.target.result;
+            //display image on element #tour_image_display
+            //set image_displayed to true and save hash of image
+            $("#tour_image_display").attr("src",base64file)
+            this.image_displayed = true;
+            this.image_hashed_value = base64file;
+        }
+        reader.readAsDataURL(file);
+    }
+
+
+    resetTourImage(){
+        $("#tour_image").val("")
+        $("#tour_image_display").attr("src","")
+        this.image_displayed = false;
+        this.image_hashed_value = null;
     }
 
 
     submittingAppTour(){
         event.preventDefault();
-        var post = this.getPost(num_of_steps, "NA")
+        var post = this.getPost(this.number_of_steps, "NA")
         $("#confirm_apptour_tourname").html(post.tour.tour_name);
         $("#modal_confirm").modal({backdrop: 'static', keyboard: false, backdrop: false})
         var steps_html = "";
@@ -94,7 +136,7 @@ class CreateTourForm(){
 
     startTryTour(){
         $("#confirm_apptour_try_tour").on("click",function(event){
-            var post = getPost(num_of_steps, "NA")
+            var post = getPost(this.number_of_steps, "NA")
             $("#modal_confirm").modal("hide")
             localStorage.setItem("try_tour__tour",JSON.stringify(post));
             if(typeof instance != 'undefined' && instance != null){
@@ -143,7 +185,7 @@ class CreateTourForm(){
             post.tour.id = null;
         }
         post.steps = []
-        for(var i = 1; i <= this.num_of_steps;i++){
+        for(var i = 1; i <= this.number_of_steps;i++){
             step = {
                 title:$(`#step${i}_title`).val(),
                 content:$(`#step${i}_content`).val(),
@@ -158,39 +200,17 @@ class CreateTourForm(){
     }
 
 
-    resetForm(){
-        while(num_of_steps > 1){
-            this.removeLastStep();
-        }
-        $('#post-form').trigger("reset");
-    }
-
-
-    removeLastStep(){
-        $('#steps button').last().remove();
-        $(`#step${num_of_steps}`).remove()
-        num_of_steps -= 1;
-    }
-
-
-    addStep(){
-        num_of_steps += 1
-        num_of_steps = num_of_steps;
-        $("#steps").append(get_step_form_content(num_of_steps))
-    }
-
-
     saveTour(){
         event.preventDefault();
         console.log("form saved!");
-        create_post(num_of_steps, "incomplete");
+        create_post(this.number_of_steps, "incomplete");
     }
 
 
     confirmSubmitTour(){
         event.preventDefault();
         console.log("form submitted!")  // sanity check
-        create_post(num_of_steps, "complete");
+        create_post(this.number_of_steps, "complete");
     }
 
 
@@ -214,8 +234,8 @@ class CreateTourForm(){
         }
         for(var i=0; i<instance.steps.length;){ 
             if(i > 0){ 
-                num_of_steps += 1 
-                $("#steps").append(get_step_form_content(num_of_steps)) 
+                this.number_of_steps += 1 
+                $("#steps").append(get_step_form_content(this.number_of_steps)) 
             } 
             i+=1; 
             $(`#step${i}_title`).val(instance.steps[i-1].title); 
@@ -230,26 +250,6 @@ class CreateTourForm(){
 
     updatingAppTour(){
         return (typeof instance != 'undefined' && instance != null)
-    }
-
-
-    hashFileImage(file){
-        var reader = new FileReader();
-        reader.onload = function(fileload) {
-            var base64filestr = fileload.target.result;
-            file_hash = base64filestr;
-            $("#tour_image_display").attr("src",file_hash)
-            this.image_displayed = true;
-            this.image_hashed_value = file_hash;
-        }
-        reader.readAsDataURL(file);
-    }
-
-
-    resetTourImage(){
-        $("#tour_image").val("")
-        $("#tour_image_display").attr("src","")
-        image_displayed = false;
     }
 
 
