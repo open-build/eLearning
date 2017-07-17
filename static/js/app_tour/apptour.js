@@ -29,6 +29,7 @@ class AppTour{
 
 
     createSteps(steps_config){
+        alert(JSON.stringify(steps_config))
         var tour_steps = [];
         var start_path = steps_config.filter(function(conf){
                 return conf.order == (1);
@@ -70,6 +71,7 @@ class AppTour{
 
 
     createTour(tour_config, steps_config, steps){
+        alert(JSON.stringify(tour_config))
         var self = this;
         var tour = new Tour({
             name: tour_config.name + "__tour",

@@ -147,30 +147,33 @@ class CreateTourForm{
 
 
     prepopulateTourForm(tour_instance){
-        $("#tour_name").val(instance.tour_name); 
-        if( instance.tour_image == ""){
+        $("#tour_name").val(tour_instance.tour_name); 
+        if( tour_instance.tour_image == ""){
             $("#tour_image_display").attr("src","")
             this.image_displayed = false;
         }else{
-            $("#tour_image_display").attr("src",instance.tour_image)
+            $("#tour_image_display").attr("src",tour_instance.tour_image)
             this.image_displayed = true;
         }
-        if(instance.tour_groups.user == "True"){
+        if(tour_instance.tour_groups.user == "True"){
             $("#tour_group_user").prop("checked",true);
         }else{
             $("#tour_group_user").prop("checked",false);
         }
-        if(instance.tour_groups.professor == "True"){
+        if(tour_instance.tour_groups.professor == "True"){
             $("#tour_group_professorr").prop("checked",true)
         }else{
             $("#tour_group_professorr").prop("checked",false);
         }
-        if(instance.tour_groups.admin == "True"){
+        if(tour_instance.tour_groups.admin == "True"){
             $("#tour_group_admin").prop("checked",true)
         }else{
             $("#tour_group_admin").prop("checked",false);
         }
-        for(var i=0; i < instance.steps.length; i++){ 
+        for(var i=0; i < tour_instance.steps.length; i++){ 
+            if(i>0){
+                this.number_of_steps += 1 ;
+            }
             $("#steps").append(this.getStepFormContent(this.number_of_steps)) ;
             $(`#step${i+1}_title`).val(instance.steps[i].title); 
             $(`#step${i+1}_content`).val(instance.steps[i].content); 
@@ -178,7 +181,6 @@ class CreateTourForm{
             $(`#step${i+1}_path`).val(instance.steps[i].path); 
             $(`#step${i+1}_element`).val(instance.steps[i].element); 
             $(`#step${i+1}_order`).val(instance.steps[i].order); 
-            this.number_of_steps += 1 ;
         } 
     }
 
@@ -204,33 +206,28 @@ class CreateTourForm{
 
 
     startTryTour(){
-        $("#confirm_apptour_try_tour").on("click",function(event){
-            var post = getPost(this.number_of_steps, "NA")
-            $("#modal_confirm").modal("hide")
-            localStorage.setItem("try_tour__tour",JSON.stringify(post));
-            if(typeof instance != 'undefined' && instance != null){
-                localStorage.setItem("try_tour__tourinstance",JSON.stringify(instance));
-            }
-            this.apptour.createTour( 
-                tour_config = {name:post.tour.tour_name}, 
-                steps_config = post.steps,
-            );
-        });
-
+        var post = this.getPost("NA")
+        $("#modal_confirm").modal("hide")
+        localStorage.setItem("try_tour__tour",JSON.stringify(post));
+        //if updating an existing tour
+        if(typeof instance != 'undefined' && instance != null){
+            localStorage.setItem("try_tour__tourinstance",JSON.stringify(instance));
+        }
+        this.apptour.startTour( {name:post.tour.tour_name}, post.steps,true);
     }
 
 
     finishTryTour(){
-        if(localStorage.getItem("try_tour__finished") != null){ 
-            localStorage.removeItem("try_tour__finished");
-            post = JSON.parse(localStorage.getItem("try_tour__tour"));
-            localStorage.removeItem("try_tour__tour");
-            prepopulate_tour_form({tour_name:post.tour.tour_name, steps:post.steps})
-            $("#submit_apptour").click();
-            if(localStorage.getItem("try_tour__tourinstance") != null){ 
-                instance = JSON.parse(localStorage.getItem("try_tour__tourinstance"));
-                localStorage.removeItem("try_tour__tourinstance");
-            }
+        localStorage.removeItem("try_tour__finished");
+        var post = JSON.parse(localStorage.getItem("try_tour__tour"));
+        localStorage.removeItem("try_tour__tour");
+        this.prepopulateTourForm(post)
+        $("#submit_apptour").click();
+        this.submittingAppTour();
+        //if updating an existing tour
+        if(localStorage.getItem("try_tour__tourinstance") != null){ 
+            instance = JSON.parse(localStorage.getItem("try_tour__tourinstance"));
+            localStorage.removeItem("try_tour__tourinstance");
         }
     }
 

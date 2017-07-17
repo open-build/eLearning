@@ -108,6 +108,17 @@ window.onload = function() {
         create_tour_form.submittingAppTour();
     });
 
+    //trying out apptour before adding
+    $("#confirm_apptour_try_tour").on("click",function(event){
+        event.preventDefault();
+        create_tour_form.startTryTour();
+    });
+
+
+    if(localStorage.getItem("try_tour__finished") != null){ 
+        create_tour_form.finishTryTour();
+    };
+
 
     //continue
 
@@ -118,14 +129,10 @@ window.onload = function() {
     });
 
 
-    $("#confirm_apptour_try_tour").on("click",function(event){
-
-    });
 
 
-    if(localStorage.getItem("try_tour__finished") != null){ 
 
-    };
+
 
 
     // Submit post on submit
