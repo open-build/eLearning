@@ -61,40 +61,56 @@ window.onload = function() {
 
     ////////////////////////listeners for creating a tour///////////////////////////////
 
-
+    //add the first step when loading create_apptour page
     if(window.location.pathname=="/apptours/create_apptour"){
         create_tour_form.appendStepsInitially()
     }
 
-
+    //enable adding a step
     $("#add_step").click(function(){
         create_tour_form.addStep();
     });
 
-
+    //enable removing a step, removes last step
     $("#remove_step").click(function(){
         create_tour_form.removeLastStep();
     });
 
 
-    //for getting and resetting image
+    //for getting an image
     $("#tour_image").on("change", function(){
         var file = this.files[0];
         create_tour_form.hashFileImage(file);
     });
 
-
+    //reseting tour image
     $("#tour_image_reset").click(function(){
         create_tour_form.resetTourImage();
     });
 
 
+    // Save post on save btn
+    $('#save_tour').on('click', function(event){
+        event.preventDefault();
+        create_tour_form.saveTour();
+    });
+
+
+    //when updating an apptour
+    if(typeof instance != 'undefined' && instance != null){
+        create_tour_form.prepopulateTourForm(instance);
+    }
+
+
+    //begin process of submiting apptour, so show modal and let admin user review and try tour
+    $("#submit_apptour").on("click",function(event){
+        event.preventDefault();
+        create_tour_form.submittingAppTour();
+    });
+
+
     //continue
 
-
-    $("#submit_apptour").on("click",function(event){
-
-    });
 
 
     $("#modal_confirm").on('hidden.bs.modal',function(){
@@ -111,20 +127,9 @@ window.onload = function() {
 
     };
 
-    //when updating an apptour
-    if(typeof instance != 'undefined' && instance != null){
-
-    }
-
 
     // Submit post on submit
     $('#confirm_apptour_submit').on('click', function(event){
-
-    });
-
-
-    // Save post on save btn
-    $('#save_tour').on('click', function(event){
 
     });
 
@@ -135,14 +140,14 @@ window.onload = function() {
 
 
     //if user clicks on tour elearning element
-    $(".app_tour_iframe_link").click(function(event){
+    $(document).on("click",".app_tour_iframe_link",function(event){
         event.preventDefault();
         $("#app_tour_iframe_modal").modal({backdrop: 'static', keyboard: false, backdrop: false});
         generate_tour_step.iframe_num = $(this).parent().attr("id").slice(-1);
         generate_tour_step.loadIFrame();
     });
 
-
+    //reset element variables to null/default and remove popover when exiting iframe
     $("#app_tour_iframe_modal").on('hidden.bs.modal',function(){
         generate_tour_step.resetChosenElement()
     });

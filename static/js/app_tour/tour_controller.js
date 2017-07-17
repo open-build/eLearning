@@ -1,58 +1,35 @@
 
 
-
-//setup ajax first
-var getCsrfToken = function(){
-    if (document.cookie && document.cookie != '') {
-        var cookies = document.cookie.split(';');
-        for (var i = 0; i < cookies.length; i++) {
-            var cookie = jQuery.trim(cookies[i]);
-            if (cookie.substring(0, "csrftoken".length + 1) == ("csrftoken" + '=')) {
-                return decodeURIComponent(cookie.substring(name.length + 1));
-            }
-        }
-    }
-    return null;
-}
-
-var csrfSafeMethod = function(method) {
-    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-}
-
-var sameOrigin = function(url) {
-    var host = document.location.host;
-    var protocol = document.location.protocol;
-    var sr_origin = '//' + host;
-    var origin = protocol + sr_origin;
-    // Allow absolute or scheme relative URLs to same origin
-    return (url == origin || url.slice(0, origin.length + 1) == origin + '/') ||
-        (url == sr_origin || url.slice(0, sr_origin.length + 1) == sr_origin + '/') ||
-        // or any other URL that isn't scheme relative or absolute i.e relative.
-        !(/^(\/\/|http:|https:).*/.test(url));
-}
-
-var ajaxSetup = function(){
-    $.ajaxSetup(
-        {
-            beforeSend: function(xhr, settings) {
-                            if (!csrfSafeMethod(settings.type) && sameOrigin(settings.url)) {
-                                xhr.setRequestHeader("X-CSRFToken", getCsrfToken());
-                            }
-                        },
-            async: false
-        }
-    );
-}
-
-//setup ajax to use csrf when needed and to set async to false
-ajaxSetup();
-
-
 class TourController{
 
-    constructor(){
 
+    constructor(){
+        //getting csrf token if one exists
+        this.csrftoken = null;
+        if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                if (cookie.startsWith("csrftoken=")) {
+                    this.csrftoken = cookie.substring("csrftoken=".length);
+
+                }
+            }
+        }
+        //setup ajax to use csrf when needed and to set async to false
+        var self = this;
+        $.ajaxSetup(
+            {
+                beforeSend: function(xhr, settings) {
+                                if ( (/^(POST|PUT)$/.test(settings.type)) ) {
+                                    xhr.setRequestHeader("X-CSRFToken", self.csrftoken);
+                                }
+                            },
+                async: false
+            }
+        );
     }
+
 
     getAppTours(){
         $.ajax({

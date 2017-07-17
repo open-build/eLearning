@@ -111,24 +111,93 @@ class CreateTourForm{
     }
 
 
+    getPost(status){
+        var self = this;
+        var post = {};
+        post.tour = {
+            tour_name: $("#tour_name").val(),
+            status: status,
+            tour_image: self.image_displayed ? $("#tour_image_display").prop("src") : "",
+            tour_groups:{
+                user:$("#tour_group_user").prop("checked"),
+                professor:$("#tour_group_professor").prop("checked"),
+                admin:$("#tour_group_admin").prop("checked")
+                }
+            }
+        if(instance != null){
+            post.tour.id = instance.id;
+        }
+        else{
+            post.tour.id = null;
+        }
+        post.steps = []
+        for(var i = 1; i <= this.number_of_steps;i++){
+            var step = {
+                title:$(`#step${i}_title`).val(),
+                content:$(`#step${i}_content`).val(),
+                placement:$(`#step${i}_placement`).val(),
+                path:$(`#step${i}_path`).val(),
+                element:$(`#step${i}_element`).val(),
+                order:$(`#step${i}_order`).val(),
+            }
+            post.steps.push(step)
+        }
+        return post;
+    }
+
+
+    prepopulateTourForm(tour_instance){
+        $("#tour_name").val(instance.tour_name); 
+        if( instance.tour_image == ""){
+            $("#tour_image_display").attr("src","")
+            this.image_displayed = false;
+        }else{
+            $("#tour_image_display").attr("src",instance.tour_image)
+            this.image_displayed = true;
+        }
+        if(instance.tour_groups.user == "True"){
+            $("#tour_group_user").prop("checked",true);
+        }else{
+            $("#tour_group_user").prop("checked",false);
+        }
+        if(instance.tour_groups.professor == "True"){
+            $("#tour_group_professorr").prop("checked",true)
+        }else{
+            $("#tour_group_professorr").prop("checked",false);
+        }
+        if(instance.tour_groups.admin == "True"){
+            $("#tour_group_admin").prop("checked",true)
+        }else{
+            $("#tour_group_admin").prop("checked",false);
+        }
+        for(var i=0; i < instance.steps.length; i++){ 
+            $("#steps").append(this.getStepFormContent(this.number_of_steps)) ;
+            $(`#step${i+1}_title`).val(instance.steps[i].title); 
+            $(`#step${i+1}_content`).val(instance.steps[i].content); 
+            $(`#step${i+1}_placement`).val(instance.steps[i].placement); 
+            $(`#step${i+1}_path`).val(instance.steps[i].path); 
+            $(`#step${i+1}_element`).val(instance.steps[i].element); 
+            $(`#step${i+1}_order`).val(instance.steps[i].order); 
+            this.number_of_steps += 1 ;
+        } 
+    }
+
+
     submittingAppTour(){
-        event.preventDefault();
-        var post = this.getPost(this.number_of_steps, "NA")
+        var post = this.getPost("NA")
         $("#confirm_apptour_tourname").html(post.tour.tour_name);
         $("#modal_confirm").modal({backdrop: 'static', keyboard: false, backdrop: false})
         var steps_html = "";
         for(var i=0; i<post.steps.length;i+=1){
             steps_html +=
-                `
-                <br/>
+                `<br/>
                 <h4>Tour Steps:</h4>
                 <br/>
                 <h5>Title:</h5> <p>${post.steps[i].title}</p>
                 <br/>
                 <h5>Content:</h5> <p>${post.steps[i].content}</p>
                 <br/>
-                <pre>Path: ${post.steps[i].path}   Element: ${post.steps[i].element}    Position: ${post.steps[i].placement}    Order: ${post.steps[i].order}</pre>
-                `
+                <pre>Path: ${post.steps[i].path}   Element: ${post.steps[i].element}    Position: ${post.steps[i].placement}    Order: ${post.steps[i].order}</pre>`
         }
         $("#confirm_apptour_steps").append(steps_html)
     }
@@ -166,44 +235,10 @@ class CreateTourForm{
     }
 
 
-    getPost(status){
-        post = {};
-        post.tour = {
-            tour_name: $("#tour_name").val(),
-            status: status,
-            tour_image: image_displayed ? $("#tour_image_display").prop("src") : "",
-            tour_groups:{
-                user:$("#tour_group_user").prop("checked"),
-                professor:$("#tour_group_professor").prop("checked"),
-                admin:$("#tour_group_admin").prop("checked")
-                }
-            }
-        if(instance != null){
-            post.tour.id = instance.id;
-        }
-        else{
-            post.tour.id = null;
-        }
-        post.steps = []
-        for(var i = 1; i <= this.number_of_steps;i++){
-            step = {
-                title:$(`#step${i}_title`).val(),
-                content:$(`#step${i}_content`).val(),
-                placement:$(`#step${i}_placement`).val(),
-                path:$(`#step${i}_path`).val(),
-                element:$(`#step${i}_element`).val(),
-                order:$(`#step${i}_order`).val(),
-            }
-            post.steps.push(step)
-        }
-        return post;
-    }
-
-
     saveTour(){
-        event.preventDefault();
         console.log("form saved!");
-        create_post(this.number_of_steps, "incomplete");
+        var saved_tour = this.getPost("incomplete");
+        this.tour_controller.createPost(saved_tour);
     }
 
 
@@ -213,44 +248,6 @@ class CreateTourForm{
         create_post(this.number_of_steps, "complete");
     }
 
-
-    prepopulateTourForm(tour_instance){
-        $("#tour_name").val(instance.tour_name); 
-        if( instance.tour_image == ""){
-            $("#tour_image_display").attr("src",instance.tour_image)
-            image_displayed = false;
-        }else{
-            $("#tour_image_display").attr("src",instance.tour_image)
-            image_displayed = true;
-        }
-        if(instance.tour_groups.user){
-            $("#tour_group_user").prop("checked",true)
-        }
-        if(instance.tour_groups.professor){
-            $("#tour_group_professorr").prop("checked",true)
-        }
-        if(instance.tour_groups.admin){
-            $("#tour_group_admin").prop("checked",true)
-        }
-        for(var i=0; i<instance.steps.length;){ 
-            if(i > 0){ 
-                this.number_of_steps += 1 
-                $("#steps").append(get_step_form_content(this.number_of_steps)) 
-            } 
-            i+=1; 
-            $(`#step${i}_title`).val(instance.steps[i-1].title); 
-            $(`#step${i}_content`).val(instance.steps[i-1].content); 
-            $(`#step${i}_placement`).val(instance.steps[i-1].placement); 
-            $(`#step${i}_path`).val(instance.steps[i-1].path); 
-            $(`#step${i}_element`).val(instance.steps[i-1].element); 
-            $(`#step${i}_order`).val(instance.steps[i-1].order); 
-        } 
-    }
-
-
-    updatingAppTour(){
-        return (typeof instance != 'undefined' && instance != null)
-    }
 
 
 

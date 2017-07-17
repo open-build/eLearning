@@ -91,7 +91,7 @@ class AppTour{
                 }
                 //else user is using tour and has finished to display other tours now
                 else{
-                    $('#app_tour_display_modal').modal('show');
+                    $('#app_tour_display_modal').modal({backdrop: 'static', keyboard: false, backdrop: false});
                 }
             },
             steps:steps
