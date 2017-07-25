@@ -61,10 +61,6 @@ window.onload = function() {
 
     ////////////////////////listeners for creating a tour///////////////////////////////
 
-    //add the first step when loading create_apptour page
-    if(window.location.pathname=="/apptours/create_apptour"){
-        create_tour_form.appendStepsInitially()
-    }
 
     //enable adding a step
     $("#add_step").click(function(){
@@ -115,29 +111,16 @@ window.onload = function() {
     });
 
 
+    //repopulate form and show confirm modal when finished trying tour
     if(localStorage.getItem("try_tour__finished") != null){ 
         create_tour_form.finishTryTour();
-    };
-
-
-    //continue
-
-
-
-    $("#modal_confirm").on('hidden.bs.modal',function(){
-
-    });
-
-
-
-
-
-
+    }
 
 
     // Submit post on submit
     $('#confirm_apptour_submit').on('click', function(event){
-
+        event.preventDefault();
+        create_tour_form.confirmSubmitTour()
     });
 
 

@@ -58,8 +58,6 @@ class TourController{
                 $('#post-text').val('');
                 console.log(json);
                 console.log("success");
-                resetForm();
-                window.location.href = "/apptours/view_tours"
             },
             error : function(xhr,errmsg,err) {
                 console.log(errmsg)

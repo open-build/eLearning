@@ -38,29 +38,29 @@ class GenerateTourStep{
     resetChosenElement(){
         //remove popup added and reset variables
         var self = this;
-        if(this.dblclicked == true){
-            $("#app-tour-iframe").contents()
-                .find("[data-toggle=popover]").popover('hide');
-            $("#app-tour-iframe").contents().find(self.chosen_element)
-                .removeAttr("data-toggle");
-            this.dblclicked = false;
-            this.chosen_path = null;
-            this.chosen_element = null;
-            this.chosen_placement = null;
-        }
+        $("#app-tour-iframe").contents()
+            .find("[data-toggle=popover]").popover('hide');
+        $("#app-tour-iframe").contents().find(self.chosen_element)
+            .removeAttr("data-toggle");
+        this.dblclicked = false;
+        this.chosen_path = null;
+        this.chosen_element = null;
+        this.chosen_placement = null;
     }
 
 
     setupIframeListener(){
         var self = this;
-        $("#app-tour-iframe").contents().find("*").dblclick(function(event) {
+        $("#app-tour-iframe").contents().find("*").off().dblclick(function(event) {
             if(self.dblclicked == true){
                 self.clickFctn(event);
+                return false;
             }
             else{
                 self.dblclickFctn(this,event);
+                return false;
             }
-            return false;
+            event.stopPropagation();
         });
     }
 
@@ -107,10 +107,11 @@ class GenerateTourStep{
         var self = this;
         if(event.target.id == "choose_element"){
             self.setCreateForm();
-            $('[data-dismiss=modal').click();
+            self.resetChosenElement();
+            $("#app_tour_iframe_modal").modal("hide");
         }
         //if exit clicked or outside of popover clicked or modal closed remove popover and reset vars to null
-        if(event.target.id == "dont_choose_element"){
+        else{
             self.resetChosenElement();
         }
     }

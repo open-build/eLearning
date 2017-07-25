@@ -8,15 +8,16 @@
   {% if instance %}
   tour_groups={}
   {% for k,v in instance.tour_groups.items%}
-  tour_groups.{{k}}="{{v}}"
+  tour_groups.{{k}}= "{{v}}" == "True" ? true : false;
   {%endfor%}
 
-  var instance = {
-    tour_name: "{{instance.tour_name}}",
-    id:{{instance.id}},
-    tour_image:"{{instance.tour_image}}",
-    tour_groups:tour_groups
-    };
+  var instance = {};
+  instance.tour = {
+        tour_name: "{{instance.tour_name}}",
+        id:{{instance.id}},
+        tour_image:"{{instance.tour_image}}",
+        tour_groups:tour_groups,
+  };
   instance.steps = []
   {% for step in instance.step_set.all %}
   var add_step ={
@@ -68,6 +69,39 @@
         <div>
           <label>Steps:</label>
           <div id="steps">
+            <button type="button" class="btn btn-primary">Step <span class="badge">1</span></button>
+              <div id="step1">
+                <div class="form-group">
+                    <label >Title:</label>
+                    <input class="form-control" id="step1_title">
+                  </div>
+                <div class="form-group">
+                    <label >Content:</label>
+                    <textarea class="form-control" id="step1_content"></textarea>
+                  </div>
+                <div class="form-group">
+                    <label >Placement:</label>
+                    <select  id="step1_placement" class="form-control">
+                        <option value="top">Top</option>
+                        <option value="bottom">Bottom</option>
+                        <option value="left">Left</option>
+                        <option value="right">Right</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label >Path:</label>
+                    <input class="form-control" id="step1_path">
+                  </div>
+                <div class="form-group">
+                    <label >Element:</label>
+                    <input class="form-control" id="step1_element">
+                  </div>
+                 <div  class="form-group">
+                    <label >Order:</label>
+                      <input readonly value="1" class="form-control" id="step1_order">
+                </div>
+                  <a class="app_tour_iframe_link" href="">view iframe of site to find elements</a>
+            </div>
           <!--where steps are dynamically added-->
           </div>
            <button type="button" id="add_step" class="btn btn-primary">Add Step</button>

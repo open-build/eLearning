@@ -90,14 +90,15 @@ class CreateTourForm{
 
 
     hashFileImage(file){
+        var self = this;
         var reader = new FileReader();
         reader.onload = function(fileload) {
             var base64file = fileload.target.result;
             //display image on element #tour_image_display
             //set image_displayed to true and save hash of image
             $("#tour_image_display").attr("src",base64file)
-            this.image_displayed = true;
-            this.image_hashed_value = base64file;
+            self.image_displayed = true;
+            self.image_hashed_value = base64file;
         }
         reader.readAsDataURL(file);
     }
@@ -124,8 +125,8 @@ class CreateTourForm{
                 admin:$("#tour_group_admin").prop("checked")
                 }
             }
-        if(instance != null){
-            post.tour.id = instance.id;
+        if(typeof instance != 'undefined' && instance != null){
+            post.tour.id = instance.tour.id;
         }
         else{
             post.tour.id = null;
@@ -147,25 +148,25 @@ class CreateTourForm{
 
 
     prepopulateTourForm(tour_instance){
-        $("#tour_name").val(tour_instance.tour_name); 
-        if( tour_instance.tour_image == ""){
+        $("#tour_name").val(tour_instance.tour.tour_name); 
+        if( tour_instance.tour.tour_image == ""){
             $("#tour_image_display").attr("src","")
             this.image_displayed = false;
         }else{
-            $("#tour_image_display").attr("src",tour_instance.tour_image)
+            $("#tour_image_display").attr("src",tour_instance.tour.tour_image)
             this.image_displayed = true;
         }
-        if(tour_instance.tour_groups.user == "True"){
+        if(tour_instance.tour.tour_groups.user == true){
             $("#tour_group_user").prop("checked",true);
         }else{
             $("#tour_group_user").prop("checked",false);
         }
-        if(tour_instance.tour_groups.professor == "True"){
+        if(tour_instance.tour.tour_groups.professor == true){
             $("#tour_group_professorr").prop("checked",true)
         }else{
             $("#tour_group_professorr").prop("checked",false);
         }
-        if(tour_instance.tour_groups.admin == "True"){
+        if(tour_instance.tour.tour_groups.admin == true){
             $("#tour_group_admin").prop("checked",true)
         }else{
             $("#tour_group_admin").prop("checked",false);
@@ -173,14 +174,15 @@ class CreateTourForm{
         for(var i=0; i < tour_instance.steps.length; i++){ 
             if(i>0){
                 this.number_of_steps += 1 ;
+                $("#steps").append(this.getStepFormContent(this.number_of_steps)) ;
             }
-            $("#steps").append(this.getStepFormContent(this.number_of_steps)) ;
-            $(`#step${i+1}_title`).val(instance.steps[i].title); 
-            $(`#step${i+1}_content`).val(instance.steps[i].content); 
-            $(`#step${i+1}_placement`).val(instance.steps[i].placement); 
-            $(`#step${i+1}_path`).val(instance.steps[i].path); 
-            $(`#step${i+1}_element`).val(instance.steps[i].element); 
-            $(`#step${i+1}_order`).val(instance.steps[i].order); 
+
+            $(`#step${i+1}_title`).val(tour_instance.steps[i].title); 
+            $(`#step${i+1}_content`).val(tour_instance.steps[i].content); 
+            $(`#step${i+1}_placement`).val(tour_instance.steps[i].placement); 
+            $(`#step${i+1}_path`).val(tour_instance.steps[i].path); 
+            $(`#step${i+1}_element`).val(tour_instance.steps[i].element); 
+            $(`#step${i+1}_order`).val(tour_instance.steps[i].order); 
         } 
     }
 
@@ -218,13 +220,13 @@ class CreateTourForm{
 
 
     finishTryTour(){
+        $("#tour_name").val("work"); 
         localStorage.removeItem("try_tour__finished");
         var post = JSON.parse(localStorage.getItem("try_tour__tour"));
         localStorage.removeItem("try_tour__tour");
-        this.prepopulateTourForm(post)
-        $("#submit_apptour").click();
+        this.prepopulateTourForm(post);
         this.submittingAppTour();
-        //if updating an existing tour
+        $("#submit_apptour").click();
         if(localStorage.getItem("try_tour__tourinstance") != null){ 
             instance = JSON.parse(localStorage.getItem("try_tour__tourinstance"));
             localStorage.removeItem("try_tour__tourinstance");
@@ -236,13 +238,15 @@ class CreateTourForm{
         console.log("form saved!");
         var saved_tour = this.getPost("incomplete");
         this.tour_controller.createPost(saved_tour);
+        this.resetForm();
     }
 
 
     confirmSubmitTour(){
-        event.preventDefault();
-        console.log("form submitted!")  // sanity check
-        create_post(this.number_of_steps, "complete");
+        console.log("form submitted!");
+        var complete_tour = this.getPost("complete");
+        this.tour_controller.createPost(complete_tour);
+        this.resetForm();
     }
 
 
