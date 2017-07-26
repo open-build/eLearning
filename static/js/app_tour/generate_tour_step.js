@@ -11,7 +11,6 @@ class GenerateTourStep{
         this.chosen_placement = null;
         this.popover_content = `<div class="popover-content">
                                     <button id="choose_element" type="button" class="btn btn-primary">Choose</button>
-                                    <button id="dont_choose_element" type="button" class="btn btn-danger">Exit</button>
                                 </div>`
     }
 
