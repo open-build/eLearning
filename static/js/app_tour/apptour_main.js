@@ -62,9 +62,14 @@ window.onload = function() {
     ////////////////////////listeners for creating a tour///////////////////////////////
 
 
+    //create listener to get values displayed when changed
+    create_tour_form.displayChosenElement(create_tour_form.number_of_steps);
+
+
     //enable adding a step
     $("#add_step").click(function(){
         create_tour_form.addStep();
+        create_tour_form.displayChosenElement(create_tour_form.number_of_steps);
     });
 
     //enable removing a step, removes last step

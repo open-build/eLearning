@@ -24,7 +24,7 @@ class CreateTourForm{
                                         <label >Content:</label>
                                         <textarea class="form-control" id="step__number_of_steps___content"></textarea>
                                       </div>
-                                    <div class="form-group">
+                                    <div style="display: none;" class="form-group">
                                         <label >Placement:</label>
                                         <select  id="step__number_of_steps___placement" class="form-control">
                                             <option value="top">Top</option>
@@ -33,23 +33,38 @@ class CreateTourForm{
                                             <option value="right">Right</option>
                                         </select>
                                     </div>
-                                    <div class="form-group">
+                                    <div style="display: none;" class="form-group">
                                         <label >Path:</label>
                                         <input class="form-control" id="step__number_of_steps___path">
                                       </div>
-                                    <div class="form-group">
+                                    <div style="display: none;" class="form-group">
                                         <label >Element:</label>
                                         <input class="form-control" id="step__number_of_steps___element">
                                       </div>
-                                     <div  class="form-group">
+                                     <div  style="display: none;" class="form-group">
                                         <label >Order:</label>
                                           <input readonly value="__number_of_steps__" class="form-control" id="step__number_of_steps___order">
-                                    </div>
+                                     </div>
+                                     <pre>Path:  <span id="step__number_of_steps___path_display"></span>  Element: <span id="step__number_of_steps___element_display"></span>   Position: <span id="step__number_of_steps___placement_display"></span>    Order: <span id="step__number_of_steps___order_display">__number_of_steps__</span></pre>
                                       <a class="app_tour_iframe_link" href="">view iframe of site to find elements</a>
                                 </div>`
 
         this.image_displayed = false;
         this.image_hashed_value = null;
+
+
+    }
+
+    displayChosenElement(step_number){
+        $('body').on("change","#step"+step_number+"_path",function(){
+            $("#step"+step_number+"_path_display").text($("#step"+step_number+"_path").val())
+        });
+        $('body').on("change","#step"+step_number+"_element",function(){
+            $("#step"+step_number+"_element_display").text($("#step"+step_number+"_element").val())
+        });
+        $('body').on("change","#step"+step_number+"_placement",function(){
+            $("#step"+step_number+"_placement_display").text($("#step"+step_number+"_placement").val())
+        });
     }
 
 
@@ -174,15 +189,16 @@ class CreateTourForm{
         for(var i=0; i < tour_instance.steps.length; i++){ 
             if(i>0){
                 this.number_of_steps += 1 ;
+                this.displayChosenElement(this.number_of_steps);
                 $("#steps").append(this.getStepFormContent(this.number_of_steps)) ;
             }
 
-            $(`#step${i+1}_title`).val(tour_instance.steps[i].title); 
-            $(`#step${i+1}_content`).val(tour_instance.steps[i].content); 
-            $(`#step${i+1}_placement`).val(tour_instance.steps[i].placement); 
-            $(`#step${i+1}_path`).val(tour_instance.steps[i].path); 
-            $(`#step${i+1}_element`).val(tour_instance.steps[i].element); 
-            $(`#step${i+1}_order`).val(tour_instance.steps[i].order); 
+            $(`#step${i+1}_title`).val(tour_instance.steps[i].title).trigger('change'); 
+            $(`#step${i+1}_content`).val(tour_instance.steps[i].content).trigger('change'); 
+            $(`#step${i+1}_placement`).val(tour_instance.steps[i].placement).trigger('change'); 
+            $(`#step${i+1}_path`).val(tour_instance.steps[i].path).trigger('change'); 
+            $(`#step${i+1}_element`).val(tour_instance.steps[i].element).trigger('change'); 
+            $(`#step${i+1}_order`).val(tour_instance.steps[i].order).trigger('change'); 
         } 
     }
 

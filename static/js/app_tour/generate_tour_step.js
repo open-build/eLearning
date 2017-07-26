@@ -52,6 +52,7 @@ class GenerateTourStep{
     setupIframeListener(){
         var self = this;
         $("#app-tour-iframe").contents().find("*").off().dblclick(function(event) {
+            event.stopImmediatePropagation();
             if(self.dblclicked == true){
                 self.clickFctn(event);
                 return false;
@@ -60,7 +61,6 @@ class GenerateTourStep{
                 self.dblclickFctn(this,event);
                 return false;
             }
-            event.stopPropagation();
         });
     }
 
@@ -95,9 +95,9 @@ class GenerateTourStep{
 
 
     setCreateForm(){
-        $(`#step${this.iframe_num}_path`).val(this.chosen_path);
-        $(`#step${this.iframe_num}_element`).val(this.chosen_element);
-        $(`#step${this.iframe_num}_placement`).val(this.chosen_placement);
+        $(`#step${this.iframe_num}_path`).val(this.chosen_path).trigger('change');;
+        $(`#step${this.iframe_num}_element`).val(this.chosen_element).trigger('change');;
+        $(`#step${this.iframe_num}_placement`).val(this.chosen_placement).trigger('change');;
     }
 
 

@@ -79,7 +79,7 @@
                     <label >Content:</label>
                     <textarea class="form-control" id="step1_content"></textarea>
                   </div>
-                <div class="form-group">
+                <div style="display: none;" class="form-group">
                     <label >Placement:</label>
                     <select  id="step1_placement" class="form-control">
                         <option value="top">Top</option>
@@ -88,18 +88,19 @@
                         <option value="right">Right</option>
                     </select>
                 </div>
-                <div class="form-group">
-                    <label >Path:</label>
+                <div style="display: none;" class="form-group">
+                    <label>Path:</label>
                     <input class="form-control" id="step1_path">
                   </div>
-                <div class="form-group">
+                <div style="display: none;" class="form-group">
                     <label >Element:</label>
                     <input class="form-control" id="step1_element">
                   </div>
-                 <div  class="form-group">
+                 <div  style="display: none;" class="form-group">
                     <label >Order:</label>
                       <input readonly value="1" class="form-control" id="step1_order">
-                </div>
+                 </div>
+                  <pre>Path:  <span id="step1_path_display"></span>  Element: <span id="step1_element_display"></span>   Position: <span id="step1_placement_display"></span>    Order: <span id="step1_order_display">1</span></pre>
                   <a class="app_tour_iframe_link" href="">view iframe of site to find elements</a>
             </div>
           <!--where steps are dynamically added-->
