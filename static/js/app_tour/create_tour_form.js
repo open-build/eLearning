@@ -267,8 +267,6 @@ class CreateTourForm{
 
 
 
-
-
 }
 
 

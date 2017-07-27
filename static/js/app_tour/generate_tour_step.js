@@ -10,7 +10,7 @@ class GenerateTourStep{
         this.chosen_element = null;
         this.chosen_placement = null;
         this.popover_content = `<div class="popover-content">
-                                    <button id="choose_element" type="button" class="btn btn-primary">Choose</button>
+                                    <button id="choose_element" type="button" class="btn btn-primary">Confirm<br/>Chosen Element</button>
                                 </div>`
     }
 
@@ -71,10 +71,10 @@ class GenerateTourStep{
                 .find(chosen_element).attr("data-toggle","popover");
          $("#app-tour-iframe").contents()
                 .find("[data-toggle=popover]").popover({
+                    container:$("#app-tour-iframe").contents().find('html'),
                     placement: chosen_placement,
                     html: true,
                     trigger: "manual",
-                    title:"Chosen Element",
                     content: self.popover_content
                 });
          $("#app-tour-iframe").contents()

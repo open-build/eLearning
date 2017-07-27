@@ -122,6 +122,17 @@
       <div style="width:95%; height:95%;" class="modal-content">
         <button type="button btn-danger" class="close" data-dismiss="modal">CLOSE</button>
         <h4 class="modal-title">Select Tour Elements</h4>
+        <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#iframe_directions">Directions</button>
+          <div id="iframe_directions" class="collapse">
+            To select an element to bind the app tour step to, navigate to the location
+            on this site where the element lies and double click the desired element.
+            When you double click an element a popup will show from the desired element.
+            The popup will ask you to confirm the chosen element. This tracks three items:
+            The css path of the chosen element, the page path, and the side of the element that
+            is used to bind the app tour step to. If you wish to choose another element just double
+            click anwhere else than the confirm button and the popup will go away for you to choose another element;
+            however, if you wish to choose this element, double click the confirm button.
+          </div>
         <iframe id="app-tour-iframe" style="width:100%; height:90%;"src="/"></iframe>
 
         <div style="height:100px;" class="modal-footer">
