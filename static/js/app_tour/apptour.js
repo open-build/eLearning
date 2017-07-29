@@ -49,7 +49,7 @@ class AppTour{
                 title: step.title,
                 content: step.content,
                 placement: step.placement,
-                element: step.element,
+                element: $(step.element).first(),
                 path:step.path,
                 onNext: function(){
                     if(this.path != next_path){

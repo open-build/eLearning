@@ -58,9 +58,11 @@ class TourController{
                 $('#post-text').val('');
                 console.log(json);
                 console.log("success");
+                return true;
             },
             error : function(xhr,errmsg,err) {
                 console.log(errmsg)
+                return false;
             }
         });
     }

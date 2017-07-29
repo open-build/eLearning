@@ -1,6 +1,5 @@
 
-
-window.onload = function() {
+$(document).bind("ready", function() {
 
 
     //create objects for apptrour
@@ -151,4 +150,4 @@ window.onload = function() {
 
 
 
-};
+});

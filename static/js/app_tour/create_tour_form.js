@@ -82,10 +82,18 @@ class CreateTourForm{
 
 
     resetForm(){
+        //need to remove added steps
         while(this.number_of_steps > 1){
             this.removeLastStep();
         }
+        //need to remove displayed image
+        this.resetTourImage();
+        //
         $('#post-form').trigger("reset");
+        //want to display chosen element 1 to the form rest value of nothing
+        $("#step1_path_display").text("");
+        $("#step1_element_display").text("");
+        $("#step1_placement_display").text("");
     }
 
 
@@ -177,9 +185,9 @@ class CreateTourForm{
             $("#tour_group_user").prop("checked",false);
         }
         if(tour_instance.tour.tour_groups.professor == true){
-            $("#tour_group_professorr").prop("checked",true)
+            $("#tour_group_professor").prop("checked",true)
         }else{
-            $("#tour_group_professorr").prop("checked",false);
+            $("#tour_group_professor").prop("checked",false);
         }
         if(tour_instance.tour.tour_groups.admin == true){
             $("#tour_group_admin").prop("checked",true)
@@ -206,6 +214,11 @@ class CreateTourForm{
     submittingAppTour(){
         var post = this.getPost("NA")
         $("#confirm_apptour_tourname").html(post.tour.tour_name);
+        $("#confirm_apptour_tour_image").prop("src", post.tour.tour_image);
+        var groups = ($("#tour_group_user").prop("checked")==true?"users ":"")+
+                        ($("#tour_group_professor").prop("checked")==true?"professors ":"")+
+                        ($("#tour_group_admin").prop("checked")==true?"administrators ":"");
+        $("#confirm_apptour_tour_groups").html(groups);
         $("#modal_confirm").modal({backdrop: 'static', keyboard: false, backdrop: false})
         var steps_html = "";
         for(var i=0; i<post.steps.length;i+=1){
@@ -219,7 +232,7 @@ class CreateTourForm{
                 <br/>
                 <pre>Path: ${post.steps[i].path}   Element: ${post.steps[i].element}    Position: ${post.steps[i].placement}    Order: ${post.steps[i].order}</pre>`
         }
-        $("#confirm_apptour_steps").append(steps_html)
+        $("#confirm_apptour_steps").append(steps_html);
     }
 
 
@@ -236,13 +249,11 @@ class CreateTourForm{
 
 
     finishTryTour(){
-        $("#tour_name").val("work"); 
         localStorage.removeItem("try_tour__finished");
         var post = JSON.parse(localStorage.getItem("try_tour__tour"));
         localStorage.removeItem("try_tour__tour");
         this.prepopulateTourForm(post);
         this.submittingAppTour();
-        $("#submit_apptour").click();
         if(localStorage.getItem("try_tour__tourinstance") != null){ 
             instance = JSON.parse(localStorage.getItem("try_tour__tourinstance"));
             localStorage.removeItem("try_tour__tourinstance");
