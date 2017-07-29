@@ -9,8 +9,11 @@ class GenerateTourStep{
         this.chosen_path = null;
         this.chosen_element = null;
         this.chosen_placement = null;
-        this.popover_content = `<div class="popover-content">
-                                    <button id="choose_element" type="button" class="btn btn-primary">Confirm<br/>Chosen Element</button>
+        this.popover_content = `<div class="popover-content"style="text-align:center; background-color:#006dcc;; text-color:white;" id="choose_element" >
+                                    <strong>Confirm Chosen Element</strong>
+                                    <pre style="text-align:left;">Path: <span id="chosen_path"></span>
+Element: <span id="chosen_element"></span>
+Placement: <span id="chosen_position"></span></pre>
                                 </div>`
     }
 
@@ -68,10 +71,9 @@ class GenerateTourStep{
         //create popover
         var self = this;
         $("#app-tour-iframe").contents()
-                .find(chosen_element).attr("data-toggle","popover");
+                .find(chosen_element).first().attr("data-toggle","popover");
          $("#app-tour-iframe").contents()
                 .find("[data-toggle=popover]").popover({
-                    container:$("#app-tour-iframe").contents().find('html'),
                     placement: chosen_placement,
                     html: true,
                     trigger: "manual",
@@ -79,6 +81,13 @@ class GenerateTourStep{
                 });
          $("#app-tour-iframe").contents()
                 .find("[data-toggle=popover]").popover('show');
+         $("#app-tour-iframe").contents()
+                .find("#chosen_path").text(self.chosen_path);
+         $("#app-tour-iframe").contents()
+                .find("#chosen_element").text(self.chosen_element);
+         $("#app-tour-iframe").contents()
+                .find("#chosen_position").text(self.chosen_placement);
+
     }
 
 
@@ -104,7 +113,9 @@ class GenerateTourStep{
         //if popover clicked do nothing
         //if choose clicked save vars to form and exit iframe and remove popover
         var self = this;
-        if(event.target.id == "choose_element"){
+        if(event.target.id == "choose_element"
+            || event.target.parentNode.id == "choose_element"
+            || event.target.parentNode.parentNode.id == "choose_element"){
             self.setCreateForm();
             self.resetChosenElement();
             $("#app_tour_iframe_modal").modal("hide");
