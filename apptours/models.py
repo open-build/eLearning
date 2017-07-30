@@ -7,9 +7,11 @@ from django.db import models
 class Tour(models.Model):
     tour_name = models.CharField(max_length=50,unique=True)
     status = models.CharField(null=False, default="complete",max_length=10)
+    tour_description = models.TextField(null=True, default="")
     tour_image = models.TextField(null=False, default="")
     tour_groups = models.CharField(default="users professors admin ",max_length=25)
     tour_create_date = models.DateTimeField()
+    tour_update_date = models.DateTimeField(null=True, default=None)
 
 class Step(models.Model):
     element = models.CharField(max_length=50)

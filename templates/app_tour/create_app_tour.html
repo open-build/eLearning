@@ -15,6 +15,7 @@
   instance.tour = {
         tour_name: "{{instance.tour_name}}",
         id:{{instance.id}},
+        tour_description:"{{instance.tour_description}}",
         tour_image:"{{instance.tour_image}}",
         tour_groups:tour_groups,
   };
@@ -55,10 +56,14 @@
           <input type="name" class="form-control" id="tour_name">
         </div>
         <div class="form-group">
+          <label for="tour_description">Tour Description:</label>
+            <textarea type="name" class="form-control" id="tour_description"></textarea>
+        </div>
+        <div class="form-group">
           <label for="tour_image">Tour Image:</label>
           <input type="file" class="form-control" id="tour_image">
           <button type="button" id="tour_image_reset" class="btn btn-default">Reset Image</button>
-          <img id="tour_image_display" src="">
+          <div class="tour_image"><img id="tour_image_display" src=""></div>
         </div>
         <div id="tour_group" class="form-group">
           <label for="tour_groups">Tour Groups:</label>
@@ -105,6 +110,10 @@
             </div>
           <!--where steps are dynamically added-->
           </div>
+            <!--form validation goes here-->
+            <div style="display:none;" id="apptour_error_box" class="alert alert-danger">
+                <strong>Form Invalid:</strong><p id="apptour_form_errors"></p>
+            </div>
            <button type="button" id="add_step" class="btn btn-primary">Add Step</button>
            <button type="button" id="remove_step" class="btn btn-danger">Remove Last Step</button>
            <button type="button" id="save_tour" class="btn btn-info">Save Tour Progress</button>
@@ -139,7 +148,6 @@
         <button type="button" class="btn btn-danger" data-dismiss="modal">CLOSE</button>
         </div>
       </div>
-
   </div>
 </div>
 
@@ -157,9 +165,9 @@
           <div>
             <div>
               <h4>Tour Name:</h4><p id="confirm_apptour_tourname"></p>
+                Tour Description:<p id="confirm_apptour_tour_description"></p>
                 Tour Groups: <p id="confirm_apptour_tour_groups"></p>
-                Tour Image:<br/><img id="confirm_apptour_tour_image" src="">
-
+                Tour Image:<br/><div class="tour_image"><img id="confirm_apptour_tour_image" src=""></div>
             </div>
             <div id="confirm_apptour_steps">
               <!--add steps to display dynamically-->

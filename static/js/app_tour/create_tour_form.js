@@ -140,6 +140,7 @@ class CreateTourForm{
         var post = {};
         post.tour = {
             tour_name: $("#tour_name").val(),
+            tour_description: $("#tour_description").val(),
             status: status,
             tour_image: self.image_displayed ? $("#tour_image_display").prop("src") : "",
             tour_groups:{
@@ -172,6 +173,7 @@ class CreateTourForm{
 
     prepopulateTourForm(tour_instance){
         $("#tour_name").val(tour_instance.tour.tour_name); 
+        $("#tour_description").val(tour_instance.tour.tour_description);
         if( tour_instance.tour.tour_image == ""){
             $("#tour_image_display").attr("src","")
             this.image_displayed = false;
@@ -212,8 +214,12 @@ class CreateTourForm{
 
 
     submittingAppTour(){
+        if(!this.validateFormInputs()){
+            return false;
+        }
         var post = this.getPost("NA")
-        $("#confirm_apptour_tourname").html(post.tour.tour_name);
+        $("#confirm_apptour_tourname").text(post.tour.tour_name);
+        $("#confirm_apptour_tour_description").text(post.tour.tour_description);
         $("#confirm_apptour_tour_image").prop("src", post.tour.tour_image);
         var groups = ($("#tour_group_user").prop("checked")==true?"users ":"")+
                         ($("#tour_group_professor").prop("checked")==true?"professors ":"")+
@@ -262,6 +268,9 @@ class CreateTourForm{
 
 
     saveTour(){
+        if(!this.validateFormInputs()){
+            return false;
+        }
         console.log("form saved!");
         var saved_tour = this.getPost("incomplete");
         this.tour_controller.createPost(saved_tour);
@@ -270,12 +279,98 @@ class CreateTourForm{
 
 
     confirmSubmitTour(){
+        if(!this.validateFormInputs()){
+            return false;
+        }
+        this.validateFormInputs();
         console.log("form submitted!");
         var complete_tour = this.getPost("complete");
         this.tour_controller.createPost(complete_tour);
         this.resetForm();
     }
 
+
+    validateForm(){ 
+        var validate = { 
+            form_valid: true, 
+            form_errors: "" 
+        } 
+        if( 
+            ($("#tour_name").val().trim() == "") 
+            || $("#tour_name").val().trim().length < 3 
+            || $("#tour_name").val().length > 30     ){ 
+            validate.form_valid = false; 
+            validate.form_errors += "Invalid Tour Name Field: Tour Name field must be longer than 3 character less than 30 and not all whitespace <br/>" 
+        } 
+        if(
+            ($("#tour_group_user").prop("checked") == false)
+            && ($("#tour_group_professor").prop("checked") == false)
+            && ($("#tour_group_admin").prop("checked") == false)
+        ){
+            validate.form_valid = false; 
+            validate.form_errors += "Invalid Tour Groups Field: At least one group must be selected<br/>" 
+        }
+        for(var i = 1; i <= this.number_of_steps; i++){
+            if( 
+                ($(`#step${i}_title`).val().trim() == "") 
+                || $(`#step${i}_title`).val().trim().length < 3 
+                || $(`#step${i}_title`).val().length > 30  ){ 
+                validate.form_valid = false; 
+                validate.form_errors += `Invalid Title on Step ${i}: Step title field must be longer than 3 character less than 30 and not all whitespace <br/>`;
+            } 
+           if( 
+                ($(`#step${i}_content`).val().trim() == "") 
+                || $(`#step${i}_content`).val().trim().length < 3 ){ 
+                validate.form_valid = false; 
+                validate.form_errors += `Invalid Content on Step ${i}: Step content field must be longer than 3 character and not all whitespace <br/>`;
+            } 
+
+        }
+        return validate;
+      }   
+
+
+    validateFormInputs(){ 
+        var validate = this.validateForm(); 
+        if(validate.form_valid){ 
+            return true; 
+        } 
+        else{ 
+            $("#apptour_error_box").css("display","block"); 
+            $("#apptour_form_errors").html(validate.form_errors); 
+            $("#save_tour").addClass("disabled"); 
+            $("#submit_apptour").addClass("disabled"); 
+            this.cleanUpValidationWarningsListener();
+            return false; 
+        }
+    }   
+
+
+    cleanUpValidaionWarnings(){ 
+        var validate = this.validateForm(); 
+        if(validate.form_valid){ 
+            $("#apptour_error_box").css("display","none"); 
+            $("#apptour_form_errors").html(""); 
+            $("#save_tour").removeClass("disabled"); 
+            $("#submit_apptour").removeClass("disabled") 
+        } 
+        else{
+            $("#apptour_form_errors").html(validate.form_errors); 
+        }
+    } 
+
+
+    cleanUpValidationWarningsListener(){
+        var self = this;
+        $("#tour_name, #tour_group_user, #tour_group_professor, #tour_group_admin").on("change",function(){
+            self.cleanUpValidaionWarnings();
+        })
+        for(var i = 1; i <= this.number_of_steps; i++){
+            $(`#step${i}_title, #step${i}_content`).on("change",function(){
+                self.cleanUpValidaionWarnings();
+            })
+        }
+    }
 
 
 }

@@ -27,6 +27,7 @@
           <h5>
           Create Date: {{tour.tour_create_date}}
           </h5>
+          <h5>Tour Description:</h5><p>{{tour.tour_description}}</p>
           <h5>
           Tour Groups:
             {%for tour, group in tour.tour_groups.items%}
@@ -36,7 +37,8 @@
             {%endfor%}
           </h5>
           {% if tour.tour_image != '' %}
-          Tour Image:<br/><img src="{{tour.tour_image}}">
+          Tour Image:<br/>
+          <div class="tour_image img-responsive"><img src="{{tour.tour_image}}"></div>
           {% endif %}
           <h4>Tour Steps:</h4>
           <br/>
@@ -71,6 +73,7 @@
           <h5>
           Saved Date: {{tour.tour_create_date}}
           </h5>
+          <h5>Tour Description:</h5><p>{{tour.tour_description}}</p>
           <h5>
           Tour Groups:
             {%for tour, group in tour.tour_groups.items%}
@@ -80,7 +83,8 @@
             {%endfor%}
           </h5>
           {% if tour.tour_image != '' %}
-          Tour Image:<br/><img src="{{tour.tour_image}}">
+          Tour Image:<br/>
+          <div class="tour_image"><img src="{{tour.tour_image}}"></div>
           {% endif %}
           <br/>
           <h4>Tour Steps:</h4>

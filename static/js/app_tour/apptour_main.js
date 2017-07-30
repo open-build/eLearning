@@ -129,7 +129,6 @@ $(document).bind("ready", function() {
 
 
 
-
     //////////////listeners fro getting tour step information from admin user///////////////////
 
 
