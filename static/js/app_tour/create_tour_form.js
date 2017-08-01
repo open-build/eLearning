@@ -300,7 +300,7 @@ class CreateTourForm{
             || $("#tour_name").val().trim().length < 3 
             || $("#tour_name").val().length > 30     ){ 
             validate.form_valid = false; 
-            validate.form_errors += "Invalid Tour Name Field: Tour Name field must be longer than 3 character less than 30 and not all whitespace <br/>" 
+            validate.form_errors += "<li>Invalid Tour Name Field: Tour Name field must be 3 or more character less than 30 and not all whitespace </li>" 
         } 
         if(
             ($("#tour_group_user").prop("checked") == false)
@@ -308,7 +308,7 @@ class CreateTourForm{
             && ($("#tour_group_admin").prop("checked") == false)
         ){
             validate.form_valid = false; 
-            validate.form_errors += "Invalid Tour Groups Field: At least one group must be selected<br/>" 
+            validate.form_errors += "<li>Invalid Tour Groups Field: At least one group must be selected</li>" 
         }
         for(var i = 1; i <= this.number_of_steps; i++){
             if( 
@@ -316,13 +316,21 @@ class CreateTourForm{
                 || $(`#step${i}_title`).val().trim().length < 3 
                 || $(`#step${i}_title`).val().length > 30  ){ 
                 validate.form_valid = false; 
-                validate.form_errors += `Invalid Title on Step ${i}: Step title field must be longer than 3 character less than 30 and not all whitespace <br/>`;
+                validate.form_errors += `<li>Invalid Title on Step ${i}: Step title field must be 3 or more character less than 30 and not all whitespace </li>`;
             } 
            if( 
                 ($(`#step${i}_content`).val().trim() == "") 
                 || $(`#step${i}_content`).val().trim().length < 3 ){ 
                 validate.form_valid = false; 
-                validate.form_errors += `Invalid Content on Step ${i}: Step content field must be longer than 3 character and not all whitespace <br/>`;
+                validate.form_errors += `<li>Invalid Content on Step ${i}: Step content field must be 3 or more character and not all whitespace </li>`;
+            } 
+            if(
+                ($(`#step${i}_placement`).val().trim() == "") 
+                || ($(`#step${i}_path`).val().trim() == "") 
+                || ($(`#step${i}_element`).val().trim() == "") 
+            ){
+                validate.form_valid = false; 
+                validate.form_errors += `<li>Must choose element for step ${i}</li>`;
             } 
 
         }
@@ -366,7 +374,7 @@ class CreateTourForm{
             self.cleanUpValidaionWarnings();
         })
         for(var i = 1; i <= this.number_of_steps; i++){
-            $(`#step${i}_title, #step${i}_content`).on("change",function(){
+            $(`#step${i}_title, #step${i}_content , #step${i}_placement , #step${i}_path , #step${i}_element`).on("change",function(){
                 self.cleanUpValidaionWarnings();
             })
         }

@@ -9,7 +9,7 @@ class GenerateTourStep{
         this.chosen_path = null;
         this.chosen_element = null;
         this.chosen_placement = null;
-        this.popover_content = `<div class="popover-content"style="text-align:center; background-color:#006dcc;; text-color:white;" id="choose_element" >
+        this.popover_content = `<div class="popover-content"style="z-index:999999999; text-align:center; background-color:#006dcc;; text-color:white;" id="choose_element" >
                                     <strong>Confirm Chosen Element</strong>
                                     <pre style="text-align:left;">Path: <span id="chosen_path"></span>
 Element: <span id="chosen_element"></span>

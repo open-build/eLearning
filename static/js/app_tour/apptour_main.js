@@ -17,12 +17,20 @@ $(document).bind("ready", function() {
     //if the user just logged in
     if (document.cookie.includes("show_app_tour=True") == true){
         $("#app_tour_display_modal").modal({backdrop: 'static', keyboard: false, backdrop: false})
+        display_tour.tour_controller.getAppTours();
+        display_tour.getTourNames();
+        display_tour.fillModalTable();
+        display_tour.addListenersToTours();
     }
 
 
     //if user clicks on tour elearning element
     $("#apptour_modal_btn").click(function(event){
         event.preventDefault();
+        display_tour.tour_controller.getAppTours();
+        display_tour.getTourNames();
+        display_tour.fillModalTable();
+        display_tour.addListenersToTours();
         $("#app_tour_display_modal").modal({backdrop: 'static', keyboard: false, backdrop: false})
     });
 
@@ -32,14 +40,6 @@ $(document).bind("ready", function() {
         var steps_config = JSON.parse(localStorage.getItem("steps_config"));
         apptour.startTour(tour_config,steps_config);
       } 
-
-
-    $("#app_tour_display_modal").on('shown.bs.modal',function(){
-        display_tour.tour_controller.getAppTours();
-        display_tour.getTourNames();
-        display_tour.fillModalTable();
-        display_tour.addListenersToTours();
-    });
 
 
 

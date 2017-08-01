@@ -19,6 +19,8 @@ def get_tours(request):
     for tour in tours:
         tour["tour_groups"] = transform_tour_groups_field(str(tour["tour_groups"]))
         tour["tour_create_date"] = tour["tour_create_date"].strftime('%Y-%m-%dT%H:%M:%S')
+        tour["tour_update_date"] = None if tour.get("tour_update_date") is None \
+            else tour["tour_update_date"].strftime('%Y-%m-%dT%H:%M:%S')
         temp_tour = {k:v for k,v in tour.items()}
         temp_steps = []
         tour['steps'] = Step.objects.filter(tour=tour['id']).values()
@@ -145,7 +147,6 @@ def delete_tour(request, tour_id=None):
 def update_apptour(request, tour_id=None):
     instance = Tour.objects.get(id=tour_id)
     instance.tour_groups = transform_tour_groups_field(str(instance.tour_groups))
-    print(instance.__dict__)
     return render(request, "app_tour/create_app_tour.html", {"instance":instance})
 
 
