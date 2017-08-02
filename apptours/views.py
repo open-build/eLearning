@@ -1,5 +1,5 @@
 from django.http import HttpResponse
-from .models import Tour, Step, transform_tour_groups_field
+from .models import Tour, Step, transform_tour_groups_field, TourUsers
 import json
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import user_passes_test, login_required
@@ -14,13 +14,16 @@ from datetime import datetime
 
 @login_required
 def get_tours(request):
-    tours = Tour.objects.filter(status="complete").values()
+    user_type = get_user_type(user=request.user._wrapped)
+    tours = Tour.objects.filter(status="complete",tour_groups__contains=user_type).values()
     response = []
     for tour in tours:
         tour["tour_groups"] = transform_tour_groups_field(str(tour["tour_groups"]))
         tour["tour_create_date"] = tour["tour_create_date"].strftime('%Y-%m-%dT%H:%M:%S')
         tour["tour_update_date"] = None if tour.get("tour_update_date") is None \
             else tour["tour_update_date"].strftime('%Y-%m-%dT%H:%M:%S')
+        tour["visited"] = tour_visited_by_user(user_id=request.user._wrapped.id,tour_id=tour.get("id"))
+        #tour["user_visited"] =
         temp_tour = {k:v for k,v in tour.items()}
         temp_steps = []
         tour['steps'] = Step.objects.filter(tour=tour['id']).values()
@@ -29,6 +32,36 @@ def get_tours(request):
         temp_tour['steps'] =  temp_steps
         response.append(temp_tour)
     return HttpResponse(json.dumps(response))
+
+
+def tour_visited_by_user(user_id, tour_id):
+    tour_users = TourUsers.objects.filter(tour__id=tour_id,user__id=user_id)
+    if len(tour_users)>0:
+        return tour_users[0].visited
+    else:
+        return False
+
+
+def get_user_type(user):
+    if user.is_professor:
+        return "professor"
+    elif user.is_site_admin:
+        return "admin"
+    else:
+        return "user"
+
+
+@login_required
+def mark_tour_as_visited(request, tour_id):
+    user_id = request.user._wrapped.id
+    tour_user = TourUsers.objects.get(tour__id=tour_id,user__id=user_id)
+    updated_tour_user = TourUsers(
+        id=tour_user.id,
+        tour_id=tour_id,
+        user_id=user_id,
+        visited=True
+    )
+    updated_tour_user.save(force_update=True)
 
 
 @user_passes_test(lambda user: user.is_site_admin)
