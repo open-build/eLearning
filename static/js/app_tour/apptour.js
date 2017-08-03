@@ -3,6 +3,7 @@ class AppTour{
 
 
     constructor(){
+        this.tour_controller = new TourController();
         this.tour_template = `<div style="color: grey;" class='popover tour'>
                                 <div class='arrow'></div>
                                 <h3 class='popover-title'></h3>
@@ -91,6 +92,9 @@ class AppTour{
                 }
                 //else user is using tour and has finished to display other tours now
                 else{
+                    //mark tour as viewd for this user
+                    localStorage.setItem("tour_display_number",Number(localStorage.getItem("tour_display_number")) + 1)
+                    self.tour_controller.markTourAsViewed(tour_config.id)
                     $("#apptour_modal_btn").click().trigger("click");
                 }
             },

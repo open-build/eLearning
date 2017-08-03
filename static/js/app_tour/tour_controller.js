@@ -48,6 +48,23 @@ class TourController{
     }
 
 
+    markTourAsViewed(tour_id){
+        $.ajax({
+            url: `/apptours/mark_tour_as_visited/${tour_id}`,
+            type: 'get',
+            success: function(success_msg) {
+                console.log(success_msg);
+                return true;
+            },
+            failure: function(data) {
+                sessionStorage.setItem('tours',null);
+                console.log("Failed to get apptour...");
+                return false;
+            }
+        });
+    }
+
+
     createPost(post_data) {
         $.ajax({
             url : "/apptours/create_tour/",

@@ -13,14 +13,18 @@ $(document).bind("ready", function() {
 
     ///////////////////////////////////add listeners get tour////////////////////////////////
 
+    if (typeof localStorage.getItem("tour_display_number") == 'undefined'){
+        localStorage.setItem("tour_display_number",1);
+    }
 
     //if the user just logged in
     if (document.cookie.includes("show_app_tour=True") == true){
         $("#app_tour_display_modal").modal({backdrop: 'static', keyboard: false, backdrop: false})
         display_tour.tour_controller.getAppTours();
-        display_tour.getTourNames();
+        display_tour.getTours();
         display_tour.fillModalTable();
         display_tour.addListenersToTours();
+        display_tour.fillSingleDisplay();
     }
 
 
@@ -28,9 +32,10 @@ $(document).bind("ready", function() {
     $("#apptour_modal_btn").click(function(event){
         event.preventDefault();
         display_tour.tour_controller.getAppTours();
-        display_tour.getTourNames();
+        display_tour.getTours();
         display_tour.fillModalTable();
         display_tour.addListenersToTours();
+        display_tour.fillSingleDisplay();
         $("#app_tour_display_modal").modal({backdrop: 'static', keyboard: false, backdrop: false})
     });
 
