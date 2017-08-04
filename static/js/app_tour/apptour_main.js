@@ -47,6 +47,24 @@ $(document).bind("ready", function() {
       } 
 
 
+    //toggle between displaying all or single tour at a time
+    $("#view_all_tours").click(function(){
+        display_tour.viewAllTours();
+    });
+    $("#view_single_tour").click(function(){
+        display_tour.viewSingleTour();
+    });
+
+
+    //see next and previous tours
+    $("#display_previous_tour").click(function(){
+        display_tour.displayPreviousTour();
+    });
+    $("#display_next_tour").click(function(){
+        display_tour.displayNextTour();
+    });
+
+
 
     ////////////////////////////listeners for admin tours view////////////////////////////
 

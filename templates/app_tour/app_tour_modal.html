@@ -9,13 +9,15 @@
           <h3>App Tours</h3>
         </div>
         <div class="modal-body">
-          <div id="display_all_apptours">
+          <div style="display:none;" id="display_all_apptours">
+            <a id="view_single_tour">see one tour at a time</a>
             <p>Click on the collapsible panel to view the tour and close it.</p>
             <div class="panel-group" id="all_displayed_tours">
             <!--dynamically add tours-->
             </div>
           </div>
-          <div id="display_single_apptour">
+          <div style="display:block;" id="display_single_apptour">
+            <a id="view_all_tours">see all tours</a>
             <h3 id="single_display_tour_name" class="panel-title">
             </h3>
             <div>
@@ -28,7 +30,9 @@
               <div class="tour_image img-responsive">
                 <img id="single_display_tour_image" src="">
               </div>
-              <button class="btn-success btn" id='apptour_single'>tour</button>
+              <button class="btn-primary btn" id='display_previous_tour'>see previous tour</button>
+              <button class="btn-primary btn" id='display_next_tour'>see next tour</button>
+              <button class="btn-success btn" id='apptour_single'>start tour</button>
             </div>
           </div>
         </div>

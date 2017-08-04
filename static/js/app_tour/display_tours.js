@@ -78,12 +78,13 @@ class DisplayTours{
 
     fillSingleDisplay(){
         var tour_display_number = localStorage.getItem("tour_display_number");
+        tour_display_number = tour_display_number < 1? this.tours_array.length: tour_display_number;
         tour_display_number = tour_display_number <= this.tours_array.length? tour_display_number: 1;
         localStorage.setItem("tour_display_number",tour_display_number)
         var tour = this.tours_array[(tour_display_number - 1)]
         $("#single_display_tour_name").text(tour.tour_name);
         $("#single_display_tour_create_date").text("Create Date:\t"+tour.tour_create_date);
-        $("#single_display_tour_visited").text("Visited\t" + tour.tour_visited);
+        $("#single_display_tour_visited").text("Visited\t" + tour.visited);
         $("#single_display_tour_description").text(tour.tour_description);
         $("#single_display_tour_image").prop("src",tour.tour_image);
         //add listener
@@ -94,6 +95,18 @@ class DisplayTours{
             //start tour for user
             self.apptour.startTour(tour,tour.steps,true);
         });
+    }
+
+
+    displayNextTour(){
+        localStorage.setItem("tour_display_number",Number(localStorage.getItem("tour_display_number")) + 1);
+        this.fillSingleDisplay();
+    }
+
+
+    displayPreviousTour(){
+        localStorage.setItem("tour_display_number",Number(localStorage.getItem("tour_display_number")) - 1);
+        this.fillSingleDisplay();
     }
 
 
@@ -123,6 +136,19 @@ class DisplayTours{
             return false;
          }
     }
+
+
+    viewAllTours(){
+        $("#display_all_apptours").css("display","block");
+        $("#display_single_apptour").css("display","none");
+    }
+
+
+    viewSingleTour(){
+        $("#display_all_apptours").css("display","none");
+        $("#display_single_apptour").css("display","block");
+    }
+
 
 
 }
