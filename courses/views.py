@@ -259,7 +259,7 @@ def remove_students(request, student_id, course_name=None):
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
-@user_passes_test(lambda user: user.is_site_admin)
+@user_passes_test(lambda user: user.is_professor)
 def admin_courses(request, slug = None):
     queryset = Course.objects.all()
     search = request.GET.get("search")
