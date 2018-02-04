@@ -146,7 +146,8 @@ def subscribe(request,blog_id):
 def email(blog,send_to):
     text_message = render_to_string('blog/email/subscription.txt',{'blog':blog})
     html_message = render_to_string('blog/email/subscription.html',{'blog':blog})
-
-    send_mail('OpenBuild New Post',text_message,'OpenBuild Team',[send_to],fail_silently=False,html_message=html_message)
-
+    try:
+    	send_mail('OpenBuild New Post',text_message,'OpenBuild Team',[send_to],fail_silently=False,html_message=html_message)
+    except:
+	print send_to	
     

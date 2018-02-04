@@ -15,7 +15,7 @@
                 <ul class="nav navbar-nav pull-down">
                     <!-- Hidden li included to remove active class from about link when scrolled up past about section -->
                     <li class="team_dropdown"> 
-                        <a href="" class="page-scroll  dropdown-toggle" data-toggle="dropdown" type="button"><span class="glyphicon glyphicon-question-sign"></span>About<span class="caret"></span> </a>
+                        <a href="" class="page-scroll  dropdown-toggle" data-toggle="dropdown" type="button">About<span class="caret"></span> </a>
                         <ul class="dropdown-menu">
                             <li class="menu_link"><a href="/#toladata">TolaData</a></li>
                             <li class="menu_link"><a href="/#humanitarian">Humanitarian Data Certification</a></li>
@@ -23,10 +23,10 @@
                         </ul>
                     </li>
                     <li>
-                        <a class="page-scroll" href="/#contact"><span class="glyphicon glyphicon-earphone"></span>Contact</a>
+                        <a class="page-scroll" href="/#contact">Contact</a>
                     </li>
                     <li class="team_dropdown"> 
-                        <a href="/ourteam" class="page-scroll  dropdown-toggle" data-toggle="dropdown" type="button"><i class="fa fa-users" aria-hidden="true"></i>Our Team <span class="caret"></span> </a>
+                        <a href="/ourteam" class="page-scroll  dropdown-toggle" data-toggle="dropdown" type="button">Our Team <span class="caret"></span> </a>
                         <ul class="dropdown-menu">
                             <li class="menu_link"><a href="/ourteam">Our Team</a></li>
                             <li class="menu_link"><a href="/ourteam/#currentprofiles">Current Profiles</a></li>
@@ -34,7 +34,7 @@
                         </ul>
                     </li>
                     <li>
-                        <a href="/blog/0/"><i class="fa fa-book" aria-hidden="true"></i>
+                        <a href="/blog/0/">
                         Blog</a>
                     </li>
                     <li>
@@ -43,7 +43,7 @@
                             <li><a href="{% url 'courses' %}"><span class="glyphicon glyphicon-education"></span> Courses</a></li>
                         {% endif %}
                     <li>
-                        <a class="page-scroll" href="/forum"><span class="glyphicon glyphicon-comment"></span>Forum</a>
+                        <a class="page-scroll" href="/forum">Forum</a>
                     </li>
                     {% endif %}
                     </li>
@@ -54,7 +54,7 @@
                     <!-- Hidden li included to remove active class from about link when scrolled up past about section -->
                     {% if not request.user.is_authenticated%}
                     <li>
-                        <a class="page-scroll" href="/accounts/register"><span class="glyphicon glyphicon-plus"></span>Sign Up</a>
+                        <a class="page-scroll" href="/accounts/register">Sign Up</a>
                     </li>
                     <li class="dropdown">
                         <a class="dropdown-toggle page-scroll" href="#" data-toggle="dropdown"><span class="glyphicon glyphicon-log-in"></span> Login <span class="caret"></span></a>

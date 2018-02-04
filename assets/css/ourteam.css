@@ -1,0 +1,65 @@
+
+.prof
+{
+	
+}
+
+.prof p
+{
+  font-size: 15px;
+  color: #275B91;
+
+}
+.profile-section h2
+{
+	color: #e4551d;
+}
+
+.content-section-prof {
+  padding-top: 100px;
+
+}
+.profile_about
+{
+  padding-top:140px;
+}
+.profile-section
+{
+  width: 100%;
+  padding-top: 30px;
+  padding-bottom: 30px;
+  padding-right: 20px;
+  margin-top: none;
+  color: white;
+  background: url(../img/downloads-bg.jpg) no-repeat center center scroll;
+  background-color: white;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  background-size: cover;
+  -o-background-size: cover;
+}
+.our_team
+{
+  font-size: 16px;
+  color: #275B91;
+  text-align: left;
+
+}
+.feature_grid_f
+{
+  color: #275B91;
+  
+}
+.intern_apply
+{
+  color: #e4551d;
+}
+.about_content
+{
+  text-align: left;
+}
+.feature_grid2 {
+    margin-top: 5px;
+    margin-bottom: 3px;
+    min-height: 230px;
+}
