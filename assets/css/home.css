@@ -13,7 +13,7 @@ p {
 
 html, body {
     font-family: 'scandia-web', helvetica, Arial,sans-serif!important;
-    font-size: 100%;
+    font-size: 98%;
     background-color: #F6F6F6;
 
 }
@@ -120,13 +120,6 @@ a {
     background-color: #f6f6f6;
     margin-bottom: 0;
 }
-/*
-#mainNavBar li a:hover {
-    color: #fff;
-    background: #e4551d !important;
-}
-*/
-/*
 #mainNavBar li a {
     display: block;
     font-size: 1.20em;
@@ -138,7 +131,7 @@ a {
     text-transform: uppercase;
     //font-weight: bold;
 }
-*/
+
 /*--registration templates--*/
 .login {
     margin-top: 4%;
@@ -161,7 +154,7 @@ a {
 
 /*--feature content--*/
 .featured_content {
-    background: rgba(255,255,255,0.3);
+    background-color: whitesmoke;
     padding-bottom: 4px;
 }
 
@@ -215,7 +208,7 @@ h3.m_1 a:hover {
 }
 
 p.m_2 {
-    color: #606060;
+    color: #275B91;
     font-size: 0.95em;
     line-height: 1.2em;
 }
@@ -274,5 +267,5 @@ p.m_2 {
 }
 
 .menu_link{
-    text-transform: none;
+    text-transform: none!important;
 }
