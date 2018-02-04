@@ -21696,3 +21696,18 @@ AppRegistryNotReady: Models aren't loaded yet.
 [2018-02-04 12:35:24 +0000] [20460] [INFO] Booting worker with pid: 20460
 [2018-02-04 12:35:24 +0000] [20461] [INFO] Booting worker with pid: 20461
 [2018-02-04 12:35:24 +0000] [20468] [INFO] Booting worker with pid: 20468
+[2018-02-04 12:43:52 +0000] [20450] [INFO] Handling signal: term
+[2018-02-04 17:43:53 +0000] [20456] [INFO] Worker exiting (pid: 20456)
+[2018-02-04 17:43:53 +0000] [20460] [INFO] Worker exiting (pid: 20460)
+[2018-02-04 17:43:53 +0000] [20459] [INFO] Worker exiting (pid: 20459)
+[2018-02-04 17:43:53 +0000] [20461] [INFO] Worker exiting (pid: 20461)
+[2018-02-04 17:43:53 +0000] [20468] [INFO] Worker exiting (pid: 20468)
+[2018-02-04 12:43:53 +0000] [20450] [INFO] Shutting down: Master
+[2018-02-04 12:43:53 +0000] [20644] [INFO] Starting gunicorn 19.3.0
+[2018-02-04 12:43:53 +0000] [20644] [INFO] Listening at: http://127.0.0.1:9000 (20644)
+[2018-02-04 12:43:53 +0000] [20644] [INFO] Using worker: gevent
+[2018-02-04 12:43:53 +0000] [20650] [INFO] Booting worker with pid: 20650
+[2018-02-04 12:43:53 +0000] [20651] [INFO] Booting worker with pid: 20651
+[2018-02-04 12:43:53 +0000] [20656] [INFO] Booting worker with pid: 20656
+[2018-02-04 12:43:53 +0000] [20657] [INFO] Booting worker with pid: 20657
+[2018-02-04 12:43:53 +0000] [20678] [INFO] Booting worker with pid: 20678
