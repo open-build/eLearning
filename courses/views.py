@@ -5,6 +5,12 @@ from .forms import *
 from users.views import professor
 
 
+def cancel(request):
+    return render(request, "cancel.html")
+
+def thanks(request):
+    return render(request, "thanks.html")
+
 @login_required
 def courses(request):
     if request.user.is_professor or request.user.is_site_admin:
