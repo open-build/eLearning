@@ -5,6 +5,12 @@ from .forms import *
 from users.views import professor
 
 
+def cancel(request):
+    return render(request, "cancel.html")
+
+def thanks(request):
+    return render(request, "thanks.html")
+
 @login_required
 def courses(request):
     if request.user.is_professor or request.user.is_site_admin:
@@ -259,7 +265,7 @@ def remove_students(request, student_id, course_name=None):
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
-@user_passes_test(lambda user: user.is_site_admin)
+@user_passes_test(lambda user: user.is_professor)
 def admin_courses(request, slug = None):
     queryset = Course.objects.all()
     search = request.GET.get("search")
