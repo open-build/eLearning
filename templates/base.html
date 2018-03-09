@@ -4,32 +4,53 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{{ title }}</title>
+  <title>OpenBuild</title>
   {% include 'head_css.html' %}
   {% include 'javascript.html' %}
 </head>
 <body id="page-top" data-spy="scroll" data-target=".navbar-fixed-top" class="banner-back">
+
+{% include 'javascript.html' %}
+
 <!-- Wrap all page content here -->
-<div id="wrap">
+<div>
 
   <!-- Begin page content -->
   {% include 'navbar.html' %}
+
   {% include 'app_tour/app_tour_modal.html' %}
+
+  <div class="row social_buttons sidebar-wrap"> 
+      <a href="https://twitter.com/toladata" target="_blank" class="btn btn-social-icon btn-twitter">
+          <span class="fa fa-twitter"></span>
+       </a>
+       <a href="#" class="btn btn-social-icon btn-facebook" target="_blank" >
+          <span class="fa fa-facebook"></span>
+       </a>
+       <a href="https://www.linkedin.com/company-beta/16227629/" target="_blank" class="btn btn-social-icon btn-linkedin">
+          <span class="fa fa-linkedin-square"></span>
+       </a>
+
+  </div>
+  <br/>
+
   {% block content %}
   {% endblock %}
 
 </div>
 
-<div id="footer">
-  <div class="container" style="color:white">
-    © x 2016 Orange-Team
+
+<div class="col-md-12" id="footer">
+  <div class="container">
+    <a href="https://github.com/open-build" target="_blank" class="font1">© 2018 OpenBuild</a>
+
   </div>
 </div>
 </body>
 
 
-<script>  
-   tinymce.init({
+
+<script>tinymce.init({
     selector: 'textarea',
     paste_data_images: true,
     plugins: ["image paste"],

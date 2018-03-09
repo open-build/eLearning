@@ -8,21 +8,14 @@
   <script src="{% static "js/tinymce/jquery.tinymce.min.js" %}"></script>
   <script src="{% static "js/tinymce/tinymce.min.js" %}"></script>
   <script>tinymce.init({
-    selector: 'textarea', resize: false,
-      theme: 'modern',
-      plugins: [
-    ' image ',
-    'searchreplace wordcount visualblocks visualchars code fullscreen',
-    'insertdatetime media  save table contextmenu directionality',
-    'emoticons template paste textcolor textpattern imagetools'
-  ]
+    selector: 'textarea', resize: false
   });
   </script>
-  {% include 'breadcrumb.html' %}
 
   <div class="container">
 
     <div class="row">
+    {% include 'breadcrumb.html' %}
       <table class=" topic-table table table-bordered">
 
         <!-- Display Topic title -->
@@ -57,7 +50,7 @@
           </tr>
         {% endfor %}
       </table>
-
+    {% if request.user.is_authenticated %}
     <div class="col-md-12 comment-text-input">
       <form method='POST' action="" role="form">
         {% csrf_token %}
@@ -66,6 +59,7 @@
         <button class="btn btn-danger btn-sm submit-btn">Submit</button>
       </form>
     </div>
+    {% endif %}
 
     </div>
 

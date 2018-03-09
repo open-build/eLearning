@@ -14,7 +14,7 @@ p {
 html, body {
     font-family: 'scandia-web', helvetica, Arial,sans-serif!important;
     font-size: 98%;
-    background-color: #F6F6F6;
+    background-color: #fff;
 
 }
 
@@ -92,17 +92,43 @@ a {
 #mainNavBar1 {
 }
 
+.nav.navbar-toggle li a{
+
+    color: #275B91;
+
+}
+.nav.navbar-toggle li a:hover{
+    color: blue;
+}
+
+.nav.navbar-nav.navbar-left li a {
+
+    color: #275B91;
+}
+.nav.navbar-nav.navbar-left li a:hover{
+    color: blue;
+}
+
+.nav.navbar-nav.navbar-right li a {
+
+    color: #275B91;
+
+}
+.nav.navbar-nav.navbar-right li a:hover{
+    color: blue;
+}
 
 .nav-wrapper {
     background-color: #f6f6f6;
     margin-bottom: 0;
 }
-
+/*
 #mainNavBar li a:hover {
     color: #fff;
     background: #e4551d !important;
 }
-
+*/
+/*
 #mainNavBar li a {
     display: block;
     font-size: 1.20em;
@@ -112,9 +138,9 @@ a {
     -o-transition: all 0.3s ease;
     transition: all 0.3s ease;
     text-transform: capitalize;
-    /*font-weight: bold;*/
+    /*font-weight: bold;
 }
-
+*/
 /*--registration templates--*/
 .login {
     margin-top: 4%;
@@ -137,8 +163,7 @@ a {
 
 /*--feature content--*/
 .featured_content {
-    background-color: whitesmoke;
-
+    background-color: rgba(255,255,255,0.4);
     padding-bottom: 4px;
 }
 
@@ -193,7 +218,7 @@ h3.m_1 a:hover {
 }
 
 p.m_2 {
-    color: #275B91;
+    color:  #696969;
     font-size: 0.95em;
     line-height: 1.2em;
 }
@@ -235,6 +260,7 @@ p.m_2 {
 .banner-back {
     background: #fff;
     background-size: 100% 100%;
+
 }
 
 @media (min-width: 900px) and (min-height: 650px) {

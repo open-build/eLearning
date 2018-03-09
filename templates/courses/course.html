@@ -1,4 +1,3 @@
-{% extends 'base.html' %}
 {% load crispy_forms_tags %}
 {% load staticfiles %}
 
@@ -34,9 +33,10 @@
             </thead>
             {% for instance in queryset_chapter %}
               <tr>
-                <td class="col-md-8"><a href="{{ instance.get_absolute_url }}">{{ instance.chapter_name }}</a></td>
+                <td class="col-md-4"><a href="{{ instance.get_absolute_url }}">{{ instance.chapter_name }}</a></td>
                 <td class="col-md-2">{{ instance.chapter_created_date }}</td>
-                <td class="col-md-2">
+                <td class="col-md-4">
+
                   <a href="{% url 'edit_chapter' instance.course instance.slug %}">
                     <input class='btn btn-primary btn-sm' type='submit' value='Rename'/>
                   </a>
@@ -52,5 +52,4 @@
       </div>
     </div>
   </div>
-
 {% endblock %}

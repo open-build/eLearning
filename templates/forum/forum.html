@@ -11,12 +11,13 @@
     selector: 'textarea', resize: false
   });
   </script>
-  {% include 'breadcrumb.html' %}
 
   <div class="container">
 
     <div class="row">
+    {% include 'breadcrumb.html' %}
 
+    {% if request.user.is_authenticated %}
       <button class="btn btn-success add-btn">New Topic</button>
       <div class="col-md-6 add-topic">
         <form method='POST' action="" role="form">
@@ -25,6 +26,7 @@
           {{ add_new_topic_form | crispy }}
           <button class="btn btn-danger btn-sm">Submit</button>
         </form>
+          {% endif %}
       </div>
 
       <form class="form-inline forum-search" method='GET' action="" role="form">
@@ -75,6 +77,15 @@
         <a class="" href="?page={{ topic_list.next_page_number }}">Next</a>
       {% endif %}
     </span>
+    </div>
+  <div class="col-md-6">
+        <button id="btn" class=" btn-success" onclick="new_topic()">New Topic</button>
+        <form id="editForm" method="post" action="." style="display: none">
+             {% csrf_token %}
+            {{ add_new_topic_form | crispy }}
+            <input  type="submit" class="btn btn-success add-btn" value="Submit" >
+        </form>
+
     </div>
   </div>
 

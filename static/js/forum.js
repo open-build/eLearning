@@ -1,6 +1,13 @@
 /**
  * Created by ante on 4/28/16.
  */
+
+function new_topic() {
+    alert("We recommend you should search for the topic before you create new one!");
+    $("#editForm").show();
+    return false;
+}
+
 $(document).ready(function () {
     // Bind the event handler to the "submit" JavaScript event
     $('.add-topic form').submit(function () {

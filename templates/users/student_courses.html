@@ -1,73 +1,36 @@
-
 {% load staticfiles %}
 
 {% block content %}
   <link href="{% static 'css/sidebar.css' %}" rel="stylesheet"/>
+  <link href="{% static "css/professor.css" %}" rel="stylesheet"/>
   <link href="{% static "css/breadcrumb.css" %}" rel="stylesheet"/>
   {% include 'head_css.html' %}
-  {% include 'javascript.html' %}
+  {% include 'javascript.html' %} 
 
-  <div class="container student-course">
-    <div class="row">
-    <!-- breadcrumb -->
-    <div class="bread-course">
-      <div class="container">
-        <section class="title-course" >
-          <ul class="nav navbar-nav course_nav">
-
-            <li>
-              <a href="/">OpenBuild&nbsp</a>
-              {% if  path  != None %}
-                {% url 'forum' as forum_url %}
-                {% if request.get_full_path != forum_url %}
-                  <span class="spacing-path">&nbsp&nbsp&nbsp</span><a href="/{{ redirect_path }}">&nbsp{{ path }}&nbsp</a>
-                {% endif %}
-              {% endif %}
-            </li>
-
-            {% url 'student_course' course_name slug as student_course_url %}
-            {% if request.get_full_path ==  student_course_url %}
-              <li><a href="{% url 'courses' %}">Courses</a></li>
-            {% endif %}
-
-            {% url 'chapter' course_name slug as chapter_url %}
-            {% if request.get_full_path ==  chapter_url %}
-              <li><a href="{% url 'professor_course' course_name %}">{{ course_name }}</a></li>
-            {% endif %}
-
-            {% url 'edit_txt' course_name slug text_id as chapter_url %}
-            {% if request.get_full_path ==  chapter_url %}
-              <li><a href="{% url 'chapter' course_name slug %}">{{ course_name }}</a></li>
-            {% endif %}
-
-            {% url 'edit_chapter' course_name chapter_id as chapter_url %}
-            {% if request.get_full_path ==  chapter_url %}
-              <li><a href="{% url 'professor_course' course_name %}">{{ course_name }}</a></li>
-            {% endif %}
-
-            {% url 'edit_link' course_name slug yt_id as chapter_url %}
-            {% if request.get_full_path ==  chapter_url %}
-              <li><a href="{% url 'chapter' course_name slug %}">{{ course_name }}</a></li>
-            {% endif %}
-          </ul>
-        <div>
-        </div>
-        </section>
-      </div>
+  <div class="container professor-panel-content">
+    <div class="prof-course">
+      <section class="bread-course" >
+        <ul class="nav nav-tabs course_nav">
+          <li><a  href="/">OpenBuild</a></li>
+          <li ><a href="{% url 'courses' %}">All Courses</a></li>
+          <li class="active"><a href="#">{{ title1 }}</a></li>
+          <div class="collapse navbar-collapse navbar-right">
+            <ul class="nav nav-tabs">
+                <li>
+                   <a href="" class=" dropdown-toggle" data-toggle="dropdown" type="button"><span class="glyphicon glyphicon-user"></span> <font class="prof">{{request.user}}</font>  <span class="caret"></span> </a>
+                    <ul class="dropdown-menu"> 
+                        <li><a href="{% url 'logout_view' %}"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>                     
+                    </ul>
+                </li>
+            </ul>
+          </div>
+        </ul>
+      </section>
     </div>
-<!-- end breadcrumb -->
-<div class="col-md-12">
-  <h3 class="font1">{{ title }} </h3>
+    <div class="col-md-12"><h3 >{{ title }} </h3></div>
+    <div class="row">
       <div class="col-md-2">
         {% if chapter_list %}
-
-        <div class="col-xs-12  col-md-6 col-md-offset-3">
-          {% if messages %}
-            {% for message in messages %}
-              <p{% if message.tags %} class="alert alert-success"{% endif %}>{{ message }}</p>
-            {% endfor %}
-          {% endif %}
-        </div>
 
           <ul class="sidebar-nav">
             <li>
@@ -81,9 +44,35 @@
 
         {% endif %}
       </div>
+
+      <div class="col-md-10" style="color:#000;">
+        {% if result_list %}
+          {% for item in result_list %}
+            {% if item.link %}
+              {% if 'youtube.com' in item.link %}
+                <div class="course-inner-content video">
+                  <iframe width="640" height="360" src="{{ item.link }}" frameborder="0" allowfullscreen></iframe>
+                </div>
+              {% else %}
+                <div class="course-inner-content">
+                {{ item.link|safe }}
+                </div>
+                {% endif %}
+            {% elif item.lesson %}
+              <div class="course-inner-content">
+                <h3 style="color: #275B91">{{item.lesson_name|safe}}</h3>
+                <font class="lesson_font">{{ item.lesson|safe }}</font>
+              </div>
+            {% else %}
+              <div class="course-inner-content">
+                <a href='{{ item.file.url }}'>{{ item.file }}</a>
+              </div>
+            {% endif %}
+          {% endfor %}
+        {% endif %}
+      </div>
     </div>
   </div>
-</div>
 
   <script>
     $(document).ready(function () {
@@ -94,6 +83,7 @@
 
       /* Add active class on chapter change */
       var pathname = window.location.pathname;
+      console.log(pathname);
       pathname = pathname.substring(0, pathname.length - 1);
       $('.sidebar-nav > li a[href="' + pathname + '"]').addClass('active-sidebar');
     });

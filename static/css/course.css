@@ -102,3 +102,7 @@ label {
 textarea {
     resize: none;
 }
+.lesson_font
+{
+    font-size: 8px;
+}

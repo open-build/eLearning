@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<link href="{% static "css/ourteam.css" %}" rel="stylesheet" />
+    <!-- Intro Header -->
+    <header class="intro">
+        <div class="intro-body">
+            <div class="container">
+            <div class="clear-fix"></div>
+                <div class="main_intro col-md-12 row">
+                  <div class="col-md-1"> </div>
+                  <div class="col-md-11">
+                    <h2>THANK YOU!</h2>
+                    <p class="our_team "><img src="{% static '/static/img/mombasa-team.jpg' %}" align="left" style="height:210px; margin-right:10px;"> The OpenBuild team is comprised of mentors, educators, and industry professionals that focus on technology solutions for international development. Our team is made up of three distinct roles that play either a Technical or Support function. The technical function consists of software engineers and developers while the support functions consists of data specialists, data analysts, and software support specialists. Each team will collaborate and work together on a particular client's needs including ensuring the server is up and running efficiently, the integrations are working well, and the support tickets are being answered in a timely manner. In addition, these teams will coordinate with the larger open source community to make sure any bounty tickets or enhancements are addressed and prioritized as well as providing training and support for issues.</p>
+                  <h3>Thanks for supporting STEM and Education</h3>
+</div>
+                </div>
+
+            </div>
+        </div>
+    </header>
+
+
+{% endblock %}
+
+
