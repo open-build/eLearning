@@ -86,6 +86,7 @@
                         <div class="dropdown-menu login_dropdown col-md-5" style="padding: 15px;min-width:250px">
                             <form method="post" action="{% url 'django.contrib.auth.views.login' %}" accept-charset="UTF-8">
                                 {% csrf_token %}
+                                <input style="margin-bottom: 15px;" type="text" placeholder="Username" id="username" name="username" class="form-control">
                                 <input style="margin-bottom: 15px;" type="password" placeholder="Password" id="password" name="password" class="form-control">
                                 <input style="float: left; margin-right: 10px;" type="checkbox" name="remember-me" id="remember-me" value="1">
                                 <label class="string optional font1" for="user_remember_me"> Remember me</label>
