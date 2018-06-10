@@ -144,8 +144,10 @@ a:focus {
 }
 .intro {
   display: table;
+  margin-top: 250px;
   width: 100%;
   height: auto;
+  padding: 70px 0;
   text-align: center;
   background: url(/static/img/banner.png) no-repeat bottom center scroll;
   /*background-color: orange;*/
