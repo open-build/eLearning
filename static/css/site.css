@@ -141,6 +141,7 @@ a:focus {
   display: table-cell;
   vertical-align: middle;
   padding-bottom: 100px;
+  padding-top: 100 px;
 }
 .intro {
   display: table;
@@ -148,7 +149,6 @@ a:focus {
   height: auto;
   padding: 70px 0;
   text-align: center;
-  background: url(/static/img/banner.png) no-repeat bottom center scroll;
   /*background-color: orange;*/
   -webkit-background-size: cover;
   -moz-background-size: cover;
